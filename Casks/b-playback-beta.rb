@@ -1,4 +1,4 @@
-cask "playback-beta" do
+cask "b-playback-beta" do
   version "7.1.1,7133"
   sha256 "59034c721036b2b490ff019f0e3892476e6ae29cb68853a0fa0023a618ae304f"
 

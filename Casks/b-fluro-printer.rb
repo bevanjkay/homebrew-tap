@@ -22,7 +22,5 @@ cask "b-fluro-printer" do
     "~/Library/Preferences/io.fluro.printer.helper.plist",
     "~/Library/Preferences/io.fluro.printer.plist",
     "~/Library/Saved Application State/io.fluro.printer/savedState",
-    "/var/db/receipts/io.fluro.printer.bom",
-    "/var/db/receipts/io.fluro.printer.plist",
   ]
 end

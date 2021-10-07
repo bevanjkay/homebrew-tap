@@ -7,6 +7,11 @@ cask "b-companion" do
   desc "Companion app for Gateway Church Geelong"
   homepage "https://github.com/bevanjkay/companion/"
 
+  livecheck do
+    url :url
+    strategy :github_latest
+  end
+
   app "Companion.app"
 
   zap trash: [

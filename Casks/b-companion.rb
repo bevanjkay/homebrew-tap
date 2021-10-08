@@ -1,6 +1,6 @@
 cask "b-companion" do
-  version "1.0.1"
-  sha256 "bbf4e8c80fdb89a57590eb5ee39f02721bcf58f79110ebd9f8846b433419d373"
+  version "1.0.2"
+  sha256 "6158530a489979b42b59ff139f7c49fdfcde42eb8e3360acb7ff0cd11890a222"
 
   url "https://github.com/bevanjkay/companion/releases/download/#{version}/companion-mac-x64-#{version}.dmg"
   name "b-companion"

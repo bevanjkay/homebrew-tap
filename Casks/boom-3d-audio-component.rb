@@ -14,12 +14,9 @@ cask "boom-3d-audio-component" do
   end
 
   app "Audio Component Installer.app"
-  installer manual: "Audio Component Installer.app"
 
   postflight do
     system "open", "/Applications/Audio Component Installer.app"
     system "rm -r", "/Applications/Audio Component Installer.app"
   end
-
-  uninstall trash: "/Applications/Audio Component Installer.app"
 end

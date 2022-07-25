@@ -15,8 +15,8 @@ cask "b-output-factory" do
   app "Output Factory Installer.app"
 
   postflight do
-    system "open", "/Applications/Audio Component Installer.app"
-    system "rm -r", "/Applications/Audio Component Installer.app"
+    system "open", "/Applications/Output Factory Installer.app"
+    system "rm -r", "/Applications/Output Factory Installer.app"
   end
 
   uninstall trash: "/Applications/Adobe Indesign */Plug-Ins/Zevrix/Output Factory.app"

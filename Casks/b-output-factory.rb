@@ -12,7 +12,7 @@ cask "b-output-factory" do
     regex(/Output\s*Factory\s*(\d+(?:\.\d+)+)/i)
   end
 
-  app "Output Factory Installer.appp"
+  app "Output Factory Installer.app"
 
   postflight do
     system "open", "/Applications/Audio Component Installer.app"

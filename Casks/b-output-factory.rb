@@ -16,6 +16,7 @@ cask "b-output-factory" do
 
   postflight do
     system "open", "/Applications/Output Factory Installer.app"
+    system "sleep", "10"
     system "rm -rf", "/Applications/Output Factory Installer.app"
   end
 

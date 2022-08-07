@@ -15,7 +15,6 @@ cask "b-output-factory" do
   app "Output Factory Installer.app",
       target: "#{staged_path}/Output Factory Installer #{version}.app"
 
-
   postflight do
     system "open '#{staged_path}/Output\ Factory\ Installer\ #{version}.app' -W"
   end

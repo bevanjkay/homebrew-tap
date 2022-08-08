@@ -12,11 +12,13 @@ cask "b-output-factory" do
     regex(/Output\s*Factory\s*(\d+(?:\.\d+)+)/i)
   end
 
-  app "Output Factory Installer.app",
-      target: "#{staged_path}/Output Factory Installer #{version}.app"
+  app_path = "Output Factory Installer.app"
+
+  app app_path,
+      target: "#{staged_path}/#{app_path} #{version}.app"
 
   postflight do
-    system "open '#{staged_path}/Output\ Factory\ Installer\ #{version}.app' -W"
+    system "open '#{staged_path}/#{app_path} #{version}.app' -W"
   end
 
   uninstall trash: "/Applications/Adobe Indesign */Plug-Ins/Zevrix/Output Factory.app"

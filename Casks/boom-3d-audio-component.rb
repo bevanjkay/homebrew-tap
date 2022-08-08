@@ -13,10 +13,12 @@ cask "boom-3d-audio-component" do
     strategy :extract_plist
   end
 
-  app "Audio Component Installer.app"
+  app_path = "Audio Component Installer.app"
+
+  app app_path,
+      target: "#{staged_path}/#{app_path} #{version}.app"
 
   postflight do
-    system "open", "/Applications/Audio Component Installer.app"
-    system "rm -r", "/Applications/Audio Component Installer.app"
+    system "open '#{staged_path}/#{app_path} #{version}.app' -W"
   end
 end

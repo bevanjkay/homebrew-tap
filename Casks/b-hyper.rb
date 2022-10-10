@@ -12,9 +12,9 @@ cask "b-hyper" do
   homepage "https://hyper.is/"
 
   livecheck do
-    url "https://github.com/vercel/hyper/releases"
-    strategy :page_match
-    regex(/hyper[._-](\d+(?:\.\d+)*.+)[._-]mac[._-]x64\.zip/i)
+    url :url
+    strategy :git
+    regex(/(\d+(?:\.\d+)+(?:-canary\.(\d+))?)/i)
   end
 
   auto_updates true

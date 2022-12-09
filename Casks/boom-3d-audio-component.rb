@@ -1,5 +1,5 @@
 cask "boom-3d-audio-component" do
-  version "1.3.11"
+  version "1.4"
   sha256 :no_check
 
   url "https://d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/catalina/latest_v#{version}_onwards/Audio%20Component%20Installer.zip",

@@ -13,7 +13,7 @@ cask "b-loopback" do
   end
 
   auto_updates true
-  conflicts_with "loopback"
+  conflicts_with cask: "loopback"
   depends_on macos: ">= :catalina"
 
   app "Loopback.app"

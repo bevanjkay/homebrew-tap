@@ -8,7 +8,20 @@ cask "kiosk-browser" do
   homepage "https://github.com/IMAGINARY/kiosk-browser"
 
   app "kiosk-browser.app"
-  binary "#{appdir}/kiosk-browser.app/Contents/MacOS/kiosk-browser", target: "kiosk-browser"
+  # shim script (https://github.com/Homebrew/homebrew-cask/issues/18809)
+  shimscript = "#{staged_path}/kiosk-browser-wrapper.sh"
+  binary shimscript, target: "kiosk-browser"
+
+  preflight do
+    File.write shimscript, <<~EOS
+      #!/bin/sh
+      '#{appdir}/kiosk-browser.app/Contents/MacOS/kiosk-browser' "$@"
+    EOS
+  end
+
+  postflight do
+    system_command "xattr", args: ["-d", "com.apple.quarantine", "#{appdir}/kiosk-browser.app"]
+  end
 
   zap trash: [
     "~/Library/Application Support/kiosk-browser",

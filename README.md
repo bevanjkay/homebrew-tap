@@ -1,5 +1,7 @@
 # Bevanjkay Tap
 
+It is **not** recommended that you use this tap.
+
 ## How do I install these formulae?
 
 `brew install bevanjkay/tap/<formula>`

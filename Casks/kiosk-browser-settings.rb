@@ -1,5 +1,5 @@
 cask "kiosk-browser-settings" do
-  version "20230227"
+  version "20230228"
   sha256 :no_check
 
   url "https://gc.org.au/app/kiosk-settings/kiosk-settings.zip"
@@ -14,6 +14,7 @@ cask "kiosk-browser-settings" do
   artifact "website.command", target: "~/Desktop/Kiosk Browser Commands/website.command"
   artifact "missions-signage.command", target: "~/Desktop/Kiosk Browser Commands/missions-signage.command"
   artifact "giving-kiosk.command", target: "~/Desktop/Kiosk Browser Commands/giving-kiosk.command"
+  artifact "inject.js", target: "~/Desktop/Kiosk Browser Commands/inject.js"
 
   postflight do
     files = system_command "/bin/ls", args: ["#{staged_path}"]

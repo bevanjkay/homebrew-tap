@@ -1,5 +1,5 @@
 cask "kiosk-browser-settings" do
-  version "20230303"
+  version "20230303.1"
   sha256 :no_check
 
   url "https://gc.org.au/app/kiosk-settings/kiosk-settings.zip"
@@ -10,7 +10,7 @@ cask "kiosk-browser-settings" do
   depends_on cask: "bevanjkay/tap/kiosk-browser"
 
   artifact "hub.command", target: "~/Desktop/Kiosk Browser Commands/hub.command"
-  artifact "youth.command", target: "~/Desktop/Kiosk Browser Commands//youth.command"
+  artifact "youth.command", target: "~/Desktop/Kiosk Browser Commands/youth.command"
   artifact "website.command", target: "~/Desktop/Kiosk Browser Commands/website.command"
   artifact "missions-signage.command", target: "~/Desktop/Kiosk Browser Commands/missions-signage.command"
   artifact "giving-kiosk.command", target: "~/Desktop/Kiosk Browser Commands/giving-kiosk.command"

@@ -1,11 +1,11 @@
 cask "kiosk-browser-settings" do
-  version "20230228"
+  version "20230303"
   sha256 :no_check
 
   url "https://gc.org.au/app/kiosk-settings/kiosk-settings.zip"
   name "Kiosk Browser Settings"
   desc "Settings for Web Kiosk Browser"
-  homepage "https://gc.org.au"
+  homepage "https://gc.org.au/"
 
   depends_on cask: "bevanjkay/tap/kiosk-browser"
 
@@ -14,10 +14,11 @@ cask "kiosk-browser-settings" do
   artifact "website.command", target: "~/Desktop/Kiosk Browser Commands/website.command"
   artifact "missions-signage.command", target: "~/Desktop/Kiosk Browser Commands/missions-signage.command"
   artifact "giving-kiosk.command", target: "~/Desktop/Kiosk Browser Commands/giving-kiosk.command"
-  artifact "inject.js", target: "~/Desktop/Kiosk Browser Commands/inject.js"
+  artifact "hubInject.js", target: "~/Desktop/Kiosk Browser Commands/hubInject.js"
+  artifact "youthInject.js", target: "~/Desktop/Kiosk Browser Commands/youthInject.js"
 
   postflight do
-    files = system_command "/bin/ls", args: ["#{staged_path}"]
+    files = system_command "/bin/ls", args: [staged_path.to_s]
     files_list = files.stdout.split("\n")
     files_list.each do |file|
       system_command "xattr", args: ["-d", "com.apple.quarantine", "#{staged_path}/#{file}"]

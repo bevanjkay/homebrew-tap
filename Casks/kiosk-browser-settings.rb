@@ -1,5 +1,5 @@
 cask "kiosk-browser-settings" do
-  version "20230303.2"
+  version "20230303.3"
   sha256 :no_check
 
   url "https://gc.org.au/app/kiosk-settings/kiosk-settings.zip"

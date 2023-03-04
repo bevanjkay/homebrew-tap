@@ -1,5 +1,5 @@
 cask "kiosk-browser-settings" do
-  version "20230303.3"
+  version "20230303.4"
   sha256 :no_check
 
   url "https://gc.org.au/app/kiosk-settings/kiosk-settings.zip"
@@ -27,5 +27,5 @@ cask "kiosk-browser-settings" do
     end
   end
 
-  uninstall trash: "~/Desktop/Kiosk Browser Commands"
+  uninstall rmdir: "~/Desktop/Kiosk Browser Commands"
 end

@@ -6,51 +6,52 @@ cask "b-propresenter-bleeding-edge" do
   name "ProPresenter"
   desc "Presentation and production application for live events"
   homepage "https://www.renewedvision.com/propresenter.php"
+
   livecheck do
     url :homepage
-    strategy :page_match do |page|
-        url = "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
+    strategy :page_match do |_page|
+      url = "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
 
-        matched = []
-        
-        current_minor = version.csv.first.minor.to_i
-        future_minor = current_minor.to_i + 0
-        current_patch = version.csv.first.patch.to_i
-        future_patch = current_patch.to_i + 1
-        current_build = version.csv.second.to_i
-        future_build = current_build.to_i + 5
-        (current_minor..future_minor).each do |minor|
-            (current_patch..future_patch).each do |patch|
-                (current_build..future_build).each do |build|
-                    url = if (patch == 0)
-                        "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_7.#{minor}_#{build}.zip"
-                    else
-                        "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_7.#{minor}.#{patch}_#{build}.zip"
-                    end
+      matched = []
 
-                    puts url
-                    system_result, _err, _st = Open3.capture3("curl -sLI #{url} | grep -i http/2")
-
-                    next if !system_result
-
-                    tested_version = if (patch == 0)
-                        "7.#{minor},#{build}"
-                    else
-                        "7.#{minor}.#{patch},#{build}"
-                    end
-
-                    if system_result.include?("200")
-                        matched << tested_version
-                        puts "Version #{tested_version} found."
-                    else
-                        puts "Version #{tested_version} not found."
-
-                    end
-                end
+      current_minor = version.csv.first.minor.to_i
+      future_minor = current_minor.to_i + 0
+      current_patch = version.csv.first.patch.to_i
+      future_patch = current_patch.to_i + 1
+      current_build = version.csv.second.to_i
+      future_build = current_build.to_i + 5
+      (current_minor..future_minor).each do |minor|
+        (current_patch..future_patch).each do |patch|
+          (current_build..future_build).each do |build|
+            url = if patch.zero?
+              "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_7.#{minor}_#{build}.zip"
+            else
+              "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_7.#{minor}.#{patch}_#{build}.zip"
             end
-        end
 
-        matched
+            puts url
+            system_result, _err, _st = Open3.capture3("curl -sLI #{url} | grep -i http/2")
+
+            next unless system_result
+
+            tested_version = if patch.zero?
+              "7.#{minor},#{build}"
+            else
+              "7.#{minor}.#{patch},#{build}"
+            end
+
+            if system_result.include?("200")
+              matched << tested_version
+              puts "Version #{tested_version} found."
+            else
+              puts "Version #{tested_version} not found."
+
+            end
+          end
+        end
+      end
+
+      matched
     end
   end
 

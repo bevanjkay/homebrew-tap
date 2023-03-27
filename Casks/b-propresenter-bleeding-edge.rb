@@ -1,6 +1,6 @@
 cask "b-propresenter-bleeding-edge" do
   version "7.13,118292499"
-  sha256 "efd546ef2b61a41f5635da8a4f46370caa8a14b488313576245adac6150109b9"
+  sha256 "1fa84729491759887f8bf7612bcd6d9f77849645c6177426e2dfccda0ec3896b"
 
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"
@@ -29,7 +29,6 @@ cask "b-propresenter-bleeding-edge" do
               "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_7.#{minor}.#{patch}_#{build}.zip"
             end
 
-            puts url
             system_result, _err, _st = Open3.capture3("curl -sLI #{url} | grep -i http/2")
 
             next unless system_result

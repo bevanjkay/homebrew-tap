@@ -4,8 +4,6 @@ cask "bmd-camera-utility" do
   version "8.0.0,4e62de5465294965977c1ac0376b6721,4558920aefe64bf98de0e9dfc0809de4"
   sha256 "fcac22d41c4518c4c6b7f563fbe03f2c57b97a602e76f1aa464a65d121783d9b"
 
-  puts version.csv.first.chomp(".0")
-
   url do
     params = {
       "platform"     => "Mac OS X",

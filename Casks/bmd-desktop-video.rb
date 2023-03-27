@@ -58,6 +58,7 @@ cask "bmd-desktop-video" do
     "/Library/LaunchDaemons/com.blackmagic-design.DesktopVideoDriverExtension.Helper.plist",
     "/Library/LaunchDaemons/com.blackmagic-design.DesktopVideoHelper.plist",
     "/Library/LaunchDaemons/com.blackmagic-design.desktopvideo.XPCService.plist",
+    "~/Library/Preferences/com.blackmagic-design.Blackmagic Desktop Video Administration.plist",
     "~/Library/Preferences/com.blackmagic-design.desktopvideo.livekey.plist",
     "/Library/PrivilegedHelperTools/com.blackmagic-design.DesktopVideoDriverExtension.Helper",
     "~/Library/Saved Application State/com.blackmagic-design.desktopvideo.livekey.savedState",

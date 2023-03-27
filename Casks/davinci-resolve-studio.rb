@@ -67,12 +67,14 @@ cask "davinci-resolve-studio" do
               "com.blackmagic-design.FairlightPanels",
               "com.blackmagic-design.ManifestBlackmagicRawPlayer",
               "com.blackmagic-design.ManifestPanels",
-              "com.blackmagic-design.ManifestLite",
+              "com.blackmagic-design.Manifest",
             ]
 
   zap trash: [
-    "~/Library/Application Scripts/com.blackmagic-design.DaVinciResolveLite",
-    "~/Library/Containers/com.blackmagic-design.DaVinciResolveLite",
-    "~/Library/Saved Application State/com.blackmagic-design.DaVinciResolveLite.savedState",
+    "~/Library/Application Scripts/com.blackmagic-design.DaVinciResolve",
+    "~/Library/Application Support/Welcome to DaVinci Resolve",
+    "~/Library/Containers/com.blackmagic-design.DaVinciResolve",
+    "~/Library/Preferences/com.blackmagic-design.DaVinciResolve.plist",
+    "~/Library/Saved Application State/com.blackmagic-design.DaVinciResolve.savedState",
   ]
 end

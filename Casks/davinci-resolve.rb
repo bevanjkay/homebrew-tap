@@ -5,11 +5,11 @@ cask "davinci-resolve" do
   sha256 "7e8160409cb3d887997edad631d6dc57340e958506e48b4b365ad0189a3697f0"
 
   url do
-    unless File.exist?("#{Dir.home}/.personal_details.json")
+    if File.exist?("#{Dir.home}/.personal_details.json")
+      personal_details = JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
+    else
       ohai "Please create a personal details file at ~/.personal_details.json - using placeholder data"
     end
-
-    personal_details = JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
 
     params = {
       "platform"  => "Mac OS X",

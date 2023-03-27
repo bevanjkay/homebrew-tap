@@ -2,7 +2,7 @@ cask "bmd-desktop-video" do
   require "net/http"
 
   version "12.4.2,de2c011b1e684bf88cefefe6ff4fde21,cdc57be479ba4af1ab6dfdbfdac5627f"
-  sha256 ""
+  sha256 "3e36b757249b0cff1db8c833611eee2eaea7dbe2ae2bfc24a835ee1af9bef21d"
 
   url do
     params = {
@@ -35,7 +35,12 @@ cask "bmd-desktop-video" do
   end
 
   container nested: "Blackmagic_Desktop_Video_#{version.csv.first}.dmg"
+
   pkg "Install Desktop Video #{version.csv.first}.pkg"
+
+  uninstall pkgutil:   "com.blackmagic-design.DesktopVideo*",
+            launchctl: "com.blackmagic-design.DesktopVideo*",
+            quit:      "com.blackmagic-design.BlackmagicDesktopVideoDriverExtension"
 
   zap trash: [
     "/Library/LaunchDaemons/com.blackmagic-design.DesktopVideoDriverExtension.Helper.plist",

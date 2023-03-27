@@ -38,15 +38,16 @@ cask "bmd-atem" do
 
   pkg "Install ATEM #{version.csv.first.chomp(".0")}.pkg"
 
-  uninstall script: {
-    executable: "/Applications/Blackmagic ATEM Switchers/Uninstall ATEM.app/Contents/Resources/uninstall.sh",
-    sudo: true
-  },
-  pkgutil: [
-    "com.blackmagic-design.Switchers",
-    "com.blackmagic-design.SwitchersAssets",
-    "com.blackmagic-design.SwitchersUninstaller",
-  ]
+  uninstall script:  {
+              executable: "/Applications/Blackmagic ATEM Switchers/Uninstall ATEM.app/Contents/Resources/uninstall.sh",
+              sudo:       true,
+            },
+            pkgutil: [
+              "com.blackmagic-design.StreamingBridge",
+              "com.blackmagic-design.Switchers",
+              "com.blackmagic-design.SwitchersAssets",
+              "com.blackmagic-design.SwitchersUninstaller",
+            ]
 
   zap trash: [
     "~/Library/Preferences/com.blackmagic-design.ATEM Setup.plist",

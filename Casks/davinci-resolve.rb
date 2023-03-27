@@ -9,18 +9,27 @@ cask "davinci-resolve" do
       personal_details = JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
     else
       ohai "Please create a personal details file at ~/.personal_details.json - using placeholder data"
+      personal_details = {
+        "firstname"   => "Joe",
+        "lastname"    => "Bloggs",
+        "email"       => "testemail@gmail.com",
+        "phone"       => "61412345678",
+        "city"        => "Melbourne",
+        "state"       => "Victoria",
+        "countrycode" => "au",
+      }
     end
 
     params = {
       "platform"  => "Mac OS X",
       "product"   => "DaVinci Resolve",
-      "firstname" => personal_details["firstname"] || "Joe",
-      "lastname"  => personal_details["lastname"] || "Bloggs",
-      "email"     => personal_details["email"] || "testemail@gmail.com",
-      "phone"     => personal_details["phone"] || "61412345678",
-      "city"      => personal_details["city"] || "Melbourne",
-      "state"     => personal_details["state"] || "Victoria",
-      "country"   => personal_details["countrycode"] || "au",
+      "firstname" => personal_details["firstname"],
+      "lastname"  => personal_details["lastname"],
+      "email"     => personal_details["email"],
+      "phone"     => personal_details["phone"],
+      "city"      => personal_details["city"],
+      "state"     => personal_details["state"],
+      "country"   => personal_details["countrycode"],
       "policy"    => "true",
     }.to_json
 

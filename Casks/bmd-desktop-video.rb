@@ -49,8 +49,10 @@ cask "bmd-desktop-video" do
               "com.blackmagic-design.DesktopVideo",
               "com.blackmagic-design.DesktopVideoDriverExtension.Helper",
               "com.blackmagic-design.DesktopVideoDriverExtensionRemove",
+              "com.blackmagic-design.DesktopVideoDriverPostInstall",
             ],
-            quit:      "com.blackmagic-design.BlackmagicDesktopVideoDriverExtension"
+            quit:      "com.blackmagic-design.BlackmagicDesktopVideoDriverExtension",
+            delete:    "/Applications/Blackmagic Disk Speed Test.app"
 
   zap trash: [
     "/Library/LaunchDaemons/com.blackmagic-design.DesktopVideoDriverExtension.Helper.plist",

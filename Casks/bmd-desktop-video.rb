@@ -38,8 +38,18 @@ cask "bmd-desktop-video" do
 
   pkg "Install Desktop Video #{version.csv.first}.pkg"
 
-  uninstall pkgutil:   "com.blackmagic-design.DesktopVideo*",
-            launchctl: "com.blackmagic-design.DesktopVideo*",
+  uninstall pkgutil:   [
+              "com.blackmagic-design.DesktopVideo",
+              "com.blackmagic-design.DesktopVideoAssets",
+              "com.blackmagic-design.DesktopVideoUninstaller",
+              "com.blackmagic-design.DiskSpeedTest",
+              "com.blackmagic-design.MediaExpress",
+            ],
+            launchctl: [
+              "com.blackmagic-design.DesktopVideo",
+              "com.blackmagic-design.DesktopVideoDriverExtension.Helper",
+              "com.blackmagic-design.DesktopVideoDriverExtensionRemove",
+            ],
             quit:      "com.blackmagic-design.BlackmagicDesktopVideoDriverExtension"
 
   zap trash: [

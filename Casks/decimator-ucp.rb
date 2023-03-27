@@ -7,6 +7,11 @@ cask "decimator-ucp" do
   desc "Utility to control and update Decimator Converters"
   homepage "http://decimator.com/"
 
+  livecheck do
+    url "http://decimator.com/DOWNLOADS/DOWNLOADS.html"
+    regex(/href=.*?UCP[ ._-]v?(\d+(?:\.\d+)+)\.dmg/i)
+  end
+
   app "UCP #{version}.app", target: "Decimator UCP.app"
 
   # No zap stanza required

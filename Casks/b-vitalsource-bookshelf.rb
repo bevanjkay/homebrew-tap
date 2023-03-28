@@ -24,6 +24,7 @@ cask "b-vitalsource-bookshelf" do
     end
   end
 
+  conflicts_with cask: "vitalsource-bookshelf"
   depends_on macos: ">= :mojave"
 
   app "VitalSource Bookshelf.app"

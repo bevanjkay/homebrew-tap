@@ -43,6 +43,7 @@ cask "bmd-videohub" do
               "com.blackmagic-design.VideohubUninstaller",
               "com.blackmagic-design.VideohubAssets",
               "com.blackmagic-design.Videohub",
+              "com.blackmagic-design.Videohub2",
             ],
             launchctl: "com.blackmagic-design.videohub.server"
 

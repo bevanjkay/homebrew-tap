@@ -37,6 +37,7 @@ jobs:
         id: generate-matrix
         run: |
           brew tap homebrew/cask
+          brew update
           brew ruby -- "$(brew --repository homebrew/cask)/cmd/lib/generate-matrix.rb" "${{ github.event.pull_request.url }}"
 
   test:

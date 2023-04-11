@@ -34,12 +34,11 @@ cask "bmd-videohub" do
     end
   end
 
+  # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
+  auto_updates true
   container nested: "Blackmagic_Videohub_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install Videohub #{version.csv.first.chomp(".0")}.pkg"
-
-  # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
-  auto_updates true
 
   uninstall pkgutil:   [
               "com.blackmagic-design.SmartControl",

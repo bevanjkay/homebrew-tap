@@ -54,10 +54,10 @@ cask "davinci-resolve-studio" do
     end
   end
 
-  pkg "Install Resolve #{version.csv.first}.pkg"
-
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
+
+  pkg "Install Resolve #{version.csv.first}.pkg"
 
   uninstall script:  {
               executable: "/Applications/DaVinci Resolve/Uninstall Resolve.app/Contents/Resources/uninstall.sh",

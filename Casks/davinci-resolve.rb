@@ -8,7 +8,7 @@ cask "davinci-resolve" do
     if File.exist?("#{Dir.home}/.personal_details.json")
       personal_details = JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
     else
-      ohai "Please create a personal details file at ~/.personal_details.json - using placeholder data"
+      opoo "Please create a personal details file at `~/.personal_details.json` - using placeholder data"
       personal_details = {
         "firstname"   => "Joe",
         "lastname"    => "Bloggs",

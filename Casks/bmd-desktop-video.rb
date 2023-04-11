@@ -38,6 +38,9 @@ cask "bmd-desktop-video" do
 
   pkg "Install Desktop Video #{version.csv.first}.pkg"
 
+  # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
+  auto_updates true
+
   uninstall pkgutil:   [
               "com.blackmagic-design.DesktopVideo",
               "com.blackmagic-design.DesktopVideoAssets",

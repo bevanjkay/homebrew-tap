@@ -15,6 +15,9 @@ cask "mixing-station" do
     end
   end
 
+  # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
+  auto_updates true
+
   app "mixing-station-pc.app", target: "Mixing Station.app"
 
   zap trash: [

@@ -38,6 +38,9 @@ cask "bmd-camera-utility" do
 
   pkg "Install Cameras #{version.csv.first.chomp(".0")}.pkg"
 
+    # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
+  auto_updates true
+
   uninstall pkgutil: [
     "com.blackmagic-design.CameraControllers",
     "com.blackmagic-design.MiniRecorder",

@@ -12,6 +12,9 @@ cask "decimator-ucp" do
     regex(/href=.*?UCP[ ._-]v?(\d+(?:\.\d+)+)\.dmg/i)
   end
 
+  # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
+  auto_updates true
+
   app "UCP #{version}.app", target: "Decimator UCP.app"
 
   # No zap stanza required

@@ -38,6 +38,9 @@ cask "bmd-atem" do
 
   pkg "Install ATEM #{version.csv.first.chomp(".0")}.pkg"
 
+  # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
+  auto_updates true
+
   uninstall script:  {
               executable: "/Applications/Blackmagic ATEM Switchers/Uninstall ATEM.app/Contents/Resources/uninstall.sh",
               sudo:       true,

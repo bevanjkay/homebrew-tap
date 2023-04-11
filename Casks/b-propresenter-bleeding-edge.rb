@@ -13,6 +13,7 @@ cask "b-propresenter-bleeding-edge" do
       url = "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
 
       matched = []
+      unmatched = []
 
       current_minor = version.csv.first.minor.to_i
       future_minor = current_minor.to_i + 0
@@ -41,12 +42,18 @@ cask "b-propresenter-bleeding-edge" do
 
             if system_result.include?("200")
               matched << tested_version
-              ohai "Version #{tested_version} found." if ARGV.include?("-v" || "--verbose")
-            elsif ARGV.include?("-v" || "--verbose")
-              ohai "Version #{tested_version} not found."
+            else
+              unmatched << tested_version
             end
           end
         end
+      end
+
+      if ARGV.include?("-v") || ARGV.include?("--verbose")
+        puts "#{Tty.blue}==>#{Tty.reset} b-propresenter-bleeding-edge: #{matched.count} versions found, " \
+             "#{unmatched.count} versions not found."
+        matched.each { |version| puts "#{Tty.green}==>#{Tty.reset} Version #{version} found." }
+        unmatched.each { |version| puts "#{Tty.red}==>#{Tty.reset} Version #{version} not found." }
       end
 
       matched

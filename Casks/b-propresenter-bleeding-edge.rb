@@ -50,7 +50,8 @@ cask "b-propresenter-bleeding-edge" do
       end
 
       if ARGV.include?("-v") || ARGV.include?("--verbose")
-        puts "#{Tty.blue}==>#{Tty.reset} b-propresenter-bleeding-edge: #{matched.count} versions found, #{unmatched.count} versions not found."
+        puts "#{Tty.blue}==>#{Tty.reset} b-propresenter-bleeding-edge: #{matched.count} versions found, " \
+             "#{unmatched.count} versions not found."
         matched.each { |version| puts "#{Tty.green}==>#{Tty.reset} Version #{version} found." }
         unmatched.each { |version| puts "#{Tty.red}==>#{Tty.reset} Version #{version} not found." }
       end

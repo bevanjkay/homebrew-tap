@@ -41,10 +41,9 @@ cask "b-propresenter-bleeding-edge" do
 
             if system_result.include?("200")
               matched << tested_version
-              puts "Version #{tested_version} found."
-            else
-              puts "Version #{tested_version} not found."
-
+              ohai "Version #{tested_version} found." if ARGV.include?("-v" || "--verbose")
+            elsif ARGV.include?("-v" || "--verbose")
+              ohai "Version #{tested_version} not found."
             end
           end
         end

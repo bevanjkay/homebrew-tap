@@ -8,7 +8,7 @@ cask "davinci-resolve" do
     if File.exist?("#{Dir.home}/.personal_details.json")
       personal_details = JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
     else
-      ohai "Please create a personal details file at ~/.personal_details.json - using placeholder data"
+      opoo "Please create a personal details file at `~/.personal_details.json` - using placeholder data"
       personal_details = {
         "firstname"   => "Joe",
         "lastname"    => "Bloggs",
@@ -54,10 +54,10 @@ cask "davinci-resolve" do
     end
   end
 
-  pkg "Install Resolve #{version.csv.first}.pkg"
-
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
+
+  pkg "Install Resolve #{version.csv.first}.pkg"
 
   uninstall script:  {
               executable: "/Applications/DaVinci Resolve/Uninstall Resolve.app/Contents/Resources/uninstall.sh",

@@ -1,11 +1,15 @@
 cask "kiosk-browser-settings" do
-  version "20230303.4"
+  version "20230303.5"
   sha256 :no_check
 
   url "https://gc.org.au/app/kiosk-settings/kiosk-settings.zip"
   name "Kiosk Browser Settings"
   desc "Settings for Web Kiosk Browser"
   homepage "https://gc.org.au/"
+
+  livecheck do
+    skip "Manual version management"
+  end
 
   depends_on cask: "bevanjkay/tap/kiosk-browser"
 

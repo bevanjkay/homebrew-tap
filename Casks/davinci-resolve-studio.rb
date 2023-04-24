@@ -1,8 +1,8 @@
 cask "davinci-resolve-studio" do
   require "net/http"
 
-  version "18.1.4,9,906defc840124defbc78aeab922b279f"
-  sha256 "541a6d8a3a59f8b763560ee82f1176a58927969309f4be35b7bedcbb08782a03"
+  version "18.5.0,16,258d5ed07fc647abb565ce4a185b4b4e,b"
+  sha256 "58ce02b34f0c44baca1f1b4c8780f04c9ab51fde4aebc8809e2e78100ce140ba"
 
   url do
     if File.exist?("#{Dir.home}/.personal_details.json")
@@ -50,14 +50,16 @@ cask "davinci-resolve-studio" do
         "\"platform\":\"mac\"}' \"https://www.blackmagicdesign.com/api/support/latest-version\"",
       )
       version_info = JSON.parse(res)["mac"]
-      "#{version_info["major"]}.#{version_info["minor"]}.#{version_info["releaseNum"]},#{version_info["build"]},#{version_info["downloadId"]}"
+      next if version_info.blank?
+
+      "#{version_info["major"]}.#{version_info["minor"]}.#{version_info["releaseNum"]},#{version_info["build"]},#{version_info["downloadId"]},#{version_info["beta"] ? "b" : ""}"
     end
   end
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
 
-  pkg "Install Resolve #{version.csv.first}.pkg"
+  pkg "Install Resolve #{version.csv.first}#{version.csv.fourth}.pkg"
 
   uninstall script:  {
               executable: "/Applications/DaVinci Resolve/Uninstall Resolve.app/Contents/Resources/uninstall.sh",

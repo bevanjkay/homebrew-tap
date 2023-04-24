@@ -18,7 +18,7 @@ cask "dante-virtual-soundcard" do
     sha256 "edd61bc82c75205e2e311e60c666fe2c80b825a500efa2b4ce513f9ecb277b92"
 
     url "https://audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/#{version.major}/#{version.major_minor}/DVS-#{version}_macos#{arch}.dmg",
-        verified: "audinate-software-updates.sgp1.digitaloceanspaces.com/DanteVirtualSoundcard/"
+        verified: "audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/"
 
     livecheck do
       url "https://audinate.jfrog.io/artifactory/ad8-software-updates-prod/DanteVirtualSoundcard/appcast/DanteVirtualSoundcard-OSX.html"

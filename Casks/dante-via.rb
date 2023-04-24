@@ -14,10 +14,16 @@ cask "dante-via" do
 
   pkg "Dante Via.pkg"
 
-  uninstall pkgutil: [
-    "com.audinate.dante.conmon.pkg",
-    "com.audinate.dante.pkg.DanteVia",
-  ]
+  uninstall quit:      "com.audinate.DanteViaLoader",
+            pkgutil:   [
+              "com.audinate.dante.conmon.pkg",
+              "com.audinate.dante.pkg.DanteVia",
+            ],
+            launchctl: [
+              "com.audinate.dante.ConMon",
+              "com.audinate.dante.DanteVia.DanteViaDaemon",
+              "com.audinate.dante.DanteVia.DanteViaLoader",
+            ]
 
   zap trash: [
     "/Library/LaunchDaemons/com.audinate.dante.ConMon.plist",

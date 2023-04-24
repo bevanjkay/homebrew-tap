@@ -18,4 +18,15 @@ cask "dante-via" do
     "com.audinate.dante.conmon.pkg",
     "com.audinate.dante.pkg.DanteVia",
   ]
+
+  zap trash: [
+    "/Library/LaunchDaemons/com.audinate.dante.ConMon.plist",
+    "/Library/LaunchDaemons/com.audinate.dante.DanteVia.DanteViaDaemon.plist",
+    "/Library/Preferences/com.audinate.dante.install",
+    "~/Library/Application Support/dante-software-license",
+    "~/Library/Caches/dante-software-license",
+    "~/Library/HTTPStorages/com.audinate.DanteViaApp",
+    "~/Library/Preferences/com.audinate.DanteViaApp.plist",
+    "~/Library/Saved Application State/com.audinate.DanteViaApp.savedState",
+  ]
 end

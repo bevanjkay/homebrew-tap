@@ -6,7 +6,7 @@ cask "dante-virtual-soundcard" do
     sha256 "fdf5fe25444aace7683bc486dfec7a3922445c9720b997331f4e980eadcbffd9"
 
     url "https://audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/#{version.major}/#{version.major_minor}/macOS/DVS-#{version}_macos#{arch}.dmg",
-        verified: "audinate-software-updates.sgp1.digitaloceanspaces.com/DanteVirtualSoundcard/"
+        verified: "audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/"
 
     livecheck do
       url "https://audinate.jfrog.io/artifactory/ad8-software-updates-prod/DanteVirtualSoundcard/appcast/macOS/DanteVirtualSoundcard-macOS.xml"
@@ -34,11 +34,15 @@ cask "dante-virtual-soundcard" do
 
   pkg "DanteVirtualSoundcard.pkg"
 
-  uninstall pkgutil: [
-    "com.audinate.dante.conmon.pkg",
-    "com.audinate.dante.pkg.dvs.ui",
-    "com.audinate.dante.pkg.dvs.DanteVirtualSoundcard",
-  ]
+  uninstall pkgutil:   [
+              "com.audinate.dante.conmon.pkg",
+              "com.audinate.dante.pkg.dvs.ui",
+              "com.audinate.dante.pkg.dvs.DanteVirtualSoundcard",
+            ],
+            launchctl: [
+              "com.audinate.dante.ConMon",
+              "com.audinate.dante.DanteVirtualSoundcard",
+            ]
 
   zap trash: [
     "/Library/LaunchDaemons/com.audinate.dante.ConMon.plist",

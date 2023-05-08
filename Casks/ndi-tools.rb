@@ -17,17 +17,23 @@ cask "ndi-tools" do
   pkg "NDIToolsInstaller.pkg"
 
   uninstall pkgutil: [
+    "com.newtek.Application-Mac-NDI-AccessManager",
+    "com.newtek.Application-Mac-NDI-ScanConverter",
+    "com.newtek.Application-Mac-NDI-StudioMonitor",
+    "com.newtek.Application-Mac-NDI-VirtualInput",
+    "com.newtek.DAL.NDIplugin",
+    "com.newtek.DAL.NDIpluginlaunchdaemon",
+    "com.newtek.driver.NDIAudio",
+    "com.newtek.HAL.NDIaudioplugin",
+    "com.newtek.NewTek-Import-SpeedHQ",
+    "com.newtek.ndi.recording",
     "com.newtek.NDI-Tools",
     "com.newtek.NDI-HX-Driver",
     "com.newtek.NDI.prefpane",
-    "com.newtek.HAL.NDIaudioplugin",
-    "com.newtek.DAL.NDIpluginlaunchdaemon",
-    "com.newtek.DAL.NDIplugin",
     "com.newtek.NDI-Transmit-AdobeCC",
-    "com.newtek.NewTek-Import-SpeedHQ",
+    "com.newtek.NDIVirtualCamera",
     "com.newtek.Test-Patterns-Mac-",
-    "com.newtek.ndi.recording",
-  ]
+  ], launchctl: "com.newtek.cmio.DPA.NDI"
 
   zap trash: [
     "/Library/Application Support/NewTek",

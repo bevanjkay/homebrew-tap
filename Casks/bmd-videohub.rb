@@ -1,8 +1,8 @@
 cask "bmd-videohub" do
   require "net/http"
 
-  version "8.0.0,2e096119931e4e4f88c8fca21687c1d2,8ba96f1e3bd9485c922e9fffeb5a4474"
-  sha256 "b7dd820b1120a1955b84db863dfde5fd0676ec58d2f6cf589250f9e230c7447a"
+  version "8.0.1,5692bab8deaa4da8a46d64d9f962784f,2a2c157525f34f42a4835683c8aa6a71"
+  sha256 "76d218bb114e8864cd9d270b996f435b550ae1f8f9c13e2895a0478ddd45b879"
 
   url do
     params = {

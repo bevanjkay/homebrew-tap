@@ -62,7 +62,7 @@ cask "davinci-resolve-project-server" do
   pkg "Install DaVinci Resolve Project Server #{version.csv.first}#{version.csv.fourth}.pkg"
 
   uninstall script:  {
-              executable: "/Applications/DaVinci Resolve Project Server/Uninstall DaVinci Resolve Project Server.app/Contents/Resources/uninstall.sh",
+              executable: "/Applications/DaVinci Resolve Project Server/Uninstall DaVinci Resolve Project Server.app/Contents/Resources/uninstall_projectserver.sh",
               sudo:       true,
             },
             pkgutil: [

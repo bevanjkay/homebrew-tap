@@ -43,14 +43,14 @@ cask "fusion-studio" do
   pkg "Install Fusion Studio v#{version.csv.first.chomp(".0")}.pkg"
   pkg "Install Fusion Render Node v#{version.csv.first.chomp(".0")}.pkg"
 
-  uninstall script:  [{
-    executable: "/Applications/Blackmagic Fusion #{version.major}/Uninstall Fusion.app/Contents/Resources/uninstall.sh",
-    sudo:       true,
-  },
-                      {
-                        executable: "/Applications/Blackmagic Fusion #{version.major} Render Node/Uninstall Fusion Render Node.app/Contents/Resources/uninstall.sh",
-                        sudo:       true,
-                      }],
+  uninstall script:  {
+              executable: "/Applications/Blackmagic Fusion #{version.major}/Uninstall Fusion.app/Contents/Resources/uninstall.sh",
+              sudo:       true,
+            },
+            script:  {
+              executable: "/Applications/Blackmagic Fusion #{version.major} Render Node/Uninstall Fusion Render Node.app/Contents/Resources/uninstall.sh",
+              sudo:       true,
+            },
             pkgutil: [
               "com.blackmagic-design.Fusion#{version.major}RenderNodeUninstaller",
               "com.blackmagic-design.Fusion#{version.major}RenderNodeAssets",

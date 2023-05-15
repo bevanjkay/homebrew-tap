@@ -1,0 +1,39 @@
+name: Re-run Workflow
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+  pull_request_target:
+    types:
+      - closed
+      - labeled
+      - unlabeled
+  schedule:
+    - cron: '30 */3 * * *' # every 3 hours (30 minutes past the hour)
+
+permissions:
+  contents: read
+
+jobs:
+  rerun-workflow:
+    if: >
+      (
+        github.event.label.name == 'ci-requeue' ||
+        github.event.label.name == 'ci-retry' ||
+        github.event.label.name == 'ci-skip-install' ||
+        github.event.label.name == 'ci-syntax-only' ||
+        !github.event.label.name
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - name: Re-run CI workflow
+        uses: reitermarkus/rerun-workflow@7381e98aa2bc4464acef4b60ade8d1d1d90e6e65
+        with:
+          token: ${{ github.token }}
+          once-label: ci-requeue
+          continuous-label: ci-retry
+          trigger-labels: ci-skip-install,ci-syntax-only
+          workflow: ci.yml

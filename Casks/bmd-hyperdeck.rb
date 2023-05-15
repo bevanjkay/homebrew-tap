@@ -18,7 +18,7 @@ cask "bmd-hyperdeck" do
     resp.body
   end
   name "Blackmagic HyperDeck"
-  desc "Update and manage Blackmagic HyperDeck Hardware"
+  desc "Update and manage Blackmagic HyperDeck Hardwarecd"
   homepage "https://www.blackmagicdesign.com/"
 
   livecheck do
@@ -50,9 +50,5 @@ cask "bmd-hyperdeck" do
               "com.blackmagic-design.HyperDeck",
             ]
 
-  zap trash: [
-    "~/Library/Preferences/com.blackmagic-design.ATEM Setup.plist",
-    "~/Library/Preferences/com.blackmagic-design.ATEM Software Control.plist",
-    "~/Library/Saved Application State/com.blackmagic-design.switchers.softwarecontrol.savedState",
-  ]
+  zap trash: "~/Library/Preferences/com.blackmagic-design.HyperDeck Setup.plist"
 end

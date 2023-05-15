@@ -1,9 +1,9 @@
 cask "companion-beta" do
   arch arm: "arm64", intel: "x64"
 
-  version "3.0.0+5866-beta-f0507bc6"
-  sha256 arm:   "e4ce7f5091a0f123ba90a1eef23ff0455e52de7aa71205ddc91ac1637dce875a",
-         intel: "42f1fe1c765fd668ebe364d805f442bf1607318638db879030f0514284fffd4e"
+  version "3.0.0+5885-beta-142d1bfa"
+  sha256 arm:   "db769c3143adb38b813174cf768644baa413b2c0e02b144a1854bed1f9d1903c",
+         intel: "f71de0e3079d7ed30736305cbb1fa241e785d1581711b6beeace9f62bc9c1d60"
 
   url "https://s3.bitfocus.io/builds/companion/companion-mac-#{arch}-#{version}.dmg"
   name "Bitfocus Companion"
@@ -20,4 +20,13 @@ cask "companion-beta" do
   auto_updates true
 
   app "Companion.app", target: "Companion Beta.app"
+
+  postflight do
+    system "open", "/Applications/Companion Beta.app" if ENV["HOMEBREW_OPEN_AFTER_INSTALL"]
+  end
+
+  uninstall quit: [
+    "companion.bitfocus.no",
+    "test-companion.bitfocus.no",
+  ]
 end

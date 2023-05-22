@@ -51,8 +51,7 @@ cask "bmd-teranex" do
               "com.blackmagic-design.Teranex",
             ],
             delete:  [
-              "/Applications/Blackmagic Teranex/Teranex Setup.app",
-              "/Applications/Blackmagic Teranex/Uninstall Teranex.app",
+              "/Applications/Blackmagic Teranex",
             ]
 
   zap trash: "~/Library/Preferences/com.blackmagic-design.Teranex Setup.plist"

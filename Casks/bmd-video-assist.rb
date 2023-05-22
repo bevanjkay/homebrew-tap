@@ -43,7 +43,8 @@ cask "bmd-video-assist" do
   uninstall script:  {
               executable: "/Applications/Blackmagic Video Assist/Uninstall Video Assist.app/Contents/Resources/uninstall.sh",
               sudo:       true,
-              args:      ["--path", "/Applications/Blackmagic Video Assist/Uninstall Video Assist.app/Contents/Resources"],
+              args:       ["--path",
+                           "/Applications/Blackmagic Video Assist/Uninstall Video Assist.app/Contents/Resources"],
             },
             pkgutil: [
               "com.blackmagic-design.VideoAssistUninstaller",

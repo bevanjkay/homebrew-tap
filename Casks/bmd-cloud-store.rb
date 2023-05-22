@@ -49,6 +49,7 @@ cask "bmd-cloud-store" do
               "com.blackmagic-design.SharedStorageUninstaller",
               "com.blackmagic-design.SharedStorageAssets",
               "com.blackmagic-design.SharedStorage",
+              "com.blackmagic-design.ManifestProxyGenerator",
             ]
 
   zap trash: [

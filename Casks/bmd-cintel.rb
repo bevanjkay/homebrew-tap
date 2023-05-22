@@ -43,6 +43,7 @@ cask "bmd-cintel" do
   uninstall script:  {
               executable: "/Applications/Blackmagic Cintel/Uninstall Cintel.app/Contents/Resources/uninstall.sh",
               sudo:       true,
+              args:       ["--path", "/Applications/Blackmagic Cintel/Uninstall Cintel.app/Contents/Resources"],
             },
             pkgutil: [
               "com.blackmagic-design.CintelUninstaller",

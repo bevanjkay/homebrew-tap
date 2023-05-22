@@ -41,8 +41,8 @@ cask "bmd-multiview" do
   pkg "Install Multiview #{version.csv.first.chomp(".0")}.pkg"
 
   uninstall script:  {
-    executable: "/Applications/Blackmagic MultiView/Uninstall MultiView.app/Contents/Resources/uninstall.sh",
-    sudo:       true,
+              executable: "/Applications/Blackmagic MultiView/Uninstall MultiView.app/Contents/Resources/uninstall.sh",
+              sudo:       true,
             },
             pkgutil: [
               "com.blackmagic-design.MultiViewUninstaller",
@@ -50,8 +50,8 @@ cask "bmd-multiview" do
               "com.blackmagic-design.MultiView",
             ]
 
-            zap trash: [
-              "~/Library/Preferences/com.blackmagic-design.MultiView Setup.plist",
-              "~/Library/Saved Application State/com.blackmagic-design.multiview.utility.savedState",
-            ]
+  zap trash: [
+    "~/Library/Preferences/com.blackmagic-design.MultiView Setup.plist",
+    "~/Library/Saved Application State/com.blackmagic-design.multiview.utility.savedState",
+  ]
 end

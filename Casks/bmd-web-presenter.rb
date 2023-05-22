@@ -47,7 +47,7 @@ cask "bmd-web-presenter" do
             pkgutil: [
               "com.blackmagic-design.WebPresenterUninstaller",
               "com.blackmagic-design.WebPresenterAssets",
-              "com.blackmagic-design.WebPresenter  ",
+              "com.blackmagic-design.WebPresenter",
             ]
 
   zap trash: "~/Library/Preferences/com.blackmagic-design.Web Presenter Setup.plist"

@@ -7,6 +7,8 @@ cask "gateway-printer-driver" do
   desc "Drivers for Toshiba ColorMFP devices"
   homepage "https://business.toshiba.com/support"
 
+  conflicts_with cask: "toshiba-color-mfp"
+
   livecheck do
     url "https://business.toshiba.com/support/downloads/GetDownloads.jsp?model=e-STUDIO3515AC"
     strategy :page_match do |page|

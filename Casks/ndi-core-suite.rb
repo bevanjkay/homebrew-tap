@@ -9,10 +9,10 @@ cask "ndi-core-suite" do
   homepage "https://ndi.video/tools/ndi-core-suite/"
 
   # TODO: https://downloads.ndi.video/Tools/ndi_tools_osx_current_version.json
-  livecheck do
-    url :homepage
-    regex(/Version\s*number:\s*v?(\d+(?:\.\d+)+)/i)
-  end
+  # livecheck do
+  #   url :homepage
+  #   regex(/Version\s*number:\s*v?(\d+(?:\.\d+)+)/i)
+  # end
 
   pkg "NDIToolsInstaller.pkg"
 

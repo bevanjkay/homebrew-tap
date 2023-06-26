@@ -16,9 +16,14 @@ cask "amphetamine-enhancer" do
 
   app "Amphetamine Enhancer.app"
 
+  zap trash: [
+    "~/Library/Preferences/com.if.Amphetamine-Enhancer.plist",
+    "~/Library/Saved Application State/com.if.Amphetamine-Enhancer.savedState",
+  ]
+
   caveats <<~EOS
-    #{name.to_s} is a helper application for Amphetamine. It is not a standalone application.
-    Amphetamine must be installed from the Mac App Store for #{name.to_s} to work.
+    #{name.first} is a helper application for Amphetamine. It is not a standalone application.
+    Amphetamine must be installed from the Mac App Store for #{name.first} to work.
       mas install 937984704
   EOS
 end

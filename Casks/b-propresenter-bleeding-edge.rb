@@ -1,6 +1,6 @@
 cask "b-propresenter-bleeding-edge" do
-  version "7.13.2,118292995"
-  sha256 "5a6662330184bbbe51bbfe74e0eb18a60c895bcc27490c754b0baffb34a1f7a6"
+  version "7.13.2,118292996"
+  sha256 "b91a21e1012139f4ebcccccef420b97cbcd53663272e4c388b355588d68929f2"
 
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"

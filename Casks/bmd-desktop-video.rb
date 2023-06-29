@@ -1,8 +1,8 @@
 cask "bmd-desktop-video" do
   require "net/http"
 
-  version "12.4.2,de2c011b1e684bf88cefefe6ff4fde21,cdc57be479ba4af1ab6dfdbfdac5627f"
-  sha256 "3e36b757249b0cff1db8c833611eee2eaea7dbe2ae2bfc24a835ee1af9bef21d"
+  version "12.5.0,052d944af6744608b27da496dfc4396d,0bb9d9fe371b474f893cc771077e6c4b"
+  sha256 "6db675a84cfbb8c55ccfdee3cab6622d4f1a863b8eecf2fdbb5b1c1dab64af2b"
 
   url do
     params = {
@@ -36,9 +36,9 @@ cask "bmd-desktop-video" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_Desktop_Video_#{version.csv.first}.dmg"
+  container nested: "Blackmagic_Desktop_Video_#{version.csv.first.chomp(".0")}.dmg"
 
-  pkg "Install Desktop Video #{version.csv.first}.pkg"
+  pkg "Install Desktop Video #{version.csv.first.chomp(".0")}.pkg"
 
   uninstall pkgutil:   [
               "com.blackmagic-design.DesktopVideo",

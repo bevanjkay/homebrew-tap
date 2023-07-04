@@ -32,7 +32,7 @@ jobs:
       - name: Re-run CI workflow
         uses: reitermarkus/rerun-workflow@7381e98aa2bc4464acef4b60ade8d1d1d90e6e65
         with:
-          token: ${{ github.token }}
+          token: ${{ GITHUB_TOKEN }}
           once-label: ci-requeue
           continuous-label: ci-retry
           trigger-labels: ci-skip-install,ci-syntax-only

@@ -13,7 +13,7 @@ cask "dante-controller" do
     strategy :sparkle
   end
 
-  pkg "Dante Controller.pkg"
+  pkg "DanteController.pkg"
 
   uninstall pkgutil: [
     "com.audinate.dante.pkg.DanteController",

@@ -1,0 +1,89 @@
+name: Bump casks on schedule or request
+
+on:
+  workflow_dispatch:
+    inputs:
+      casks:
+        description: Custom list of casks to livecheck and bump if outdated
+        required: false
+  schedule:
+    # Every day at 12am and 12pm
+    - cron: "0 0,12 * * *"
+
+env:
+  CASKS: >
+    allen-and-heath-midi-control
+    amphetamine-enhancer
+    auracle-for-x-series
+    b-fluro-printer
+    b-font-sister-spray
+    b-hyper
+    b-loopback
+    b-output-factory
+    b-propresenter-bleeding-edge
+    b-propresenter
+    b-vitalsource-bookshelf
+    bmd-atem
+    bmd-braw
+    bmd-camera-utility
+    bmd-cintel
+    bmd-cloud-store
+    bmd-converters
+    bmd-desktop-video
+    bmd-hyperdeck
+    bmd-multiview
+    bmd-teranex
+    bmd-ultimatte
+    bmd-video-assist
+    bmd-videohub
+    bmd-web-presenter
+    bome-midi-translator-pro
+    boom-3d-audio-component
+    companion-beta
+    companion-experimental
+    companion-satellite
+    companion
+    dante-controller
+    dante-via
+    dante-virtual-soundcard
+    davinci-resolve-project-server
+    davinci-resolve-studio
+    davinci-resolve
+    decimator-ucp
+    fusion-studio
+    gld-editor
+    kiosk-browser
+    mixing-station
+    ndi-core-suite
+    rtp-midi-setup
+    toast-titanium
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+
+permissions:
+  contents: read
+
+jobs:
+  autobump:
+    if: github.repository == 'Homebrew/homebrew-cask'
+    runs-on: macos-latest
+    steps:
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+        with:
+          cask: false
+          core: false
+          test-bot: false
+
+      - name: Configure Git user
+        uses: Homebrew/actions/git-user-config@master
+        with:
+          username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'bevanjkay' }}
+
+      - name: Bump casks
+        uses: Homebrew/actions/bump-packages@master
+        continue-on-error: true
+        with:
+          token: ${{ secrets.TOKEN }}
+          casks: ${{ github.event.inputs.casks || env.CASKS }}

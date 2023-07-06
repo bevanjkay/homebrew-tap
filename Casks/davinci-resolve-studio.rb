@@ -12,10 +12,12 @@ cask "davinci-resolve-studio" do
       personal_details = {
         "firstname"   => "Joe",
         "lastname"    => "Bloggs",
-        "email"       => "testemail@gmail.com",
+        "email"       => "email@example.com",
         "phone"       => "61412345678",
+        "address"     => "123 Main Street",
         "city"        => "Melbourne",
         "state"       => "Victoria",
+        "zip"         => "3000",
         "countrycode" => "au",
       }
     end

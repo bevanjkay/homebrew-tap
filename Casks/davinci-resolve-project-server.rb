@@ -12,10 +12,12 @@ cask "davinci-resolve-project-server" do
       personal_details = {
         "firstname"   => "Joe",
         "lastname"    => "Bloggs",
-        "email"       => "testemail@gmail.com",
+        "email"       => "email@example.com",
         "phone"       => "61412345678",
+        "address"     => "123 Main Street",
         "city"        => "Melbourne",
         "state"       => "Victoria",
+        "zip"         => "3000",
         "countrycode" => "au",
       }
     end
@@ -27,10 +29,12 @@ cask "davinci-resolve-project-server" do
       "lastname"  => personal_details["lastname"],
       "email"     => personal_details["email"],
       "phone"     => personal_details["phone"],
+      "street"    => personal_details["address"],
       "city"      => personal_details["city"],
       "state"     => personal_details["state"],
+      "zip"       => personal_details["postcode"],
       "country"   => personal_details["countrycode"],
-      "policy"    => "true",
+      "policy"    => true,
     }.to_json
 
     uri = URI("https://www.blackmagicdesign.com/api/register/au/download/#{version.csv.third}")

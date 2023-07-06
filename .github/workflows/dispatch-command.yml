@@ -14,8 +14,8 @@ jobs:
       - name: Dispatch /rebase Command
         uses: peter-evans/slash-command-dispatch@a28ee6cd74d5200f99e247ebc7b365c03ae0ef3c
         with:
-          token: ${{ secrets.TOKEN }}
-          reaction-token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.BOT_TOKEN }}
+          reaction-token: ${{ secrets.BOT_TOKEN }}
           commands: rebase
           permission: triage
           issue-type: pull-request

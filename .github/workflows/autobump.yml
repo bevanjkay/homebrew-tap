@@ -79,11 +79,11 @@ jobs:
       - name: Configure Git user
         uses: Homebrew/actions/git-user-config@master
         with:
-          username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'bevanjkay' }}
+          username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'bkdbot' }}
 
       - name: Bump casks
         uses: Homebrew/actions/bump-packages@master
         continue-on-error: true
         with:
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.BOT_TOKEN }}
           casks: ${{ github.event.inputs.casks || env.CASKS }}

@@ -65,7 +65,6 @@ permissions:
 
 jobs:
   autobump:
-    if: github.repository == 'Homebrew/homebrew-cask'
     runs-on: macos-latest
     steps:
       - name: Set up Homebrew

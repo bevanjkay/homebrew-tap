@@ -1,9 +1,9 @@
 cask "companion-experimental" do
   arch arm: "arm64", intel: "x64"
 
-  version "3.99.0+6135-develop-31576feb"
-  sha256 arm:   "818dfbed58f61ac9c0ac119bb06a3424bd6677868e0ff6e1550478eacd4dd9a9",
-         intel: "8486c6674182cc78a3a9c85cfa141d3e785270b0d4c439cc28b9ff7957344331"
+  version "3.99.0+6136-develop-0ef86a1d"
+  sha256 arm:   "619dea20ef63edb18ea310ca7cdef17df00943c29ca60fd3d1ab8dd9db059f78",
+         intel: "fb8a048f1885454b917b0b8ca92b7027da117af7fef938820553b7455d7f2468"
 
   url "https://s3.bitfocus.io/builds/companion/companion-mac-#{arch}-#{version}.dmg"
   name "Bitfocus Companion"
@@ -20,4 +20,8 @@ cask "companion-experimental" do
   auto_updates true
 
   app "Companion.app", target: "Companion Experimental.app"
+
+  # No zap stanza required
+  # Shares settings with companion-beta - so don't remove
+  # To forcibly clean up, run brew uninstall --cask --force --zap companion-beta
 end

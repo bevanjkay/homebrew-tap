@@ -29,4 +29,8 @@ cask "companion-beta" do
     "companion.bitfocus.no",
     "test-companion.bitfocus.no",
   ]
+
+  # Only remove the preference file relevant to the beta version.
+  # To remove all files, also run brew uninstall --zap --force companion
+  zap trash: "~/Library/Preferences/test-companion.bitfocus.no.plist",
 end

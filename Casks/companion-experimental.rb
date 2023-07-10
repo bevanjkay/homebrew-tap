@@ -23,5 +23,5 @@ cask "companion-experimental" do
 
   # No zap stanza required
   # Shares settings with companion-beta - so don't remove
-  # To forcibly clean up, run brew uninstall --cask --force --zap companion-beta 
+  # To forcibly clean up, run brew uninstall --cask --force --zap companion-beta
 end

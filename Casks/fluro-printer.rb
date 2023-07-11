@@ -1,4 +1,4 @@
-cask "b-fluro-printer" do
+cask "fluro-printer" do
   version "6.2.4"
   sha256 "86a0587db197a0995524e0d456117f037d77e2404db470590bc221caa917b4b8"
 

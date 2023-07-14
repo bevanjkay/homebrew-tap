@@ -2,8 +2,8 @@ cask "dante-virtual-soundcard" do
   arch arm: "-apple-silicon"
 
   on_arm do
-    version "4.3.0.7"
-    sha256 "f2b614fc2a77098c4e88d3976bd96d94f1eb9170e3e876db949fd3ac90e4b6ed"
+    version "4.3.1.1"
+    sha256 "c23a54db0d1fe2a411b55e287e0ce56024b899d438e3b12d4ae2a750f863c705"
 
     url "https://audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/#{version.major}/#{version.major_minor}/macOS/DVS-#{version}_macos#{arch}.dmg",
         verified: "audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/"

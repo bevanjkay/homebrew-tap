@@ -8,7 +8,7 @@ on:
         required: false
   schedule:
     # Every day at 12am and 12pm
-    - cron: "0 0,12 * * *"
+    - cron: "0 12,22 * * *"
 
 env:
   CASKS: >

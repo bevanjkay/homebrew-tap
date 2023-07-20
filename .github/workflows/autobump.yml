@@ -15,7 +15,6 @@ env:
     allen-and-heath-midi-control
     amphetamine-enhancer
     auracle-for-x-series
-    b-fluro-printer
     b-font-sister-spray
     b-hyper
     b-loopback
@@ -50,6 +49,8 @@ env:
     davinci-resolve-studio
     davinci-resolve
     decimator-ucp
+    enttec-emu
+    fluro-printer
     fusion-studio
     gld-editor
     kiosk-browser

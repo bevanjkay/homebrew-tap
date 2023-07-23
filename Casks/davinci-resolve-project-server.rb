@@ -63,7 +63,7 @@ cask "davinci-resolve-project-server" do
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
 
-  pkg "Install DaVinci Resolve Project Server #{version.csv.first}#{version.csv.fourth}.pkg"
+  pkg "Install DaVinci Resolve Project Server #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
 
   uninstall script:    {
               executable: "/Applications/DaVinci Resolve Project Server/Uninstall DaVinci Resolve Project Server.app/Contents/Resources/uninstall_projectserver.sh",

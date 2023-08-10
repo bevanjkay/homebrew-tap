@@ -19,8 +19,6 @@ env:
     b-hyper
     b-loopback
     b-output-factory
-    b-propresenter-bleeding-edge
-    b-propresenter
     b-vitalsource-bookshelf
     bmd-atem
     bmd-braw
@@ -56,6 +54,7 @@ env:
     kiosk-browser
     mixing-station
     ndi-core-suite
+    propresenter-bleeding-edge
     rtp-midi-setup
     toast-titanium
     zsh-autosuggestions

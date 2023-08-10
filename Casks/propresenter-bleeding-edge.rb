@@ -1,6 +1,6 @@
-cask "b-propresenter-bleeding-edge" do
-  version "7.13.2,118292999"
-  sha256 "56c140825235c94decba193cb70f007cd7157c856288bb74894a557d9b8cee80"
+cask "propresenter-bleeding-edge" do
+  version "7.14,118358020"
+  sha256 "7048f236cc507c040f755b1a2471d22e367df9ceb54afa0f3499e7861d166052"
 
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"
@@ -62,7 +62,7 @@ cask "b-propresenter-bleeding-edge" do
 
   depends_on macos: ">= :mojave"
 
-  app "ProPresenter.app", target: "ProPresenter Alpha (#{version.csv.first}).app"
+  app "ProPresenter.app", target: "ProPresenter (#{version.csv.first}).app"
 
   zap trash: [
         "~/Library/Application Support/RenewedVision/ProPresenter#{version.major}",

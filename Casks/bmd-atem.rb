@@ -1,8 +1,8 @@
 cask "bmd-atem" do
   require "net/http"
 
-  version "9.0.2,82191a58665147b29a26a54012c03a8b,2d76c50e63194be7baf8eeb1ade9df4c"
-  sha256 "ddd28fa0bd6463640a8b5d0dc0197347971890bb7d82feb345a9a6a85a7de286"
+  version "9.1.0,bccce818f80e4cdaaac79790889d1972,0a333d6e27794cecb0bbb443e1518541"
+  sha256 "42eb462f3333c8d4b3e0ab8aff3ddd3048673c83263586d80fc677a3ae3f49dd"
 
   url do
     params = {

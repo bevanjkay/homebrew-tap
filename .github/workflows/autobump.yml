@@ -55,8 +55,8 @@ env:
     mixing-station
     ndi-core-suite
     propresenter-bleeding-edge
-    rtp-midi-setup
     rpcs3
+    rtp-midi-setup
     toast-titanium
     zsh-autosuggestions
     zsh-syntax-highlighting

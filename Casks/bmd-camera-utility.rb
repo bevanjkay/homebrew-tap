@@ -1,8 +1,8 @@
 cask "bmd-camera-utility" do
   require "net/http"
 
-  version "8.1.2,5e3263d24a604a929dda981ac1c1f5a5,ec5c44477d574669b262dd41a3d64db8"
-  sha256 "bbebcfb0d2f5b7099e5fbb824b9102c6a4f7937c1003718359abbcdfd87a8384"
+  version "8.3.0,4cca2e19dc2847f9b26af7cde847dcca,5642508cdd5a4178aef28fd1ce52f4ab"
+  sha256 "734cc6567ab1a856466415903985bfdf06d54ae31529f45664180307687a3e08"
 
   url do
     params = {

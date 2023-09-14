@@ -1,8 +1,8 @@
 cask "davinci-resolve" do
   require "net/http"
 
-  version "18.5.1,6,70d17c4a7c124c67b8745a3760049c4c,"
-  sha256 "1c7d49b3bf71b184dffa21db2630857fa9732196feca8f5f9d4ad1d09c89f18d"
+  version "18.6.0,9,dcfbc085908e4bc5a15ee81fa155de2f,"
+  sha256 "80c450f8c9d4469d4738870a7865476d1b6a0eea2bdf55a411275ba7583548e9"
 
   url do
     if File.exist?("#{Dir.home}/.personal_details.json")

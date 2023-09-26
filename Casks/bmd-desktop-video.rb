@@ -1,8 +1,8 @@
 cask "bmd-desktop-video" do
   require "net/http"
 
-  version "12.6.0,fed78f73a80e47fbae107a329e869dc4,688fe836247645ffadf737727652c6cc"
-  sha256 "7e180589fe5dd85c7652948cf5d598e90d0830b8b9edfc23d0382948cdfc287c"
+  version "12.7.0,2631f5a4fc1d434d99ab04a7db7626c9,77e6f0a5a9d842a68e6568268d77d8e1"
+  sha256 "c2ab23905cf335f50ab028ccc067276312fa9cc85239317b7d2c44df41eacbca"
 
   url do
     params = {

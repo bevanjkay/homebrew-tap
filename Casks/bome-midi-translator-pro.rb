@@ -1,8 +1,8 @@
 cask "bome-midi-translator-pro" do
-  version "1.9.0"
-  sha256 "37436933ce487fbd4054277d94863ad3d244728263535cc61d900feba59440a6"
+  version "1.9.1"
+  sha256 "e618e982b87ccd78dc35f2dac86c413dc86b8631fb02f7703e4a79c4e22dfd66"
 
-  url "https://download.bome.com/dl.php/27CB9388415F5/MIDITranslatorPro#{version}_Full.dmg"
+  url "https://download.bome.com/dl.php/3ACFDF73C03CB/MIDITranslatorPro#{version}_Full.dmg"
   name "Bome MIDI Translator Pro"
   desc "MIDI Translator Application"
   homepage "https://www.bome.com/products/miditranslator"

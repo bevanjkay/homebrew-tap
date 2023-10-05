@@ -9,12 +9,19 @@ cask "rpcs3" do
   homepage "https://rpcs3.net/"
 
   livecheck do
-    url "https://rpcs3.net/download"
+    url "https://rpcs3.net/compatibility?b"
     regex(%r{href=.*?([^-]+)/rpcs3[._-]v?((?:\d+(?:[.-]\d+)+)[._-](?:[a-f]|[0-9])+)[._-]macos\.dmg}i)
     strategy :page_match do |page, regex|
       page.scan(regex).map { |match| "#{match.second},#{match.first}" }
     end
   end
 
+  depends_on macos: ">= :monterey"
+
   app "RPCS3.app"
+
+  zap trash: [
+    "~/Library/Application Support/rpcs3",
+    "~/Library/Caches/rpcs3",
+  ]
 end

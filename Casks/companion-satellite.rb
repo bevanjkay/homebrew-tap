@@ -1,9 +1,9 @@
 cask "companion-satellite" do
   arch arm: "arm64", intel: "x64"
 
-  version "1.5.1,228-6f036a0"
-  sha256 arm:   "7bcf6140fa4a16986c05efa7ae4cd0500b3f4647ebd375dbfe70fde423d151ee",
-         intel: "004ce03e5912ba4b83988fa8821b38d29284a157a4913a40a63190d1ccb64970"
+  version "1.5.2,239-ea77fc2"
+  sha256 arm:   "9e1f2e07519b0cc445e5b109f19cdd9a1ad84f49976f8b466a156e40f4f04119",
+         intel: "ac5feba9de45f554cf64b6c1b002690757f90fbd60a922814389a46fea91420f"
 
   url "https://s3.bitfocus.io/builds/companion-satellite/companion-satellite-#{arch}-#{version.csv.second}.dmg"
   name "Bitfocus Satellite"

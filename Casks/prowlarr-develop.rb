@@ -1,9 +1,9 @@
 cask "prowlarr-develop" do
   arch arm: "arm64", intel: "x64"
 
-  version "1.9.1.3981"
-  sha256 arm:   "a9b98738e85cea087acdeb90fcb805188bb840427a58bc3c70b742e9b30b3588",
-         intel: "55f80286b3ac5701bb2b9308e4978274074735def9f2b6afdbab11ab54e5da87"
+  version "1.9.2.3992"
+  sha256 arm:   "9d87c56966f9cd84389216ca3ec07933bb7d49c2883bebbe3a79c5be10daf92a",
+         intel: "22b4f3574a4c8f1cf51cde6f0c681f68b22662094141ed6ae7b6b8a8d9f28139"
 
   url "https://github.com/Prowlarr/Prowlarr/releases/download/v#{version}/Prowlarr.develop.#{version}.osx-app-core-#{arch}.zip",
       verified: "github.com/Prowlarr/Prowlarr/"

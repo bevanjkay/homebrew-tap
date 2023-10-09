@@ -1,8 +1,8 @@
 cask "boom-3d-audio-component" do
-  version "1.4.5"
-  sha256 "d5c6a1029205498156c21e7c7c89bdc14f8c9f5222b55a9eb6feca2be47768dc"
+  version "2.0.2"
+  sha256 "5f831b998bf8df851a8c0e5aaf92ac37a959e792499369c124570dd85bace03f"
 
-  url "https://d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/catalina/v#{version}_tagged/Audio_Component_Installer.zip",
+  url "https://d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/catalina/v#{version}_tagged_surround/Audio_Component_Installer.zip",
       verified: "d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/",
       referer:  "https://www.globaldelight.com"
   name "Boom 3D Component Installer"
@@ -19,6 +19,7 @@ cask "boom-3d-audio-component" do
       next if main_cask_version.blank?
 
       main_cask_version_major = main_cask_version.to_s.split(",").first
+      ohai "Boom 3D Version: #{main_cask_version_major}"
       audio_component_url =
         "https://www.globaldelight.com/boom3d/mas-content/catalina/device-installer.php" \
         "?language=en-AU&app_version=#{main_cask_version_major}"

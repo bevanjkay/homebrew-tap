@@ -19,7 +19,11 @@ cask "boom-3d-audio-component" do
       next if main_cask_version.blank?
 
       main_cask_version_major = main_cask_version.to_s.split(",").first
-      ohai "Boom 3D Version: #{main_cask_version_major}"
+
+      if ARGV.include?("-v") || ARGV.include?("--verbose")
+        puts "#{Tty.blue}==>#{Tty.reset} Boom 3D Version: #{main_cask_version}"
+      end
+
       audio_component_url =
         "https://www.globaldelight.com/boom3d/mas-content/catalina/device-installer.php" \
         "?language=en-AU&app_version=#{main_cask_version_major}"

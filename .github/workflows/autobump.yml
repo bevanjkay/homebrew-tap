@@ -15,11 +15,6 @@ env:
     allen-and-heath-midi-control
     amphetamine-enhancer
     auracle-for-x-series
-    b-font-sister-spray
-    b-hyper
-    b-loopback
-    b-output-factory
-    b-vitalsource-bookshelf
     bmd-atem
     bmd-braw
     bmd-camera-utility
@@ -31,21 +26,27 @@ env:
     bmd-multiview
     bmd-teranex
     bmd-ultimatte
-    bmd-video-assist
     bmd-videohub
+    bmd-video-assist
     bmd-web-presenter
     bome-midi-translator-pro
     boom-3d-audio-component
+    b-font-sister-spray
+    b-hyper
+    b-loopback
+    b-output-factory
+    b-propresenter
+    b-vitalsource-bookshelf
+    companion
     companion-beta
     companion-experimental
     companion-satellite
-    companion
     dante-controller
     dante-via
     dante-virtual-soundcard
+    davinci-resolve
     davinci-resolve-project-server
     davinci-resolve-studio
-    davinci-resolve
     decimator-ucp
     enttec-emu
     fluro-printer
@@ -53,7 +54,9 @@ env:
     gld-editor
     kiosk-browser
     mixing-station
+    mixing-station-beta
     ndi-core-suite
+    nps-browser
     propresenter-bleeding-edge
     prowlarr-develop
     rpcs3

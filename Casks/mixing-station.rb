@@ -17,6 +17,7 @@ cask "mixing-station" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
+  conflicts_with cask: "bevanjkay/tap/mixing-station-beta"
 
   app "mixing-station-pc.app", target: "Mixing Station.app"
 

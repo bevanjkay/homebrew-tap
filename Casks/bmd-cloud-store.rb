@@ -1,8 +1,8 @@
 cask "bmd-cloud-store" do
   require "net/http"
 
-  version "1.1.5,fda9b2a4cddb480aa354e26b75ad226c,52e5660e1cb34a2f8246681d6d699114"
-  sha256 "935999de78a09d6cbddde1a6da3bd7434cb116f46294bd46053c4402bac5ea19"
+  version "1.1.6,9ba946cb738d47eab79db483cce136ad,2d5e6c41afe4468aa66f20f6928184a9"
+  sha256 "e16b16d1e65e1a33b0e051dd99708291bb8e963452c9e5d838a37f9032203d92"
 
   url do
     params = {

@@ -1,9 +1,9 @@
 cask "companion-beta" do
   arch arm: "arm64", intel: "x64"
 
-  version "3.2.0+6426-beta-69b3936b"
-  sha256 arm:   "3c89161bb6fbc29d734b57795016bbf51973c4ff598b389eaa66a73b21ac1936",
-         intel: "e0355681e5b6141b6289a0e15603c6b37323e44339852d1e540a82e9cf549a14"
+  version "3.2.0+6431-beta-43185675"
+  sha256 arm:   "1dcde9d82e0fcb35cc381a4c885d82122df8a7537619c2c01d1547ee5d9252a8",
+         intel: "5ed47fef84442fc7bc0fb200419e672b871cb615ba43403ca49a130b9859b2dd"
 
   url "https://s3.bitfocus.io/builds/companion/companion-mac-#{arch}-#{version}.dmg"
   name "Bitfocus Companion"

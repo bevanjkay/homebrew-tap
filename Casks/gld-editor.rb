@@ -1,18 +1,21 @@
 cask "gld-editor" do
-  version "1.61"
-  sha256 "bf099adfe233f6a8c1b199178e53fe2467282d5f1f45443a732e43798b805167"
+  version "1.61,2023,06"
+  sha256 "7e7902447b686950167c134680d16dcdab697412a8855ad54a9a844e5e6cd834"
 
-  url "https://www.allen-heath.com/media/GLD-Editor-#{version}-Installer.dmg"
+  url "https://www.allen-heath.com/content/uploads/#{version.csv.second}/#{version.csv.third}/GLD-Editor-#{version.csv.first}-Installer-Mac.zip"
   name "Allen & Heath GLD Editor"
   desc "Software control for Allen & Heath GLD Series Audio Console"
-  homepage "https://www.allen-heath.com/key-series/gld-series"
+  homepage "https://www.allen-heath.com/hardware/legacy-products/gld-80/"
 
   livecheck do
-    url :homepage
-    regex(/GLD\s*Editor\s*v?(\d+(?:\.\d+)+)[< "]/i)
+    url "https://www.allen-heath.com/hardware/legacy-products/gld-80/resources/"
+    regex(%r{href=.*?/([^/]+)/([^/]+)/GLD-Editor[._-]v?(\d+(?:\.\d+)+)[._-]Installer[._-]Mac\.zip}i)
+    strategy :page_match do |page, regex|
+      page.scan(regex).map { |match| "#{match.third},#{match.first},#{match.second}" }
+    end
   end
 
-  pkg "GLD Editor #{version} Installer.pkg"
+  pkg "GLD Editor #{version.csv.first} Installer.pkg"
 
   uninstall pkgutil: "com.allenheath.pkg.gldeditor*"
 

@@ -15,7 +15,7 @@ cask "allen-and-heath-midi-control" do
     end
   end
 
-  container nested: "Allen and Heath MIDI Control #{version}.dmg"
+  container nested: "Allen and Heath MIDI Control #{version.csv.first}.dmg"
 
   app "Allen and Heath MIDI Control.app"
 

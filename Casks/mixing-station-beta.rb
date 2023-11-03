@@ -10,8 +10,11 @@ cask "mixing-station-beta" do
   livecheck do
     url "https://mixingstation.app/backend/api/web/changelogs/milestones"
     strategy :json do |json|
-      json["data"].select { |item| item["variant"] == "PC" }
-                  .map { |item| item["beta"]["name"] }
+      versions = json["data"].select { |item| item["variant"] == "PC" }
+                             .map { |item| item["beta"]["name"] }
+      next version if versions.all?(&:blank?)
+
+      versions
     end
   end
 

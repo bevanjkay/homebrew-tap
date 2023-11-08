@@ -1,8 +1,8 @@
 cask "bmd-converters" do
   require "net/http"
 
-  version "8.0.0,d4c06d57c74141348a428af7d0b8b074,1f130439a7ad432abb4981ab0862dd51"
-  sha256 "94ffd2c180af6584e3f330680b52703778e4f6b30f94585fcd9335f4b2658128"
+  version "9.0.0,d3ae9836178a4498ac5608a4fe512b4d,42bccac89a5741c2bd8ee306aab0d4d6"
+  sha256 "6a7e725f637de733a9224242ad2854715e3c994d86aebc43a17912e4fbb23df9"
 
   url do
     params = {

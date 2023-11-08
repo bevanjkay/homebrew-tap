@@ -44,6 +44,7 @@ cask "bmd-converters" do
     "com.blackmagic-design.Converters",
     "com.blackmagic-design.ConvertersAssets",
     "com.blackmagic-design.ConvertersUninstaller",
+    "com.blackmagic-design.IPVideo2",
     "com.blackmagic-design.MicConverter",
     "com.blackmagic-design.MicroConverters",
   ]

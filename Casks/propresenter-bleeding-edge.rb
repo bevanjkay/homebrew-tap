@@ -1,15 +1,15 @@
 cask "propresenter-bleeding-edge" do
-  version "7.15,118423567"
-  sha256 "70e71ec898d16bf54852470255ae31f4edb095fa5441cf5fb2602486853e35de"
+  version "7.15,118423568"
+  sha256 "8c8fcb5acecf9275c1cd6cad1ea335b1efbf792d7f09b32cd7b72be989764046"
 
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"
   desc "Presentation and production application for live events"
-  homepage "https://www.renewedvision.com/propresenter.php"
+  homepage "https://www.renewedvision.com/propresenter/"
 
   livecheck do
     url :homepage
-    strategy :page_match do |_page|
+    strategy :page_match do
       url = "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
 
       matched = []
@@ -60,7 +60,7 @@ cask "propresenter-bleeding-edge" do
     end
   end
 
-  depends_on macos: ">= :mojave"
+  depends_on macos: ">= :monterey"
 
   app "ProPresenter.app", target: "ProPresenter (#{version.csv.first}).app"
 

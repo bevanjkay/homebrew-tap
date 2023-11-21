@@ -1,6 +1,6 @@
 cask "auracle-for-x-series" do
-  version "2.0.1"
-  sha256 "0aa0a65b3bfbed41eb1390159c55d8c0d13e7ec6f47b8a34706e0bbb9d4ed31f"
+  version "2.0.2"
+  sha256 "d04d79d5fbceed14de46cae76855670dc3a03116d61dae8461161dd9d57b812b"
 
   url "https://cdn.iconnectivity.com/software/AuracleForX#{version}.dmg"
   name "Auracle for X-Series"

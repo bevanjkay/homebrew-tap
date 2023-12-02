@@ -75,7 +75,7 @@ jobs:
         uses: Homebrew/actions/setup-homebrew@master
         with:
           core: false
-          cask: true
+          cask: false
           test-bot: false
 
       - name: Enable debug mode

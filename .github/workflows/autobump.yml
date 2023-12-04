@@ -76,13 +76,13 @@ jobs:
         id: set-up-homebrew
         uses: Homebrew/actions/setup-homebrew@master
         with:
-          cask: true
+          cask: false
           core: false
           test-bot: false
 
-      - name: Install Homebrew Gems
-        id: gems
-        run: brew install-bundler-gems
+      - name: Livecheck Test
+        id: livecheck-test
+        run: brew livecheck amphetamine-enhancer
 
       - name: Configure Git user
         uses: Homebrew/actions/git-user-config@master

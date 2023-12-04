@@ -7,8 +7,7 @@ on:
         description: Custom list of casks to livecheck and bump if outdated
         required: false
   schedule:
-    # Every day at 12am and 12pm
-    - cron: "0 12,15,22 * * *"
+    - cron: "15 */2 * * *"
 
 env:
   CASKS: >
@@ -79,10 +78,6 @@ jobs:
           cask: false
           core: false
           test-bot: false
-
-      - name: Livecheck Test
-        id: livecheck-test
-        run: brew livecheck amphetamine-enhancer
 
       - name: Configure Git user
         uses: Homebrew/actions/git-user-config@master

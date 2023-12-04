@@ -80,6 +80,10 @@ jobs:
           core: false
           test-bot: false
 
+      - name: Install Homebrew Gems
+        id: gems
+        run: brew install-bundler-gems
+
       - name: Configure Git user
         uses: Homebrew/actions/git-user-config@master
         with:

@@ -1,34 +1,17 @@
 cask "dante-virtual-soundcard" do
-  arch arm: "-apple-silicon"
+  version "4.4.1.3"
+  sha256 "ff2b5384b4905ed479915e8d4f9a1220abc88a379a0e129d2f76c302c8e72a99"
 
-  on_arm do
-    version "4.3.1.1"
-    sha256 "c23a54db0d1fe2a411b55e287e0ce56024b899d438e3b12d4ae2a750f863c705"
-
-    url "https://audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/#{version.major}/#{version.major_minor}/macOS/DVS-#{version}_macos#{arch}.dmg",
-        verified: "audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/"
-
-    livecheck do
-      url "https://audinate.jfrog.io/artifactory/ad8-software-updates-prod/DanteVirtualSoundcard/appcast/macOS/DanteVirtualSoundcard-macOS.xml"
-      strategy :sparkle
-    end
-  end
-  on_intel do
-    version "4.1.2.3"
-    sha256 "edd61bc82c75205e2e311e60c666fe2c80b825a500efa2b4ce513f9ecb277b92"
-
-    url "https://audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/#{version.major}/#{version.major_minor}/DVS-#{version}_macos#{arch}.dmg",
-        verified: "audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/"
-
-    livecheck do
-      url "https://audinate.jfrog.io/artifactory/ad8-software-updates-prod/DanteVirtualSoundcard/appcast/DanteVirtualSoundcard-OSX.html"
-      regex(/Dante\s*Virtual\s*Soundcard\s*v?(\d+(?:\.\d+)+)[< "]/i)
-    end
-  end
-
+  url "https://audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/#{version.major}/#{version.major_minor}/macOS/DVS-#{version}_macos.dmg",
+      verified: "audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteVirtualSoundcard/"
   name "Dante Virtual Soundcard"
   desc "Virtual direct I/O for Dante Network"
   homepage "https://www.audinate.com/products/software/dante-virtual-soundcard"
+
+  livecheck do
+    url "https://audinate.jfrog.io/artifactory/ad8-software-updates-prod/DanteVirtualSoundcard/appcast/macOS/DanteVirtualSoundcard-macOS.xml"
+    strategy :sparkle
+  end
 
   auto_updates true
 

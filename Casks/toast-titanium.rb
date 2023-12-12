@@ -1,6 +1,6 @@
 cask "toast-titanium" do
-  version "20.2"
-  sha256 "8b8ffc642ae9ca595509f1e0735a5104d3d87cedfbf144002bf63b60c0c58b34"
+  version "20.3"
+  sha256 "e6b18f9098ecaceacae9a9f14eabfcbe1b88a3d0d86bd1e8e62e9046ebb85a0f"
 
   url "https://img.roxio.com/updaters/toast/v#{version.no_dots}/titanium/Toast_Titanium.zip"
   name "Toast Titanium"

@@ -10,7 +10,7 @@ cask "mixing-station" do
   livecheck do
     url "https://mixingstation.app/backend/api/web/changelogs/milestones"
     strategy :json do |json|
-      json["data"].select { |item| item["variant"] == "PC" }
+      json["data"].select { |item| item["variant"] == "Desktop" }
                   .map { |item| item["current"]["name"] }
     end
   end

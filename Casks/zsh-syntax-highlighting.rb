@@ -1,6 +1,6 @@
 cask "zsh-syntax-highlighting" do
-  version "0.7.1"
-  sha256 "69f117a988acd97f5399bfda92f837052164c4837d73d0888cc1ccc6117a34c6"
+  version "0.8.0"
+  sha256 "e8c214bf96168f13eaa9d2b78fd3e58070ecf11963b3a626fe5df9dfe0cf2925"
 
   url "https://github.com/zsh-users/zsh-syntax-highlighting/archive/refs/tags/#{version}.zip"
   name "ZSH Syntax Highlighting Plugin"

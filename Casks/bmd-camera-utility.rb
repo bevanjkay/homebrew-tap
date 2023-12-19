@@ -22,15 +22,17 @@ cask "bmd-camera-utility" do
   homepage "https://www.blackmagicdesign.com/"
 
   livecheck do
-    url "https://www.blackmagicdesign.com/"
-    strategy :page_match do
-      res, _err, _st =
-        Open3.capture3("curl -X POST -H \"Content-Type: application/json\" -d '{\"product\":\"camera\", " \
-                       "\"platform\":\"mac\"}' \"https://www.blackmagicdesign.com/api/support/latest-version\"")
-      version_info = JSON.parse(res)["mac"]
-      next if version_info.blank?
-
-      "#{version_info["major"]}.#{version_info["minor"]}.#{version_info["releaseNum"]},#{version_info["releaseId"]},#{version_info["downloadId"]}"
+    url "https://www.blackmagicdesign.com/api/support/us/downloads.json"
+    strategy :json do |json|
+      matched = json["downloads"].select do |download|
+        next false if download["name"].match(/beta/i)
+        next false unless download["urls"]["Mac OS X"].present?
+        download["urls"]["Mac OS X"].first["product"] == "camera"
+      end
+      matched.map do |download|
+        v = download["urls"]["Mac OS X"].first
+        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]}"
+      end
     end
   end
 

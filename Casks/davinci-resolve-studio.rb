@@ -1,7 +1,7 @@
 cask "davinci-resolve-studio" do
   require "net/http"
 
-  version "18.6.4,6,48a7b70dcdf4495b97cc49ad7bda2539,"
+  version "18.6.4,479f37a4180c4e14b4ab67553d1683c0,48a7b70dcdf4495b97cc49ad7bda2539,"
   sha256 "21e128a8ae841ae7ee004ffa0235a8da4e3fb1bbeb5db34044b321ce7517e745"
 
   url do
@@ -45,16 +45,18 @@ cask "davinci-resolve-studio" do
   homepage "https://www.blackmagicdesign.com/au/products/davinciresolve/"
 
   livecheck do
-    url "https://www.blackmagicdesign.com/"
-    strategy :page_match do
-      res, = Open3.capture3(
-        "curl -X POST -H \"Content-Type: application/json\" -d '{\"product\": \"davinci-resolve-studio\", " \
-        "\"platform\":\"mac\"}' \"https://www.blackmagicdesign.com/api/support/latest-version\"",
-      )
-      version_info = JSON.parse(res)["mac"]
-      next if version_info.blank?
+    url "https://www.blackmagicdesign.com/api/support/us/downloads.json"
+    strategy :json do |json|
+      matched = json["downloads"].select do |download|
+        next false if /beta/i.match?(download["name"])
+        next false if download["urls"]["Mac OS X"].blank?
 
-      "#{version_info["major"]}.#{version_info["minor"]}.#{version_info["releaseNum"]},#{version_info["build"]},#{version_info["downloadId"]},#{version_info["beta"] ? "b" : ""}"
+        download["urls"]["Mac OS X"].first["product"] == "davinci-resolve-studio"
+      end
+      matched.map do |download|
+        v = download["urls"]["Mac OS X"].first
+        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{v["beta"] ? "b" : ""}"
+      end
     end
   end
 

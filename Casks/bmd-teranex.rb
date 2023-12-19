@@ -22,15 +22,18 @@ cask "bmd-teranex" do
   homepage "https://www.blackmagicdesign.com/products/teranex"
 
   livecheck do
-    url "https://www.blackmagicdesign.com/"
-    strategy :page_match do
-      res, _err, _st =
-        Open3.capture3("curl -X POST -H \"Content-Type: application/json\" -d '{\"product\":\"teranex\", " \
-                       "\"platform\":\"mac\"}' \"https://www.blackmagicdesign.com/api/support/latest-version\"")
-      version_info = JSON.parse(res)["mac"]
-      next if version_info.blank?
+    url "https://www.blackmagicdesign.com/api/support/us/downloads.json"
+    strategy :json do |json|
+      matched = json["downloads"].select do |download|
+        next false if /beta/i.match?(download["name"])
+        next false if download["urls"]["Mac OS X"].blank?
 
-      "#{version_info["major"]}.#{version_info["minor"]}.#{version_info["releaseNum"]},#{version_info["releaseId"]},#{version_info["downloadId"]}"
+        download["urls"]["Mac OS X"].first["product"] == "teranex"
+      end
+      matched.map do |download|
+        v = download["urls"]["Mac OS X"].first
+        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]}"
+      end
     end
   end
 

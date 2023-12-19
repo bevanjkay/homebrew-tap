@@ -1,8 +1,8 @@
 cask "bmd-web-presenter" do
   require "net/http"
 
-  version "3.3.0,686fe60bae9c42829ccd619c0f350192,ce92935741e84f909148ef1a76d5a21f"
-  sha256 "05284f416882ebf27febff7cbe1c572a98494dbe842cf7008653cacefe2def71"
+  version "3.4.0,749a7d93d702481dbc51b682ae10c2ec,9bad309132e54dceadf1bf9466005d3a"
+  sha256 "3bf25453191e9a6d9578086894f28a339d8514bc2b278dcb07ddd7bb0b2bfa91"
 
   url do
     params = {

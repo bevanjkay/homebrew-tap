@@ -1,7 +1,7 @@
 cask "fusion-studio" do
   require "net/http"
 
-  version "18.6.4,6,928ad09f6a8c41c2ac35103ab297b4e4,"
+  version "18.6.4,ad781aca7e3a447bbdf58970ecd6d2e8,928ad09f6a8c41c2ac35103ab297b4e4,"
   sha256 "c19b7c2bf10f96f579c244f7637602df25f7eee596df3a6c18e072051dc1c67f"
 
   url do
@@ -25,16 +25,18 @@ cask "fusion-studio" do
   homepage "https://www.blackmagicdesign.com/au/products/fusion/"
 
   livecheck do
-    url "https://www.blackmagicdesign.com/"
-    strategy :page_match do
-      res, = Open3.capture3(
-        "curl -X POST -H \"Content-Type: application/json\" -d '{\"product\": \"fusion-studio\", " \
-        "\"platform\":\"mac\"}' \"https://www.blackmagicdesign.com/api/support/latest-version\"",
-      )
-      version_info = JSON.parse(res)["mac"]
-      next if version_info.blank?
+    url "https://www.blackmagicdesign.com/api/support/us/downloads.json"
+    strategy :json do |json|
+      matched = json["downloads"].select do |download|
+        next false if /beta/i.match?(download["name"])
+        next false if download["urls"]["Mac OS X"].blank?
 
-      "#{version_info["major"]}.#{version_info["minor"]}.#{version_info["releaseNum"]},#{version_info["build"]},#{version_info["downloadId"]},#{version_info["beta"] ? "b" : ""}"
+        download["urls"]["Mac OS X"].first["product"] == "fusion-studio"
+      end
+      matched.map do |download|
+        v = download["urls"]["Mac OS X"].first
+        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{v["beta"] ? "b" : ""}"
+      end
     end
   end
 

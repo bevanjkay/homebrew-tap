@@ -17,7 +17,6 @@ cask "rpcs3" do
   end
 
   depends_on macos: ">= :monterey"
-  container type: :seven_zip
 
   app "RPCS3.app"
 

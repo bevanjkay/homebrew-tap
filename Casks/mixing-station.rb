@@ -11,7 +11,7 @@ cask "mixing-station" do
     url "https://mixingstation.app/backend/api/web/changelogs/milestones"
     strategy :json do |json|
       json["data"].select { |item| item["variant"] == "Desktop" }
-                  .map { |item| item["current"]["name"] }
+                  .map { |item| item["current"]["version"] }
     end
   end
 

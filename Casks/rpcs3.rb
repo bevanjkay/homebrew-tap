@@ -12,7 +12,19 @@ cask "rpcs3" do
     url "https://rpcs3.net/download"
     regex(%r{href=.*?([^-]+)/rpcs3[._-]v?((?:\d+(?:[.-]\d+)+)[._-](?:[a-f]|[0-9])+)[._-]macos\.7z}i)
     strategy :page_match do |page, regex|
-      page.scan(regex).map { |match| "#{match.second},#{match.first}" }
+      current_version, current_build = version.csv
+      build, version = page.scan(regex).max_by(&:first)
+
+      current_build_number = current_version.split("-").second
+      build_number = version.split("-").second
+
+      # If the current version is within 5 builds of the latest, use the current version
+      if build_number && current_build_number.to_i + 5 > build_number.to_i
+        version = current_version
+        build = current_build
+      end
+
+      "#{version},#{build}"
     end
   end
 

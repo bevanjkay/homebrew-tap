@@ -1,5 +1,5 @@
 cask "mixing-station" do
-  version "2.0.2"
+  version "2.0.3"
   sha256 :no_check
 
   url "https://mixingstation.app/backend/api/web/download/attachment/mixing-station-pc/release/OSX"
@@ -19,7 +19,7 @@ cask "mixing-station" do
   auto_updates true
   conflicts_with cask: "bevanjkay/tap/mixing-station-beta"
 
-  app "mixing-station-pc.app", target: "Mixing Station.app"
+  app "Mixing Station.app"
 
   zap trash: [
     "~/Library/Saved Application State/org.devcore.mixingstation.pc.savedState",

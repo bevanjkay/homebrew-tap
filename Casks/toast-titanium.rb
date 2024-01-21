@@ -17,13 +17,13 @@ cask "toast-titanium" do
   pkg "Toast #{version.major} Titanium.pkg"
 
   uninstall pkgutil: [
+    "com.roxio.toast.toast#{version.major}.DiskCatalogMaker.pkg",
     "com.roxio.toast.toast#{version.major}Titanium.Akrilic.pkg",
     "com.roxio.toast.toast#{version.major}Titanium.MultiCamCaptureandEditing.pkg",
-    "com.roxio.toast.toast#{version.major}Titanium.ToastSlice.pkg",
     "com.roxio.toast.toast#{version.major}Titanium.RoxioSecureBurn.pkg",
-    "com.roxio.toast.toast#{version.major}Titanium.ToastAudioAssistant.pkg",
     "com.roxio.toast.toast#{version.major}Titanium.ScreenCapture.pkg",
-    "com.roxio.toast.toast#{version.major}.DiskCatalogMaker.pkg",
+    "com.roxio.toast.toast#{version.major}Titanium.ToastAudioAssistant.pkg",
+    "com.roxio.toast.toast#{version.major}Titanium.ToastSlice.pkg",
     "com.roxio.toast.toast#{version.major}Titanium.ToastTitanium.pkg",
   ]
 
@@ -36,8 +36,8 @@ cask "toast-titanium" do
     "~/Library/HTTPStorages/com.corel.ToastStub.binarycookies",
     "~/Library/HTTPStorages/com.roxio.Toast",
     "~/Library/HTTPStorages/com.roxio.Toast.binarycookies",
-    "~/Library/Preferences/Roxio Toast Prefs",
     "~/Library/Preferences/com.roxio.Toast.plist",
+    "~/Library/Preferences/Roxio Toast Prefs",
     "~/Library/WebKit/com.roxio.Toast",
   ], rmdir: [
     "~/Documents/Roxio Captured Items",

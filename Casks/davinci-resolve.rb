@@ -77,8 +77,8 @@ cask "davinci-resolve" do
               "com.blackmagic-design.DaVinciPanels",
               "com.blackmagic-design.FairlightPanels",
               "com.blackmagic-design.ManifestBlackmagicRawPlayer",
-              "com.blackmagic-design.ManifestPanels",
               "com.blackmagic-design.ManifestLite",
+              "com.blackmagic-design.ManifestPanels",
             ]
 
   zap trash: [

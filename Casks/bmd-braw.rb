@@ -74,9 +74,9 @@ cask "bmd-braw" do
               sudo:       true,
             },
             pkgutil: [
+              "com.blackmagic-design.BlackmagicRaw",
               "com.blackmagic-design.BlackmagicRawSDK",
               "com.blackmagic-design.BlackmagicRawUninstaller",
-              "com.blackmagic-design.BlackmagicRaw",
             ]
 
   zap trash: [

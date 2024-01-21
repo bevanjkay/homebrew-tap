@@ -74,9 +74,9 @@ cask "davinci-resolve-studio" do
               "com.blackmagic-design.DaVinciKeyboards",
               "com.blackmagic-design.DaVinciPanels",
               "com.blackmagic-design.FairlightPanels",
+              "com.blackmagic-design.Manifest",
               "com.blackmagic-design.ManifestBlackmagicRawPlayer",
               "com.blackmagic-design.ManifestPanels",
-              "com.blackmagic-design.Manifest",
             ]
 
   zap trash: [

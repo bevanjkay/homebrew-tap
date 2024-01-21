@@ -48,9 +48,9 @@ cask "bmd-ultimatte" do
               sudo:       true,
             },
             pkgutil: [
-              "com.blackmagic-design.UltimatteUninstaller",
-              "com.blackmagic-design.UltimatteAssets",
               "com.blackmagic-design.Ultimatte",
+              "com.blackmagic-design.UltimatteAssets",
+              "com.blackmagic-design.UltimatteUninstaller",
             ]
 
   zap trash: [

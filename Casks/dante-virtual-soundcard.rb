@@ -19,8 +19,8 @@ cask "dante-virtual-soundcard" do
 
   uninstall pkgutil:   [
               "com.audinate.dante.conmon.pkg",
-              "com.audinate.dante.pkg.dvs.ui",
               "com.audinate.dante.pkg.dvs.DanteVirtualSoundcard",
+              "com.audinate.dante.pkg.dvs.ui",
             ],
             launchctl: [
               "com.audinate.dante.ConMon",

@@ -48,10 +48,10 @@ cask "bmd-cloud-store" do
               sudo:       true,
             },
             pkgutil: [
-              "com.blackmagic-design.SharedStorageUninstaller",
-              "com.blackmagic-design.SharedStorageAssets",
-              "com.blackmagic-design.SharedStorage",
               "com.blackmagic-design.ManifestProxyGenerator",
+              "com.blackmagic-design.SharedStorage",
+              "com.blackmagic-design.SharedStorageAssets",
+              "com.blackmagic-design.SharedStorageUninstaller",
             ]
 
   zap trash: [

@@ -49,9 +49,9 @@ cask "bmd-cintel" do
               args:       ["--path", "/Applications/Blackmagic Cintel/Uninstall Cintel.app/Contents/Resources"],
             },
             pkgutil: [
-              "com.blackmagic-design.CintelUninstaller",
-              "com.blackmagic-design.CintelAssets",
               "com.blackmagic-design.Cintel",
+              "com.blackmagic-design.CintelAssets",
+              "com.blackmagic-design.CintelUninstaller",
             ]
 
   zap trash: [

@@ -25,13 +25,13 @@ cask "ndi-core-suite" do
     "com.newtek.DAL.NDIpluginlaunchdaemon",
     "com.newtek.driver.NDIAudio",
     "com.newtek.HAL.NDIaudioplugin",
-    "com.newtek.NewTek-Import-SpeedHQ",
-    "com.newtek.ndi.recording",
-    "com.newtek.NDI-Tools",
     "com.newtek.NDI-HX-Driver",
-    "com.newtek.NDI.prefpane",
+    "com.newtek.NDI-Tools",
     "com.newtek.NDI-Transmit-AdobeCC",
+    "com.newtek.NDI.prefpane",
+    "com.newtek.ndi.recording",
     "com.newtek.NDIVirtualCamera",
+    "com.newtek.NewTek-Import-SpeedHQ",
     "com.newtek.Test-Patterns-Mac-",
   ], launchctl: "com.newtek.cmio.DPA.NDI"
 

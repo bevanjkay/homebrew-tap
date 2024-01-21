@@ -45,10 +45,10 @@ cask "bmd-videohub" do
 
   uninstall pkgutil:   [
               "com.blackmagic-design.SmartControl",
-              "com.blackmagic-design.VideohubUninstaller",
-              "com.blackmagic-design.VideohubAssets",
               "com.blackmagic-design.Videohub",
               "com.blackmagic-design.Videohub2",
+              "com.blackmagic-design.VideohubAssets",
+              "com.blackmagic-design.VideohubUninstaller",
             ],
             launchctl: "com.blackmagic-design.videohub.server"
 

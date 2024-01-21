@@ -48,9 +48,9 @@ cask "bmd-hyperdeck" do
               sudo:       true,
             },
             pkgutil: [
-              "com.blackmagic-design.HyperDeckUninstaller",
-              "com.blackmagic-design.HyperDeckAssets",
               "com.blackmagic-design.HyperDeck",
+              "com.blackmagic-design.HyperDeckAssets",
+              "com.blackmagic-design.HyperDeckUninstaller",
             ]
 
   zap trash: "~/Library/Preferences/com.blackmagic-design.HyperDeck Setup.plist"

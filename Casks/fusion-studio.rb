@@ -58,12 +58,12 @@ cask "fusion-studio" do
   }
   uninstall launchctl: "com.blackmagicdesign.fusion.server",
             pkgutil:   [
-              "com.blackmagic-design.Fusion#{version.major}RenderNodeUninstaller",
-              "com.blackmagic-design.Fusion#{version.major}RenderNodeAssets",
               "com.blackmagic-design.Fusion#{version.major}RenderNode",
-              "com.blackmagic-design.Fusion#{version.major}StudioUninstaller",
-              "com.blackmagic-design.Fusion#{version.major}StudioAssets",
+              "com.blackmagic-design.Fusion#{version.major}RenderNodeAssets",
+              "com.blackmagic-design.Fusion#{version.major}RenderNodeUninstaller",
               "com.blackmagic-design.Fusion#{version.major}Studio",
+              "com.blackmagic-design.Fusion#{version.major}StudioAssets",
+              "com.blackmagic-design.Fusion#{version.major}StudioUninstaller",
             ]
 
   zap trash: [

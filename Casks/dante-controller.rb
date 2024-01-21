@@ -16,9 +16,9 @@ cask "dante-controller" do
   pkg "DanteController.pkg"
 
   uninstall pkgutil: [
+    "com.audinate.dante.conmon.pkg",
     "com.audinate.dante.pkg.DanteController",
     "com.audinate.dante.pkg.DanteControllerPackage",
-    "com.audinate.dante.conmon.pkg",
     "com.audinate.dante.pkg.DanteUpdateHelper",
     "com.audinate.dante.pkg.DanteUpdateHelperDB",
     "com.audinate.dante.pkg.DanteUpdater",

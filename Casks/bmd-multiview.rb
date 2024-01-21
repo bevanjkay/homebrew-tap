@@ -48,9 +48,9 @@ cask "bmd-multiview" do
               sudo:       true,
             },
             pkgutil: [
-              "com.blackmagic-design.MultiViewUninstaller",
-              "com.blackmagic-design.MultiViewAssets",
               "com.blackmagic-design.MultiView",
+              "com.blackmagic-design.MultiViewAssets",
+              "com.blackmagic-design.MultiViewUninstaller",
             ]
 
   zap trash: [

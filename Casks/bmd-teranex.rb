@@ -48,14 +48,12 @@ cask "bmd-teranex" do
               sudo:       true,
             },
             pkgutil: [
+              "com.blackmagic-design.Teranex",
+              "com.blackmagic-design.TeranexAssets",
               "com.blackmagic-design.TeranexMini",
               "com.blackmagic-design.TeranexUninstaller",
-              "com.blackmagic-design.TeranexAssets",
-              "com.blackmagic-design.Teranex",
             ],
-            delete:  [
-              "/Applications/Blackmagic Teranex",
-            ]
+            delete:  "/Applications/Blackmagic Teranex"
 
   zap trash: "~/Library/Preferences/com.blackmagic-design.Teranex Setup.plist"
 end

@@ -48,9 +48,9 @@ cask "bmd-web-presenter" do
               sudo:       true,
             },
             pkgutil: [
-              "com.blackmagic-design.WebPresenterUninstaller",
-              "com.blackmagic-design.WebPresenterAssets",
               "com.blackmagic-design.WebPresenter",
+              "com.blackmagic-design.WebPresenterAssets",
+              "com.blackmagic-design.WebPresenterUninstaller",
             ]
 
   zap trash: "~/Library/Preferences/com.blackmagic-design.Web Presenter Setup.plist"

@@ -44,17 +44,15 @@ cask "bmd-camera-utility" do
   pkg "Install Cameras #{version.csv.first.chomp(".0")}.pkg"
 
   uninstall pkgutil: [
-    "com.blackmagic-design.CameraControllers",
-    "com.blackmagic-design.MiniRecorder",
-    "com.blackmagic-design.BlackmagicRawSDK",
     "com.blackmagic-design.BlackmagicRaw",
-    "com.blackmagic-design.SMPTEFiber",
-    "com.blackmagic-design.CamerasUninstaller",
-    "com.blackmagic-design.CamerasAssets",
+    "com.blackmagic-design.BlackmagicRawSDK",
+    "com.blackmagic-design.CameraControllers",
     "com.blackmagic-design.Cameras",
+    "com.blackmagic-design.CamerasAssets",
+    "com.blackmagic-design.CamerasUninstaller",
+    "com.blackmagic-design.MiniRecorder",
+    "com.blackmagic-design.SMPTEFiber",
   ]
 
-  zap trash: [
-    "~/Library/Preferences/com.blackmagic-design.Camera Setup.plist",
-  ]
+  zap trash: "~/Library/Preferences/com.blackmagic-design.Camera Setup.plist"
 end

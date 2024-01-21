@@ -16,9 +16,9 @@ cask "enttec-emu" do
   pkg "EMU-#{version}.pkg"
 
   uninstall pkgutil: [
+    "com.enttec.emu",
     "com.enttec.emu.au",
     "com.enttec.emu.vst3",
-    "com.enttec.emu",
   ]
 
   zap trash: "~/Library/Preferences/com.enttec.emu.plist"

@@ -50,9 +50,9 @@ cask "bmd-video-assist" do
                            "/Applications/Blackmagic Video Assist/Uninstall Video Assist.app/Contents/Resources"],
             },
             pkgutil: [
-              "com.blackmagic-design.VideoAssistUninstaller",
-              "com.blackmagic-design.VideoAssistAssets",
               "com.blackmagic-design.VideoAssist",
+              "com.blackmagic-design.VideoAssistAssets",
+              "com.blackmagic-design.VideoAssistUninstaller",
             ]
 
   zap trash: "~/Library/Preferences/com.blackmagic-design.Video Assist Setup.plist"

@@ -3,7 +3,6 @@ cask "adobe-fonts-revealer" do
   sha256 :no_check
 
   url "https://github.com/Kalaschnik/adobe-fonts-revealer.git",
-      verified: "github.com/google/fonts",
       branch:   "main"
   name "Adobe Fonts Revealer"
   desc "Turn Adobe Fonts into local fonts"

@@ -17,14 +17,14 @@ cask "dante-virtual-soundcard" do
 
   pkg "DanteVirtualSoundcard.pkg"
 
-  uninstall pkgutil:   [
+  uninstall launchctl: [
+              "com.audinate.dante.ConMon",
+              "com.audinate.dante.DanteVirtualSoundcard",
+            ],
+            pkgutil:   [
               "com.audinate.dante.conmon.pkg",
               "com.audinate.dante.pkg.dvs.DanteVirtualSoundcard",
               "com.audinate.dante.pkg.dvs.ui",
-            ],
-            launchctl: [
-              "com.audinate.dante.ConMon",
-              "com.audinate.dante.DanteVirtualSoundcard",
             ]
 
   zap trash: [

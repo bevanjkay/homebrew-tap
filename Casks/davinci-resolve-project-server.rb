@@ -65,11 +65,11 @@ cask "davinci-resolve-project-server" do
 
   pkg "Install DaVinci Resolve Project Server #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
 
-  uninstall script:    {
+  uninstall launchctl: "com.edb.launchd.postgresql-13",
+            script:    {
               executable: "/Applications/DaVinci Resolve Project Server/Uninstall DaVinci Resolve Project Server.app/Contents/Resources/uninstall_projectserver.sh",
               sudo:       true,
             },
-            launchctl: "com.edb.launchd.postgresql-13",
             pkgutil:   [
               "com.blackmagic-design.ManifestPostgres",
               "com.blackmagic-design.ManifestProjectServer",

@@ -16,24 +16,25 @@ cask "ndi-core-suite" do
 
   pkg "NDIToolsInstaller.pkg"
 
-  uninstall pkgutil: [
-    "com.newtek.Application-Mac-NDI-AccessManager",
-    "com.newtek.Application-Mac-NDI-ScanConverter",
-    "com.newtek.Application-Mac-NDI-StudioMonitor",
-    "com.newtek.Application-Mac-NDI-VirtualInput",
-    "com.newtek.DAL.NDIplugin",
-    "com.newtek.DAL.NDIpluginlaunchdaemon",
-    "com.newtek.driver.NDIAudio",
-    "com.newtek.HAL.NDIaudioplugin",
-    "com.newtek.NDI-HX-Driver",
-    "com.newtek.NDI-Tools",
-    "com.newtek.NDI-Transmit-AdobeCC",
-    "com.newtek.NDI.prefpane",
-    "com.newtek.ndi.recording",
-    "com.newtek.NDIVirtualCamera",
-    "com.newtek.NewTek-Import-SpeedHQ",
-    "com.newtek.Test-Patterns-Mac-",
-  ], launchctl: "com.newtek.cmio.DPA.NDI"
+  uninstall launchctl: "com.newtek.cmio.DPA.NDI",
+            pkgutil:   [
+              "com.newtek.Application-Mac-NDI-AccessManager",
+              "com.newtek.Application-Mac-NDI-ScanConverter",
+              "com.newtek.Application-Mac-NDI-StudioMonitor",
+              "com.newtek.Application-Mac-NDI-VirtualInput",
+              "com.newtek.DAL.NDIplugin",
+              "com.newtek.DAL.NDIpluginlaunchdaemon",
+              "com.newtek.driver.NDIAudio",
+              "com.newtek.HAL.NDIaudioplugin",
+              "com.newtek.NDI-HX-Driver",
+              "com.newtek.NDI-Tools",
+              "com.newtek.NDI-Transmit-AdobeCC",
+              "com.newtek.NDI.prefpane",
+              "com.newtek.ndi.recording",
+              "com.newtek.NDIVirtualCamera",
+              "com.newtek.NewTek-Import-SpeedHQ",
+              "com.newtek.Test-Patterns-Mac-",
+            ]
 
   zap trash: [
     "/Library/Application Support/NewTek",

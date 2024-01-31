@@ -43,14 +43,14 @@ cask "bmd-videohub" do
 
   pkg "Install Videohub #{version.csv.first.chomp(".0")}.pkg"
 
-  uninstall pkgutil:   [
+  uninstall launchctl: "com.blackmagic-design.videohub.server",
+            pkgutil:   [
               "com.blackmagic-design.SmartControl",
               "com.blackmagic-design.Videohub",
               "com.blackmagic-design.Videohub2",
               "com.blackmagic-design.VideohubAssets",
               "com.blackmagic-design.VideohubUninstaller",
-            ],
-            launchctl: "com.blackmagic-design.videohub.server"
+            ]
 
   zap trash: [
     "/Library/LaunchDaemons/com.blackmagic-design.videohub.server.plist",

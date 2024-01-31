@@ -43,20 +43,20 @@ cask "bmd-desktop-video" do
 
   pkg "Install Desktop Video #{version.csv.first.chomp(".0")}.pkg"
 
-  uninstall pkgutil:   [
-              "com.blackmagic-design.DesktopVideo",
-              "com.blackmagic-design.DesktopVideoAssets",
-              "com.blackmagic-design.DesktopVideoUninstaller",
-              "com.blackmagic-design.DiskSpeedTest",
-              "com.blackmagic-design.MediaExpress",
-            ],
-            launchctl: [
+  uninstall launchctl: [
               "com.blackmagic-design.DesktopVideo",
               "com.blackmagic-design.DesktopVideoDriverExtension.Helper",
               "com.blackmagic-design.DesktopVideoDriverExtensionRemove",
               "com.blackmagic-design.DesktopVideoDriverPostInstall",
             ],
             quit:      "com.blackmagic-design.BlackmagicDesktopVideoDriverExtension",
+            pkgutil:   [
+              "com.blackmagic-design.DesktopVideo",
+              "com.blackmagic-design.DesktopVideoAssets",
+              "com.blackmagic-design.DesktopVideoUninstaller",
+              "com.blackmagic-design.DiskSpeedTest",
+              "com.blackmagic-design.MediaExpress",
+            ],
             delete:    "/Applications/Blackmagic Disk Speed Test.app"
 
   zap trash: [

@@ -1,4 +1,4 @@
 {
-    "gateway-printer-driver": "gateway-media/tap",
-    "kiosk-browser-settings": "gateway-media/tap"
+    "gateway-printer-driver": "gatewaymedia/tap",
+    "kiosk-browser-settings": "gatewaymedia/tap"
 }

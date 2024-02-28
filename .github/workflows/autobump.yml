@@ -9,61 +9,6 @@ on:
   schedule:
     - cron: "15 */2 * * *"
 
-env:
-  CASKS: >
-    allen-and-heath-midi-control
-    amphetamine-enhancer
-    auracle-for-x-series
-    bmd-atem
-    bmd-braw
-    bmd-camera-utility
-    bmd-cintel
-    bmd-cloud-store
-    bmd-converters
-    bmd-desktop-video
-    bmd-hyperdeck
-    bmd-multiview
-    bmd-teranex
-    bmd-ultimatte
-    bmd-videohub
-    bmd-video-assist
-    bmd-web-presenter
-    bome-midi-translator-pro
-    boom-3d-audio-component
-    b-font-sister-spray
-    b-hyper
-    b-loopback
-    b-output-factory
-    b-propresenter
-    b-vitalsource-bookshelf
-    companion
-    companion-beta
-    companion-experimental
-    companion-satellite
-    dante-controller
-    dante-via
-    dante-virtual-soundcard
-    davinci-resolve
-    davinci-resolve-project-server
-    davinci-resolve-studio
-    decimator-ucp
-    enttec-emu
-    fluro-printer
-    fusion-studio
-    gld-editor
-    kiosk-browser
-    mixing-station
-    mixing-station-beta
-    ndi-core-suite
-    nps-browser
-    propresenter-bleeding-edge
-    prowlarr-develop
-    rpcs3
-    rtp-midi-setup
-    toast-titanium
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-
 permissions:
   contents: read
 
@@ -84,9 +29,13 @@ jobs:
         with:
           username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'bkdbot' }}
 
+      - name: Get list of autobump casks
+        id: autobump
+        run: echo "autobump_list=$(brew tap-info bevanjkay/tap --json | jq -c -r '.[0]["cask_tokens"]|join(" ")')" >> "$GITHUB_OUTPUT"
+
       - name: Bump casks
         uses: Homebrew/actions/bump-packages@master
         continue-on-error: true
         with:
           token: ${{ secrets.BOT_TOKEN }}
-          casks: ${{ github.event.inputs.casks || env.CASKS }}
+          casks: ${{ github.event.inputs.casks || steps.autobump.outputs.autobump_list }}

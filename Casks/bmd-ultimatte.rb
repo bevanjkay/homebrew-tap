@@ -1,8 +1,8 @@
 cask "bmd-ultimatte" do
   require "net/http"
 
-  version "2.0.3,b521619300e74352a111f7804a2dcaa3,a8bd4ffed1174604aae997e5335a476f"
-  sha256 "93658428171119901ccd60466df4b8dce03b7b12eca7df69811ce209e6c55909"
+  version "2.1.0,4c31b0a1d188409e808500ddedd9a47a,5816316c05304bab9fefcda162676879"
+  sha256 "c0a2beb7ad73f12a20cca0b0bad70ae5cfbd35b337673e9a5116eac50c10f7ad"
 
   url do
     params = {

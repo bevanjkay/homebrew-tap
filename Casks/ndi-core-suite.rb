@@ -8,10 +8,11 @@ cask "ndi-core-suite" do
   desc "Tools & plugins for NDI"
   homepage "https://ndi.video/tools/ndi-core-suite/"
 
-  # TODO: https://downloads.ndi.video/Tools/ndi_tools_osx_current_version.json
   livecheck do
-    url :homepage
-    regex(/Version\s*number:\s*v?(\d+(?:\.\d+)+)/i)
+    url "https://downloads.ndi.tv/Tools/ndi_tools_osx_current_version.json"
+    strategy :json do |json|
+      json["version"]
+    end
   end
 
   pkg "NDIToolsInstaller.pkg"

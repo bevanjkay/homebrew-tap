@@ -1,8 +1,8 @@
 cask "bmd-braw" do
   require "net/http"
 
-  version "3.6.1,d62f98f160954ecba91b690e88196ab5,8d7f84f0edaf4b0597e2d52f1551dd9a"
-  sha256 "2401adc1c1ce85fa20e5354d6f6e8be699f0e75843c06e2106e28171e318554e"
+  version "4.0.0,70234b6c73d743d39d47b3f2692fc2f6,4e43b9aa27124dac845ab94183acbf12"
+  sha256 "f643f4b2a0bad7dd2c6a6f1e58e313a198dd21110835560b478021da73aa26d3"
 
   url do
     if File.exist?("#{Dir.home}/.personal_details.json")

@@ -1,8 +1,8 @@
 cask "bmd-hyperdeck" do
   require "net/http"
 
-  version "8.3.2,015997dc8024430a8678952bc58f8210,b5c741c3213348e1acec5ba28db650ec"
-  sha256 "bd3c2d63bbde25eb83d80e95cfc1d51752acde6d66ba21710a23df375061d1f1"
+  version "8.4.0,6708ebfa72a340dabbae3145489f55e1,be3d53bb33c74f9a838ed5382f11351f"
+  sha256 "534c8e51619307983252b8c4d894e08aaba45376afc0db192d1de3a1070c6ddc"
 
   url do
     params = {

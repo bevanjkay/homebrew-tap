@@ -1,5 +1,5 @@
 cask "adobe-fonts-revealer" do
-  version "20230624,8d02879ef8a6679e5c9cf09fb0ab4168e0e44341"
+  version "20240422,70364ff58539081f000ded8fa70018628860397d"
   sha256 :no_check
 
   url "https://github.com/Kalaschnik/adobe-fonts-revealer.git",

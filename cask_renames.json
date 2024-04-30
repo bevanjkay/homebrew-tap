@@ -3,5 +3,10 @@
     "b-bome-midi-translator-pro": "bome-midi-translator-pro",
     "b-fluro-printer": "fluro-printer",
     "b-propresenter-bleeding-edge": "propresenter-bleeding-edge",
-    "ndi-tools": "ndi-core-suite"
+    "companion-beta": "companion@beta",
+    "companion-experimental": "companion@experimental",
+    "mixing-station-beta": "mixing-station@beta",
+    "ndi-tools": "ndi-core-suite",
+    "propresenter-bleeding-edge": "propresenter@bleeding-edge",
+    "prowlarr-develop": "prowlarr@develop"
 }

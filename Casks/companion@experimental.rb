@@ -1,4 +1,4 @@
-cask "companion-experimental" do
+cask "companion@experimental" do
   arch arm: "arm64", intel: "x64"
 
   version "3.99.0+6806-develop-9ccb6d95"

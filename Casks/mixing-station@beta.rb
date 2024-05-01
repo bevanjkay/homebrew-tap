@@ -1,4 +1,4 @@
-cask "mixing-station-beta" do
+cask "mixing-station@beta" do
   version "2.0.3"
   sha256 :no_check
 

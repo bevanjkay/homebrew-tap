@@ -1,4 +1,4 @@
-cask "propresenter-bleeding-edge" do
+cask "propresenter@bleeding-edge" do
   version "7.16.2,118489613"
   sha256 "f58d7c547ef8a950d79c42db9b6b49675c1f48efa5ff339294a6c5f6ad5e790e"
 

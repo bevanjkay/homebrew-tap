@@ -1,4 +1,4 @@
-cask "companion-beta" do
+cask "companion@beta" do
   arch arm: "arm64", intel: "x64"
 
   version "3.3.0+6940-main-6ad28daf"

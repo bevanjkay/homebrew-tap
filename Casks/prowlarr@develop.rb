@@ -1,4 +1,4 @@
-cask "prowlarr-develop" do
+cask "prowlarr@develop" do
   arch arm: "arm64", intel: "x64"
 
   version "1.17.0.4448,develop"

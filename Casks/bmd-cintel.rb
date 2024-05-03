@@ -1,8 +1,8 @@
 cask "bmd-cintel" do
   require "net/http"
 
-  version "5.0.0,11a3ba20ff104be192e523725ded5625,2b2893eb27834d93a74cbb683e16a25a"
-  sha256 "1b0d85ecb482f07776a3e48daa9bc531517b630acbe3c156635fa74c912df993"
+  version "6.0.0,3d6d964a3ec94a5d8bc9084d2827b65f,60ef3d64394a448ba486be4b792fd450"
+  sha256 "59cfe3abbc0601446a3a9ac5d73bc5353c59eb31531f91b915ee4431882b88d4"
 
   url do
     params = {

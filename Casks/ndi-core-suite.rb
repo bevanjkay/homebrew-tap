@@ -32,6 +32,7 @@ cask "ndi-core-suite" do
               "com.newtek.NDI-Transmit-AdobeCC",
               "com.newtek.NDI.prefpane",
               "com.newtek.ndi.recording",
+              "com.newtek.NDIRouter"
               "com.newtek.NDIVirtualCamera",
               "com.newtek.NewTek-Import-SpeedHQ",
               "com.newtek.Test-Patterns-Mac-",

@@ -1,5 +1,5 @@
 cask "ndi-core-suite" do
-  version "6.0"
+  version "6.0.1.0"
   sha256 :no_check
 
   url "https://downloads.ndi.tv/Tools/NDIToolsInstaller.pkg",
@@ -32,6 +32,7 @@ cask "ndi-core-suite" do
               "com.newtek.NDI-Transmit-AdobeCC",
               "com.newtek.NDI.prefpane",
               "com.newtek.ndi.recording",
+              "com.newtek.NDIRouter",
               "com.newtek.NDIVirtualCamera",
               "com.newtek.NewTek-Import-SpeedHQ",
               "com.newtek.Test-Patterns-Mac-",

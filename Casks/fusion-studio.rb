@@ -41,6 +41,7 @@ cask "fusion-studio" do
   end
 
   auto_updates true
+  conflicts_with cask: "fusion-studio@beta"
 
   pkg "Install Fusion Studio v#{version.csv.first.chomp(".0")}.pkg"
   pkg "Install Fusion Render Node v#{version.csv.first.chomp(".0")}.pkg"

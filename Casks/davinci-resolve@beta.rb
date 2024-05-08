@@ -1,8 +1,8 @@
 cask "davinci-resolve@beta" do
   require "net/http"
 
-  version "19.0.0,c3135f5e36144d268c71e104cfc32a82,9d2321946dd74ccfa52391df79f5129a,"
-  sha256 "d7f1846deac98e0803e1a769f147a813745d11b41c73c8b66d98178a206592f9"
+  version "19.0.0,c3135f5e36144d268c71e104cfc32a82,9d2321946dd74ccfa52391df79f5129a,b"
+  sha256 "e999b1b6cc89b3db1798ea8c4b95c9632f2b5e740f1beb49b358593f63a3c85f"
 
   url do
     if File.exist?("#{Dir.home}/.personal_details.json")
@@ -52,17 +52,19 @@ cask "davinci-resolve@beta" do
       matched = json["downloads"].select do |download|
         next false if download["urls"]["Mac OS X"].blank?
 
-        download["urls"]["Mac OS X"].first["product"] == "davinci-resolve" && /beta/i.match?(download["name"])
+        download["urls"]["Mac OS X"].first["product"] == "davinci-resolve"
       end
       matched.map do |download|
+        beta = /beta/i.match?(download["name"])
         v = download["urls"]["Mac OS X"].first
-        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{v["beta"] ? "b" : ""}"
+        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{beta ? "b" : ""}"
       end
     end
   end
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
+  conflicts_with cask: "davinci-resolve"
 
   pkg "Install Resolve #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
 

@@ -64,6 +64,7 @@ cask "davinci-resolve" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
+  conflicts_with cask: "davinci-resolve@beta"
 
   pkg "Install Resolve #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
 

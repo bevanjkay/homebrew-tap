@@ -1,7 +1,7 @@
 cask "davinci-resolve-studio@beta" do
   require "net/http"
 
-  version "19.0.0,7e0c39f9a80841769ea49d0cfe3eb6ff,ee8a2674f12b45a79e7a64708edfc8f9,"
+  version "19.0.0,7e0c39f9a80841769ea49d0cfe3eb6ff,ee8a2674f12b45a79e7a64708edfc8f9,b"
   sha256 "4c1c7aa031fbc2eedc4328db8b9d088f48fb9bfcbf0587fb565ce6568432ff02"
 
   url do
@@ -53,16 +53,18 @@ cask "davinci-resolve-studio@beta" do
         download["urls"]["Mac OS X"].first["product"] == "davinci-resolve-studio" && /beta/i.match?(download["name"])
       end
       matched.map do |download|
+        beta = /beta/i.match?(download["name"])
         v = download["urls"]["Mac OS X"].first
-        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{v["beta"] ? "b" : ""}"
+        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{beta ? "b" : ""}"
       end
     end
   end
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
+  conflicts_with cask: "davinci-resolve-studio"
 
-  pkg "Install Resolve #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
+  pkg "Install Resolve #{version.csv.first}#{version.csv.fourth}.pkg"
 
   uninstall script:  {
               executable: "/Applications/DaVinci Resolve/Uninstall Resolve.app/Contents/Resources/uninstall.sh",

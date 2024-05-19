@@ -7,6 +7,5 @@
     "companion-experimental": "companion@experimental",
     "mixing-station-beta": "mixing-station@beta",
     "ndi-tools": "ndi-core-suite",
-    "propresenter-bleeding-edge": "propresenter@bleeding-edge",
-    "prowlarr-develop": "prowlarr@develop"
+    "propresenter-bleeding-edge": "propresenter@bleeding-edge"
 }

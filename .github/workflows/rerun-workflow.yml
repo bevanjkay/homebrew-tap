@@ -57,3 +57,4 @@ jobs:
           continuous-label: ci-retry-failed-jobs
           trigger-labels: ci-skip-install,ci-syntax-only
           workflow: ci.yml
+          failed-jobs-only: true

@@ -30,10 +30,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Re-run CI workflow
-        uses: reitermarkus/rerun-workflow@7381e98aa2bc4464acef4b60ade8d1d1d90e6e65
+        uses: reitermarkus/rerun-workflow@440187d88f68a23cfb30caab5f33ac1bcce31b6a
         with:
           token: ${{ secrets.BOT_TOKEN }}
           once-label: ci-requeue
           continuous-label: ci-retry
+          trigger-labels: ci-skip-install,ci-syntax-only
+          workflow: ci.yml
+
+  rerun-failed-jobs:
+    if: >
+      (
+        github.event.label.name == 'ci-requeue-failed-jobs' ||
+        github.event.label.name == 'ci-retry-failed-jobs' ||
+        github.event.label.name == 'ci-skip-install' ||
+        github.event.label.name == 'ci-syntax-only' ||
+        !github.event.label.name
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - name: Re-run CI workflow
+        uses: reitermarkus/rerun-workflow@440187d88f68a23cfb30caab5f33ac1bcce31b6a
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          once-label: ci-requeue-failed-jobs
+          continuous-label: ci-retry-failed-jobs
           trigger-labels: ci-skip-install,ci-syntax-only
           workflow: ci.yml

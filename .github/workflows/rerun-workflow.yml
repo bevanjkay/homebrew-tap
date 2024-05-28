@@ -22,7 +22,9 @@ jobs:
     if: >
       (
         github.event.label.name == 'ci-requeue' ||
+        github.event.label.name == 'ci-requeue-failed-jobs' ||
         github.event.label.name == 'ci-retry' ||
+        github.event.label.name == 'ci-retry-failed-jobs' ||
         github.event.label.name == 'ci-skip-install' ||
         github.event.label.name == 'ci-syntax-only' ||
         !github.event.label.name

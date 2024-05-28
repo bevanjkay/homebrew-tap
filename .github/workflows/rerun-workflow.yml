@@ -37,24 +37,11 @@ jobs:
           continuous-label: ci-retry
           trigger-labels: ci-skip-install,ci-syntax-only
           workflow: ci.yml
-
-  rerun-failed-jobs:
-    if: >
-      (
-        github.event.label.name == 'ci-requeue-failed-jobs' ||
-        github.event.label.name == 'ci-retry-failed-jobs' ||
-        github.event.label.name == 'ci-skip-install' ||
-        github.event.label.name == 'ci-syntax-only' ||
-        !github.event.label.name
-      )
-    runs-on: ubuntu-latest
-    steps:
-      - name: Re-run CI workflow
+      - name: Re-run CI failed jobs
         uses: reitermarkus/rerun-workflow@440187d88f68a23cfb30caab5f33ac1bcce31b6a
         with:
-          token: ${{ secrets.BOT_TOKEN }}
-          once-label: ci-requeue-failed-jobs
-          continuous-label: ci-retry-failed-jobs
-          trigger-labels: ci-skip-install,ci-syntax-only
-          workflow: ci.yml
-          failed-jobs-only: true
+            token: ${{ secrets.BOT_TOKEN }}
+            once-label: ci-requeue-failed-jobs
+            continuous-label: ci-retry-failed-jobs
+            workflow: ci.yml
+            failed-jobs-only: true

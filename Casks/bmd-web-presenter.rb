@@ -39,7 +39,6 @@ cask "bmd-web-presenter" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_Web_Presenter_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install Web Presenter #{version.csv.first.chomp(".0")}.pkg"
 

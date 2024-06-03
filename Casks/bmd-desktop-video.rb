@@ -1,8 +1,8 @@
 cask "bmd-desktop-video" do
   require "net/http"
 
-  version "14.0.0,d7fe9043ca6b4c1384420689c42fa4a1,14291840612c429c8f272a2501948928"
-  sha256 "9500d9e6260fcc58bbd414cd2938725421eb63edb3f215fb6894a830c01fe0f6"
+  version "14.0.1,76801bc1d84147da9cb1a16e663ac33e,0e2429030ac8485183dad219d85cfe66"
+  sha256 "b312bbbf55551ed2772538f934645242a5c3fbd55ce7eebeb2c357b86afc8d31"
 
   url do
     params = {
@@ -39,7 +39,6 @@ cask "bmd-desktop-video" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_Desktop_Video_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install Desktop Video #{version.csv.first.chomp(".0")}.pkg"
 

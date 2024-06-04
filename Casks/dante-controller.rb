@@ -21,6 +21,8 @@ cask "dante-controller" do
             ],
             pkgutil:   [
               "com.audinate.dante.conmon.pkg",
+              "com.audinate.dante.pkg.DanteActivator",
+              "com.audinate.dante.pkg.DanteActivatorLegacy",
               "com.audinate.dante.pkg.DanteController",
               "com.audinate.dante.pkg.DanteControllerPackage",
               "com.audinate.dante.pkg.DanteUpdateHelper",

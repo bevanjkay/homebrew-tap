@@ -1,6 +1,6 @@
 cask "allen-and-heath-midi-control" do
-  version "2.01,2023,02"
-  sha256 "4479564b5cac657ce166704083702a04738b7e152fc89ee79413ab6fa7299bbf"
+  version "2.10,2024,06"
+  sha256 "8b6aed7ce59b295ac27c4f4c7d3d9058b1aea909ddd90ced9105d62158ee98bb"
 
   url "https://www.allen-heath.com/content/uploads/#{version.csv.second}/#{version.csv.third}/Allen-and-Heath-MIDI-Control-#{version.csv.first}-Mac.zip"
   name "Allen & Heath Midi Control"

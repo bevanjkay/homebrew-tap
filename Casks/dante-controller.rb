@@ -1,6 +1,6 @@
 cask "dante-controller" do
-  version "4.12.0.3"
-  sha256 "99d6b954ec51698185118297172b2ca6103b972bcbb24cedd9ba2cff77478e9a"
+  version "4.13.0.5"
+  sha256 "7b0716b18b484bb4be873d09c6c631b483b1b9be409cf22d2e4b44f8a770b0ed"
 
   url "https://audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteController/#{version.major}/#{version.major_minor}/DanteController-#{version}_macos.dmg",
       verified: "audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteController/"
@@ -21,6 +21,8 @@ cask "dante-controller" do
             ],
             pkgutil:   [
               "com.audinate.dante.conmon.pkg",
+              "com.audinate.dante.pkg.DanteActivator",
+              "com.audinate.dante.pkg.DanteActivatorLegacy",
               "com.audinate.dante.pkg.DanteController",
               "com.audinate.dante.pkg.DanteControllerPackage",
               "com.audinate.dante.pkg.DanteUpdateHelper",

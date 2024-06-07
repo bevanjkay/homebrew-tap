@@ -1,8 +1,8 @@
 cask "bmd-atem" do
   require "net/http"
 
-  version "9.4.0,656e2acb4c8741399a8498685f9afe61,68732925d0bd418f9bfa355b498b5a37"
-  sha256 "3999c6a6d69064cccd8bf0a59ea7fcc59a40f2b85d7eb34b89986a46ad27cf65"
+  version "9.5.0,5ccdbc2df2d74f62a652bf6613ba71d5,9767e5366e3647b7aa9c9000e2593e50"
+  sha256 "879a81d48af7bb2587c3a4d7464d40d604097e8946cfe5f3a802af2323ccfdee"
 
   url do
     params = {
@@ -39,7 +39,6 @@ cask "bmd-atem" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_ATEM_Switchers_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install ATEM #{version.csv.first.chomp(".0")}.pkg"
 

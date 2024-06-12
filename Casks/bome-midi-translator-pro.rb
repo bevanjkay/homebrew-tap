@@ -1,15 +1,18 @@
 cask "bome-midi-translator-pro" do
-  version "1.9.1"
-  sha256 "e618e982b87ccd78dc35f2dac86c413dc86b8631fb02f7703e4a79c4e22dfd66"
+  version "1.9.1,1064"
+  sha256 "2fd942c76acaaa27fd203775d8713cf0cd832959d8493a2074c77bf56ed31cc2"
 
-  url "https://download.bome.com/dl.php/3ACFDF73C03CB/MIDITranslatorPro#{version}_Full.dmg"
+  url "https://download.bome.com/dl.php/3BE99E132EB23/MIDITranslatorPro#{version.csv.first}_Full.dmg"
   name "Bome MIDI Translator Pro"
   desc "MIDI Translator Application"
   homepage "https://www.bome.com/products/miditranslator"
 
   livecheck do
-    url "https://www.bome.com/products/miditranslator/support/updates?v=#{version}&e=pro"
-    regex(/The current version of MIDI Translator Pro is (\d+(?:\.\d+)+)/i)
+    url :homepage
+    regex(/href=.*?MIDITranslatorProv?(\d+(?:\.\d+)+)[._-]Trial[._-](\d+)[._-]macOS\.dmg/i)
+    strategy :page_match do |page, regex|
+      page.scan(regex).map { |match| "#{match.first},#{match.second}" }
+    end
   end
 
   app "Bome MIDI Translator Pro.app"

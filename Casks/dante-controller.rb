@@ -1,6 +1,6 @@
 cask "dante-controller" do
-  version "4.13.0.5"
-  sha256 "7b0716b18b484bb4be873d09c6c631b483b1b9be409cf22d2e4b44f8a770b0ed"
+  version "4.13.1.1"
+  sha256 "aabc06c815c5463269be4d7d1ad5018efdcc8b0038f24bb086dba988f0eb9411"
 
   url "https://audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteController/#{version.major}/#{version.major_minor}/DanteController-#{version}_macos.dmg",
       verified: "audinate-software-updates.sgp1.cdn.digitaloceanspaces.com/DanteController/"

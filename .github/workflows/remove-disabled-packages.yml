@@ -1,18 +1,18 @@
-name: Remove disabled formulae
+name: Remove disabled packages
 
 on:
   push:
     branches:
       - master
     paths:
-      - .github/workflows/remove-disabled-formulae.yml
+      - .github/workflows/remove-disabled-pacakges.yml
   schedule:
     # Once every day at midnight UTC
     - cron: "0 0 * * *"
   workflow_dispatch:
 
 concurrency:
-  group: remove-disabled-formulae
+  group: remove-disabled-packages
   cancel-in-progress: true
 
 permissions:
@@ -58,7 +58,7 @@ jobs:
           HOMEBREW_EVAL_ALL: 1
 
       - name: Push commits
-        if: fromJson(steps.remove_disabled.outputs.formulae-removed)
+        if: fromJson(steps.remove_disabled.outputs.packages-removed)
         uses: Homebrew/actions/git-try-push@master
         with:
           token: ${{ secrets.BOT_TOKEN }}

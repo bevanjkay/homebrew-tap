@@ -44,7 +44,8 @@ jobs:
 
       - name: Checkout removal branch
         run: git checkout -b "$REMOVAL_BRANCH" origin/main
-        working-directory: ${{ steps.set-up-homebrew.outputs.repository-path }}
+        working-directory: /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/bevanjkay/homebrew-tap
+
 
       - name: Remove disabled packages
         id: remove_disabled
@@ -57,13 +58,13 @@ jobs:
         uses: Homebrew/actions/git-try-push@master
         with:
           token: ${{ secrets.BOT_TOKEN }}
-          directory: ${{ steps.set-up-homebrew.outputs.repository-path }}
+          directory: /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/bevanjkay/homebrew-tap
           branch: ${{ env.REMOVAL_BRANCH }}
 
       - name: Create pull request
         id: pr-create
         if: fromJson(steps.remove_disabled.outputs.formulae-removed)
-        working-directory: ${{ steps.set-up-homebrew.outputs.repository-path }}
+        working-directory: /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/bevanjkay/homebrew-tap
         env:
           GH_TOKEN: ${{ secrets.BOT_TOKEN }}
           PR_BODY: >

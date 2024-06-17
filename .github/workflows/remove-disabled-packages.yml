@@ -43,7 +43,7 @@ jobs:
           username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'bkdbot' }}
 
       - name: Checkout removal branch
-        run: git checkout -b "$REMOVAL_BRANCH" origin/master
+        run: git checkout -b "$REMOVAL_BRANCH" origin/main
         working-directory: ${{ steps.set-up-homebrew.outputs.repository-path }}
 
       - name: Remove disabled packages

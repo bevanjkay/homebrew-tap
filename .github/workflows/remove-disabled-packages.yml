@@ -50,7 +50,6 @@ jobs:
         run: git checkout -b "$REMOVAL_BRANCH" origin/main
         working-directory: /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/bevanjkay/homebrew-tap
 
-
       - name: Remove disabled packages
         id: remove_disabled
         uses: bevanjkay/actions/remove-disabled-packages@master
@@ -64,10 +63,13 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
           directory: /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/bevanjkay/homebrew-tap
           branch: ${{ env.REMOVAL_BRANCH }}
+        env:
+          GIT_COMMITTER_NAME: ${{ steps.git-user-config.outputs.name }}
+          GIT_COMMITTER_EMAIL: ${{ steps.git-user-config.outputs.email }}
 
       - name: Create pull request
         id: pr-create
-        if: fromJson(steps.remove_disabled.outputs.formulae-removed)
+        if: fromJson(steps.remove_disabled.outputs.packages-removed)
         working-directory: /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/bevanjkay/homebrew-tap
         env:
           GH_TOKEN: ${{ secrets.BOT_TOKEN }}

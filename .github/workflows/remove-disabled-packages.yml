@@ -77,7 +77,7 @@ jobs:
             workflow.
         run: |
           gh pr create \
-            --base master \
+            --base main \
             --body "$PR_BODY" \
             --head "$REMOVAL_BRANCH" \
             --title 'Remove disabled packages'

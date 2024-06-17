@@ -19,7 +19,7 @@ permissions:
   contents: read
 
 jobs:
-  remove-disabled-formulae:
+  remove-disabled-packages:
     # if: github.repository_owner == 'Homebrew'
     runs-on: ubuntu-latest
     container:
@@ -42,9 +42,11 @@ jobs:
         run: brew tap bevanjkay/tap
 
       - name: Configure Git user
+        id: git-user-config
         uses: Homebrew/actions/git-user-config@master
         with:
-          username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'bkdbot' }}
+          # username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'bkdbot' }}
+          username: bkdbot
 
       - name: Checkout removal branch
         run: git checkout -b "$REMOVAL_BRANCH" origin/main
@@ -55,6 +57,9 @@ jobs:
         uses: bevanjkay/actions/remove-disabled-packages@master
         env:
           HOMEBREW_EVAL_ALL: 1
+        
+      - name: Debug output
+        run: echo "TESTING ${{ toJson(steps.remove_disabled) }}"
 
       - name: Push commits
         if: fromJson(steps.remove_disabled.outputs.packages-removed)
@@ -64,8 +69,8 @@ jobs:
           directory: /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/bevanjkay/homebrew-tap
           branch: ${{ env.REMOVAL_BRANCH }}
         env:
-          GIT_COMMITTER_NAME: ${{ steps.git-user-config.outputs.name }}
-          GIT_COMMITTER_EMAIL: ${{ steps.git-user-config.outputs.email }}
+          GIT_COMMITTER_NAME: "${{ steps.git-user-config.outputs.name }}"
+          GIT_COMMITTER_EMAIL: "${{ steps.git-user-config.outputs.email }}"
 
       - name: Create pull request
         id: pr-create

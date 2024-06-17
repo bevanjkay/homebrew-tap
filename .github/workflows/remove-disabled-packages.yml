@@ -57,9 +57,6 @@ jobs:
         uses: bevanjkay/actions/remove-disabled-packages@master
         env:
           HOMEBREW_EVAL_ALL: 1
-        
-      - name: Debug output
-        run: echo "TESTING ${{ toJson(steps.remove_disabled) }}"
 
       - name: Push commits
         if: fromJson(steps.remove_disabled.outputs.packages-removed)

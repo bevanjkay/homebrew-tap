@@ -59,7 +59,7 @@ jobs:
           HOMEBREW_EVAL_ALL: 1
         
       - name: Debug output
-        run: echo "${{ toJson(steps.remove_disabled) }}"
+        run: echo "TESTING ${{ toJson(steps.remove_disabled) }}"
 
       - name: Push commits
         if: fromJson(steps.remove_disabled.outputs.packages-removed)
@@ -71,7 +71,7 @@ jobs:
         env:
           GIT_COMMITTER_NAME: "${{ steps.git-user-config.outputs.name }}"
           GIT_COMMITTER_EMAIL: "${{ steps.git-user-config.outputs.email }}"
-  
+
       - name: Create pull request
         id: pr-create
         if: fromJson(steps.remove_disabled.outputs.packages-removed)

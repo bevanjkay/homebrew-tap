@@ -37,6 +37,10 @@ jobs:
           cask: false
           test-bot: false
 
+      - name: Run brew tap
+        id: tap
+        run: brew tap bevanjkay/tap
+
       - name: Configure Git user
         uses: Homebrew/actions/git-user-config@master
         with:

@@ -1,7 +1,7 @@
 cask "bmd-braw" do
   require "net/http"
 
-  version "4.0.0,70234b6c73d743d39d47b3f2692fc2f6,4e43b9aa27124dac845ab94183acbf12"
+  version "4.1.0,ed92b91fe7ec42079e76ea90a5423def,58332f891ddd41e7a4545cf8b5085286"
   sha256 "f643f4b2a0bad7dd2c6a6f1e58e313a198dd21110835560b478021da73aa26d3"
 
   url do

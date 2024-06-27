@@ -1,8 +1,8 @@
 cask "zsh-autosuggestions" do
   version "0.7.0"
-  sha256 "ad68b8af2a6df6b75f7f87e652e64148fd9b9cfb95a2e53d6739b76c83dd3b99"
+  sha256 "ccd97fe9d7250b634683c651ef8a2fe3513ea917d1b491e8696a2a352b714f08"
 
-  url "https://github.com/zsh-users/zsh-autosuggestions/archive/refs/tags/v#{version}.zip"
+  url "https://github.com/zsh-users/zsh-autosuggestions/archive/refs/tags/v#{version}.tar.gz"
   name "ZSH Autosuggestions Plugin"
   desc "Fish-like autosuggestions for zsh"
   homepage "https://github.com/zsh-users/zsh-autosuggestions"

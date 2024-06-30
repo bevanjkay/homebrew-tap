@@ -1,6 +1,6 @@
 cask "auracle-x" do
-  version "2.1.1"
-  sha256 "64a62c6a083ef7226d8b5a1bb1725d1a96c1ffdea83105c03de183592bf0894b"
+  version "2.2.0"
+  sha256 "59da20f711b7f240d6e82ce487bee80222f97e310302f7bf5209e409ac742f57"
 
   url "https://cdn.iconnectivity.com/software/AuracleX#{version}.dmg"
   name "Auracle for X-Series"
@@ -25,4 +25,8 @@ cask "auracle-x" do
     "~/Library/Preferences/com.iconnectivity.auracle.plist",
     "~/Library/Saved Application State/com.iconnectivity.auracle.savedState",
   ]
+
+  caveats do
+    requires_rosetta
+  end
 end

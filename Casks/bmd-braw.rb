@@ -1,8 +1,8 @@
 cask "bmd-braw" do
   require "net/http"
 
-  version "4.0.0,70234b6c73d743d39d47b3f2692fc2f6,4e43b9aa27124dac845ab94183acbf12"
-  sha256 "f643f4b2a0bad7dd2c6a6f1e58e313a198dd21110835560b478021da73aa26d3"
+  version "4.1.0,ed92b91fe7ec42079e76ea90a5423def,58332f891ddd41e7a4545cf8b5085286"
+  sha256 "4da888fc7fb4b27a1ce1f225aa70d77cfd6784a4c0762d1c1653ab95c56c9aa4"
 
   url do
     if File.exist?("#{Dir.home}/.personal_details.json")
@@ -65,7 +65,6 @@ cask "bmd-braw" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_RAW_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install Blackmagic RAW #{version.csv.first.chomp(".0")}.pkg"
 

@@ -1,8 +1,8 @@
 cask "fusion-studio@beta" do
   require "net/http"
 
-  version "19.0.0,934f43badfe44f28bd53a042f0d6ca30,b61ada2c25ec4725a4798a3322db0778,b"
-  sha256 "ae4c1d04c673384d5f24abdcb4202671040538d9245641f65e4cdf1ffef807bd"
+  version "19.0.0,a879972ff7ae4b569f2583fe524e9a2f,d14ab390aec04d1aad14e37e3eb2cdd8,b"
+  sha256 "4602810628e35d109fbbc7689bb3cacb6b4c748dca0bb0ca9eb01e145140bc0b"
 
   url do
     params = {
@@ -36,7 +36,7 @@ cask "fusion-studio@beta" do
         beta = /beta/i.match?(download["name"])
         v = download["urls"]["Mac OS X"].first
         "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{beta ? "b" : ""}"
-      end
+      end&.first
     end
   end
 

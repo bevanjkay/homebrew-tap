@@ -1,8 +1,8 @@
 cask "davinci-resolve@beta" do
   require "net/http"
 
-  version "19.0.0,2f0f597aea1a40b0ab7f509a51b3f53d,cc4758ddfc5f42f8b254af6437ad4a52,b"
-  sha256 "cdef7b691a58ea5d9830d65a0211c1b339650e2df928bb99514d4c91330aef18"
+  version "19.0.0,b3482f95c9734fc695ebde1822e9daa8,f6636652ee3c40a48223e7e99a98eb04,b"
+  sha256 "5b4bcf343697b72e0218581aff5ee9a2838be2138e464165b2e201856fc0caff"
 
   url do
     if File.exist?("#{Dir.home}/.personal_details.json")
@@ -58,7 +58,7 @@ cask "davinci-resolve@beta" do
         beta = /beta/i.match?(download["name"])
         v = download["urls"]["Mac OS X"].first
         "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{beta ? "b" : ""}"
-      end
+      end.first
     end
   end
 

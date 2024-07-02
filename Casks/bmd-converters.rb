@@ -1,8 +1,8 @@
 cask "bmd-converters" do
   require "net/http"
 
-  version "9.0.1,3c449e07a6dc498aa52b87ad85512bd1,016031717fd648ad96cdfe1da6418ae6"
-  sha256 "5187277bddf8c7d6bb8bc7130b3be4f4d30856371be0614f93ec2c14a2c46562"
+  version "9.0.2,6bc04ec8e40e4e9f90360eb5c49e4029,a821b038d0304d219ea6d9f48d6d822f"
+  sha256 "eafec6629a9a4028f9a2e5e6999cd8ddf2cb9cdc08286e01bd7e5f89dbc02e04"
 
   url do
     params = {
@@ -39,7 +39,6 @@ cask "bmd-converters" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_Converters_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install Converters #{version.csv.first.chomp(".0")}.pkg"
 

@@ -1,8 +1,8 @@
 cask "boom-3d-audio-component" do
-  version "2.0.3"
-  sha256 "e261b75f7d22a80752098b29a331441e04ac167628deb1dcb9b2c764fcd1533d"
+  version "2.2.0"
+  sha256 "1efb0ec94acaf5571e0130f0e2a10b17893eb458b7b2ce2e54c325d10bad8579"
 
-  url "https://d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/catalina/v#{version}_tagged_surround/Audio_Component_Installer.zip",
+  url "https://d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/catalina/v#{version}_tagged_surround/AudioComponentInstaller.zip",
       verified: "d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/",
       referer:  "https://www.globaldelight.com"
   name "Boom 3D Component Installer"
@@ -16,9 +16,9 @@ cask "boom-3d-audio-component" do
       main_cask_version = Homebrew::Livecheck::Strategy::ExtractPlist.find_versions(cask: main_cask)[:matches]
                                                                      .values
                                                                      .first
+                                                                     &.to_s
+                                                                     &.split(",")&.first
       next if main_cask_version.blank?
-
-      main_cask_version_major = main_cask_version.to_s.split(",").first
 
       if ARGV.include?("-v") || ARGV.include?("--verbose")
         puts "#{Tty.blue}==>#{Tty.reset} Boom 3D Version: #{main_cask_version}"
@@ -26,9 +26,9 @@ cask "boom-3d-audio-component" do
 
       audio_component_url =
         "https://www.globaldelight.com/boom3d/mas-content/catalina/device-installer.php" \
-        "?language=en-AU&app_version=#{main_cask_version_major}"
+        "?language=en-AU&app_version=#{main_cask_version}"
       audio_component_regex =
-        %r{href=.*?v?(\d+(?:\.\d+)+)(?:_)(?:.+)/Audio((%20)|[_-])Component((%20)|[_-])Installer\.zip}i
+        %r{href=.*?v?(\d+(?:\.\d+)+)(?:_)(?:.+)/Audio((%20)|[_-])?Component((%20)|[_-])?Installer\.zip}i
 
       Homebrew::Livecheck::Strategy::PageMatch.find_versions(url:   audio_component_url,
                                                              regex: audio_component_regex)[:matches].values

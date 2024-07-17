@@ -1,6 +1,6 @@
 cask "bible-import" do
-  version "2024-05-24"
-  sha256 "9780a59ae65be0a3efe7b2da41ec34900ef88950a3f5e95e9d8af8108e01a921"
+  version "2024-07-17"
+  sha256 "b73ca3d0e7253133f58b9dceef3b4844a90ebcc84e5bdfd1ab81f4859b99793d"
 
   url "https://github.com/martijnlentink/propresenter-custom-bibles/releases/download/#{version}/bible_import.OSX.tar.zip"
   name "ProPresenter Custom Bibles"

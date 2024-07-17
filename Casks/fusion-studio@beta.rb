@@ -1,8 +1,8 @@
 cask "fusion-studio@beta" do
   require "net/http"
 
-  version "19.0.0,a879972ff7ae4b569f2583fe524e9a2f,d14ab390aec04d1aad14e37e3eb2cdd8,b"
-  sha256 "4602810628e35d109fbbc7689bb3cacb6b4c748dca0bb0ca9eb01e145140bc0b"
+  version "19.0.0,67c93e8934524d0096517717358c9370,1d21e42d75ee47978385be409a4d5a5e,b"
+  sha256 "43a5a832e42019c87a523af8736c6a0d98ef9fe921cc604ed1ddfd19f30d3963"
 
   url do
     params = {

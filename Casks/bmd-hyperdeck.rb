@@ -1,8 +1,8 @@
 cask "bmd-hyperdeck" do
   require "net/http"
 
-  version "8.4.0,6708ebfa72a340dabbae3145489f55e1,be3d53bb33c74f9a838ed5382f11351f"
-  sha256 "534c8e51619307983252b8c4d894e08aaba45376afc0db192d1de3a1070c6ddc"
+  version "8.4.1,6a188e38dd6f4c739eb880af5c4dfd69,9e5000bcc0324a82b6cabe51a3c25bf9"
+  sha256 "3648722e19f737eae07b98eec5ecc9108cb13d015a3f134a5cecfc2a82695325"
 
   url do
     params = {
@@ -39,7 +39,6 @@ cask "bmd-hyperdeck" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_HyperDeck_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install HyperDeck #{version.csv.first.chomp(".0")}.pkg"
 

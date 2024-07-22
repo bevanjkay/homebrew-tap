@@ -19,7 +19,8 @@ env:
   GH_REPO: ${{ github.repository }}
 
 permissions:
-  contents: write
+  contents: read
+  actions: write
 
 jobs:
   scheduled-retry:

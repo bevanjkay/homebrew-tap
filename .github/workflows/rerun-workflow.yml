@@ -15,6 +15,9 @@ on:
     - cron: '30 */3 * * *' # every 3 hours (30 minutes past the hour)
   workflow_dispatch:
 
+env:
+  GH_REPO: ${{ github.repository_owner }}/${{ github.repository }}
+
 permissions:
   contents: read
 

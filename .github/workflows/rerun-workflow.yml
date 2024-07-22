@@ -80,7 +80,7 @@ jobs:
           WORKFLOW_RUN_ID=$(gh pr view "${{ github.event.pull_request.number }}" --json headRefName --jq '.headRefName' | xargs -I {} gh run list --workflow=ci.yml --branch={} --json databaseId,status --jq '.[].databaseId')
           if [ -n "$WORKFLOW_RUN_ID" ]; then
             echo "Rerunning workflow run #$WORKFLOW_RUN_ID for PR #$PR_NUMBER"
-            gh run cancel "$WORKFLOW_RUN_ID" || true
+            gh run cancel "$WORKFLOW_RUN_ID" && sleep 15 || true
             gh run rerun "$WORKFLOW_RUN_ID"
           else
             echo "No runs found for PR #$PR_NUMBER"
@@ -98,7 +98,7 @@ jobs:
             WORKFLOW_RUN_ID=$(gh pr view "${{ github.event.pull_request.number }}" --json headRefName --jq '.headRefName' | xargs -I {} gh run list --workflow=ci.yml --branch={} --json databaseId --jq '.[].databaseId')
             if [ -n "$WORKFLOW_RUN_ID" ]; then
               echo "Rerunning workflow run #$WORKFLOW_RUN_ID for PR #$PR_NUMBER"
-              gh run cancel "$WORKFLOW_RUN_ID" || true
+              gh run cancel "$WORKFLOW_RUN_ID" && sleep 15 || true
               gh run rerun "$WORKFLOW_RUN_ID" --failed
             else
               echo "No runs found for PR #$PR_NUMBER"

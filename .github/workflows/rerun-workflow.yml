@@ -18,32 +18,47 @@ permissions:
   contents: read
 
 jobs:
-  rerun-workflow:
+  scheduled-retry:
     if: >
-      (
-        github.event.label.name == 'ci-requeue' ||
-        github.event.label.name == 'ci-requeue-failed-jobs' ||
-        github.event.label.name == 'ci-retry' ||
-        github.event.label.name == 'ci-retry-failed-jobs' ||
-        github.event.label.name == 'ci-skip-install' ||
-        github.event.label.name == 'ci-syntax-only' ||
-        !github.event.label.name
-      )
+      startsWith(github.repository, 'Homebrew/') &&
+      github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
       - name: Re-run CI workflow
-        uses: reitermarkus/rerun-workflow@440187d88f68a23cfb30caab5f33ac1bcce31b6a
-        with:
-          token: ${{ secrets.BOT_TOKEN }}
-          once-label: ci-requeue
-          continuous-label: ci-retry
-          trigger-labels: ci-skip-install,ci-syntax-only
-          workflow: ci.yml
-      - name: Re-run CI failed jobs
-        uses: reitermarkus/rerun-workflow@440187d88f68a23cfb30caab5f33ac1bcce31b6a
-        with:
-            token: ${{ secrets.BOT_TOKEN }}
-            once-label: ci-requeue-failed-jobs
-            continuous-label: ci-retry-failed-jobs
-            workflow: ci.yml
-            failed-jobs-only: true
+        run: |
+          PR_NUMBERS=$(gh pr list -l 'ci-retry' --json number --jq '.[].number')
+          for PR_NUMBER in $PR_NUMBERS; do
+            echo "Processing PR #$PR_NUMBER"
+            WORKFLOW_RUNS=$(gh pr view $PR_NUMBER --json headRefName --jq '.headRefName' | xargs -I {} gh run list --workflow=ci.yml --branch={} --json databaseId --jq '.[].databaseId')
+            if [ ! -z "$LATEST_RUN_ID" ]; then
+              echo "Rerunning workflow run #$LATEST_RUN_ID for PR #$PR_NUMBER"
+              gh run rerun $LATEST_RUN_ID
+            else
+              echo "No runs found for PR #$PR_NUMBER"
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  scheduled-retry-failed-jobs:
+    if: >
+      startsWith(github.repository, 'Homebrew/') &&
+      github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Re-run CI workflow
+        run: |
+          PR_NUMBERS=$(gh pr list -l 'ci-retry-failed-jobs' --json number --jq '.[].number')
+          for PR_NUMBER in $PR_NUMBERS; do
+            echo "Processing PR #$PR_NUMBER"
+            WORKFLOW_RUNS=$(gh pr view $PR_NUMBER --json headRefName --jq '.headRefName' | xargs -I {} gh run list --workflow=ci.yml --branch={} --json databaseId --jq '.[].databaseId')
+            if [ ! -z "$LATEST_RUN_ID" ]; then
+              echo "Rerunning workflow run #$LATEST_RUN_ID for PR #$PR_NUMBER"
+              gh run rerun $LATEST_RUN_ID --failed
+            else
+              echo "No runs found for PR #$PR_NUMBER"
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

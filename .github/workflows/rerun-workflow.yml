@@ -41,7 +41,7 @@ jobs:
             fi
           done
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 
   scheduled-retry-failed-jobs:
     if: >
@@ -62,7 +62,7 @@ jobs:
             fi
           done
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 
   trigger-rerun:
     if: >
@@ -84,7 +84,7 @@ jobs:
             echo "No runs found for PR #$PR_NUMBER"
           fi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
   
   trigger-retry-failed-jobs: 
       if: github.event.label.name == 'ci-requeue-failed-jobs'
@@ -101,4 +101,4 @@ jobs:
               echo "No runs found for PR #$PR_NUMBER"
             fi
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}

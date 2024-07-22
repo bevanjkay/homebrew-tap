@@ -29,10 +29,10 @@ jobs:
           PR_NUMBERS=$(gh pr list -l 'ci-retry' --json number --jq '.[].number')
           for PR_NUMBER in $PR_NUMBERS; do
             echo "Processing PR #$PR_NUMBER"
-            WORKFLOW_RUNS=$(gh pr view $PR_NUMBER --json headRefName --jq '.headRefName' | xargs -I {} gh run list --workflow=ci.yml --branch={} --json databaseId --jq '.[].databaseId')
-            if [ ! -z "$LATEST_RUN_ID" ]; then
-              echo "Rerunning workflow run #$LATEST_RUN_ID for PR #$PR_NUMBER"
-              gh run rerun $LATEST_RUN_ID
+            WORKFLOW_RUN_ID=$(gh pr view $PR_NUMBER --json headRefName --jq '.headRefName' | xargs -I {} gh run list --sort --workflow=ci.yml --branch={} --json databaseId --jq '.[].databaseId')
+            if [ ! -z "$WORKFLOW_RUN_ID" ]; then
+              echo "Rerunning workflow run #$WORKFLOW_RUN_ID for PR #$PR_NUMBER"
+              gh run rerun $WORKFLOW_RUN_ID
             else
               echo "No runs found for PR #$PR_NUMBER"
             fi
@@ -51,10 +51,10 @@ jobs:
           PR_NUMBERS=$(gh pr list -l 'ci-retry-failed-jobs' --json number --jq '.[].number')
           for PR_NUMBER in $PR_NUMBERS; do
             echo "Processing PR #$PR_NUMBER"
-            WORKFLOW_RUNS=$(gh pr view $PR_NUMBER --json headRefName --jq '.headRefName' | xargs -I {} gh run list --workflow=ci.yml --branch={} --json databaseId --jq '.[].databaseId')
-            if [ ! -z "$LATEST_RUN_ID" ]; then
-              echo "Rerunning workflow run #$LATEST_RUN_ID for PR #$PR_NUMBER"
-              gh run rerun $LATEST_RUN_ID --failed
+            WORKFLOW_RUN_ID=$(gh pr view $PR_NUMBER --json headRefName --jq '.headRefName' | xargs -I {} gh run list --sort --workflow=ci.yml --branch={} --json databaseId --jq '.[].databaseId')
+            if [ ! -z "$WORKFLOW_RUN_ID" ]; then
+              echo "Rerunning workflow run #$WORKFLOW_RUN_ID for PR #$PR_NUMBER"
+              gh run rerun $WORKFLOW_RUN_ID --failed
             else
               echo "No runs found for PR #$PR_NUMBER"
             fi

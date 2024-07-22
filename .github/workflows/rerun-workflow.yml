@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 env:
-  GH_REPO: ${{ github.repository_owner }}/${{ github.repository }}
+  GH_REPO: ${{ github.repository }}
 
 permissions:
   contents: read

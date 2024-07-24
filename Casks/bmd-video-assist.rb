@@ -1,8 +1,8 @@
 cask "bmd-video-assist" do
   require "net/http"
 
-  version "3.15.0,2f4a98bbe67a4ccb8393b54a5cf3bd5e,6ffa93b7f9854cd19c05d582102db80f"
-  sha256 "810d3ba8b969bc34da8adb57082d35a31d476087e7c0caff8aa34e1300a9f7a8"
+  version "3.16.0,095418c38ed94d6c97b0baa9e0c84a63,0e42cfd6e197427d88f62b4ea4bce013"
+  sha256 "e0d116e2832b61d67076a21c08ed091e6537b7ef55425ee861442f82ebf5c3d0"
 
   url do
     params = {

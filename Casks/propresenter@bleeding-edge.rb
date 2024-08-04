@@ -1,6 +1,6 @@
 cask "propresenter@bleeding-edge" do
-  version "7.16.3,118489862"
-  sha256 "18f577848a94c4e1804485b773962f8eb0a15c29df9006502451c418e851182e"
+  version "17,285212704"
+  sha256 "d5b0715e1fc59f31a46b9f9a842786fd09dbcc1e1d1cdc4e9abf3ab4e207f2e7"
 
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"
@@ -15,37 +15,21 @@ cask "propresenter@bleeding-edge" do
       matched = []
       unmatched = []
 
-      current_minor = version.csv.first.minor.to_i
-      future_minor = current_minor.to_i + 0
-      current_patch = version.csv.first.patch.to_i
-      future_patch = current_patch.to_i + 1
       current_build = version.csv.second.to_i
       future_build = current_build.to_i + 5
-      (current_minor..future_minor).each do |minor|
-        (current_patch..future_patch).each do |patch|
-          (current_build..future_build).each do |build|
-            url = if patch.zero?
-              "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_7.#{minor}_#{build}.zip"
-            else
-              "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_7.#{minor}.#{patch}_#{build}.zip"
-            end
+      (current_build..future_build).each do |build|
+        url = "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_17_#{build}.zip"
 
-            system_result, _err, _st = Open3.capture3("curl -sLI #{url} | grep -i http/2")
+        system_result, _err, _st = Open3.capture3("curl -sLI #{url} | grep -i http/2")
 
-            next unless system_result
+        next unless system_result
 
-            tested_version = if patch.zero?
-              "7.#{minor},#{build}"
-            else
-              "7.#{minor}.#{patch},#{build}"
-            end
+        tested_version = "17,#{build}"
 
-            if system_result.include?("200")
-              matched << tested_version
-            else
-              unmatched << tested_version
-            end
-          end
+        if system_result.include?("200")
+          matched << tested_version
+        else
+          unmatched << tested_version
         end
       end
 

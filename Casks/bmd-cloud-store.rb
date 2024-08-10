@@ -1,8 +1,8 @@
 cask "bmd-cloud-store" do
   require "net/http"
 
-  version "1.3.0,46267931f2c7486ea34853af418bf3f5,fd715f798d3e461eb6708d72a326071a"
-  sha256 "0c5b712d5a43536cfbcc8f6c72d4fd0665d523d37051970be99a1f1ce088cd04"
+  version "1.3.1,4fb8a92a939249c78feef346d5c90bc5,5892a10816334e24a091bf31036946cb"
+  sha256 "c5d3ed0da105b7f6bc64b800610c4b700a1a6e3b043a8622b203e47cddc15583"
 
   url do
     params = {
@@ -39,7 +39,6 @@ cask "bmd-cloud-store" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_Cloud_Store_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install Cloud Store #{version.csv.first.chomp(".0")}.pkg"
 

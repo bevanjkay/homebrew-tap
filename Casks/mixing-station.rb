@@ -1,5 +1,5 @@
 cask "mixing-station" do
-  version "2.0.14"
+  version "2.1.1"
   sha256 :no_check
 
   url "https://mixingstation.app/backend/api/web/download/attachment/mixing-station-pc/release/OSX"
@@ -25,4 +25,8 @@ cask "mixing-station" do
     "~/Library/Saved Application State/org.devcore.mixingstation.pc.savedState",
     "~/MixingStation",
   ]
+
+  caveats do
+    requires_rosetta
+  end
 end

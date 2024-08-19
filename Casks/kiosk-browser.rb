@@ -19,10 +19,6 @@ cask "kiosk-browser" do
     EOS
   end
 
-  postflight do
-    system_command "xattr", args: ["-d", "com.apple.quarantine", "#{appdir}/kiosk-browser.app"]
-  end
-
   zap trash: [
     "~/Library/Application Support/kiosk-browser",
     "~/Library/Preferences/org.imaginary.kiosk.plist",

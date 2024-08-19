@@ -1,6 +1,6 @@
 cask "kiosk-browser" do
-  version "0.17.0"
-  sha256 "0d6fbbe22612862d37e8dc23a37907dc2645f042c14a2fae821bd45d866073ad"
+  version "0.18.0"
+  sha256 "5616873915d6420230ea4dc9875ce6bd4f9e589519c64d791a2bb379bdc88010"
 
   url "https://github.com/IMAGINARY/kiosk-browser/releases/download/v#{version}/kiosk-browser-#{version}.dmg"
   name "Kiosk Browser"
@@ -19,13 +19,13 @@ cask "kiosk-browser" do
     EOS
   end
 
-  postflight do
-    system_command "xattr", args: ["-d", "com.apple.quarantine", "#{appdir}/kiosk-browser.app"]
-  end
-
   zap trash: [
     "~/Library/Application Support/kiosk-browser",
     "~/Library/Preferences/org.imaginary.kiosk.plist",
     "~/Library/Saved Application State/org.imaginary.kiosk.savedState",
   ]
+
+  caveats do
+    requires_rosetta
+  end
 end

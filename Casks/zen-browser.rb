@@ -12,7 +12,7 @@ cask "zen-browser" do
   homepage "https://www.zen-browser.app/"
 
   auto_updates true
-  depends_on macos: ">=:catalina"
+  depends_on macos: ">= :catalina"
 
   app "Zen Browser.app"
 

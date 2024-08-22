@@ -50,7 +50,7 @@ cask "davinci-resolve-studio@beta" do
       matched = json["downloads"].select do |download|
         next false if download["urls"]["Mac OS X"].blank?
 
-        download["urls"]["Mac OS X"].first["product"] == "davinci-resolve-studio" && /beta/i.match?(download["name"])
+        download["urls"]["Mac OS X"].first["product"] == "davinci-resolve-studio"
       end
       matched.map do |download|
         beta = /beta/i.match?(download["name"])

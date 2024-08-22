@@ -1,8 +1,8 @@
 cask "davinci-resolve@beta" do
   require "net/http"
 
-  version "19.0.0,e937af67ed9648fbb7e45f903e555c73,b3b54f9a9aff4347a06ebcd1c18794a3,b"
-  sha256 "7138847e5b0482caf9d71d5c437b49d3a3118d1a9bd54c4493d6882472836b76"
+  version "19.0.0,3546da9727ff4c1f92c2914422901314,401a7235df6c49dd942404f90be30e35,"
+  sha256 "8d0926c605180f2c970b503091aac4ebf55519af90f6babf6391cf289bc134eb"
 
   url do
     if File.exist?("#{Dir.home}/.personal_details.json")
@@ -66,7 +66,7 @@ cask "davinci-resolve@beta" do
   auto_updates true
   conflicts_with cask: "davinci-resolve"
 
-  pkg "Install Resolve #{version.csv.first}#{version.csv.fourth}.pkg"
+  pkg "Install Resolve #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
 
   uninstall script:  {
               executable: "/Applications/DaVinci Resolve/Uninstall Resolve.app/Contents/Resources/uninstall.sh",

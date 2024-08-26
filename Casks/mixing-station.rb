@@ -1,5 +1,5 @@
 cask "mixing-station" do
-  version "2.1.3"
+  version "2.1.4"
   sha256 :no_check
 
   url "https://mixingstation.app/backend/api/web/download/attachment/mixing-station-pc/release/OSX"

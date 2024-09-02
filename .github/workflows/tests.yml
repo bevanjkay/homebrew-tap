@@ -1,0 +1,69 @@
+name: brew test-bot
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  test-bot:
+    strategy:
+      matrix:
+        include:
+          - name: macOS 14 (arm64)
+            runs-on: macos-14
+            cleanup-before: true
+          - name: macOS 13 (x86_64)
+            runs-on: macos-13
+            cleanup-before: true
+          - name: macOS 12 (x86_64)
+            runs-on: macos-12
+            cleanup-before: true
+          - name: macOS 11 (x86_64)
+            runs-on: macos-11
+            cleanup-before: true
+          - name: Ubuntu 22.04
+            runs-on: ubuntu-22.04
+            cleanup-before: false
+            container:
+              image: ghcr.io/homebrew/ubuntu22.04:master
+              options: --user=linuxbrew
+            working-directory: /github/home
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runs-on }}
+    container: ${{ matrix.container }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ matrix.working-directory || github.workspace }}
+    env:
+      BOTTLES_DIR: ${{ matrix.working-directory || github.workspace }}/bottles
+    steps:
+      - name: Pre-test steps
+        uses: Homebrew/actions/pre-build@master
+        with:
+          bottles-directory: ${{ env.BOTTLES_DIR }}
+          cleanup: ${{ matrix.cleanup-before }}
+
+      - run: brew test-bot --only-tap-syntax
+
+      - run: brew test-bot --only-formulae --root-url='https://ghcr.io/v2/bevanjkay/homebrew-tap'
+        id: brew-test-bot-formulae
+        if: github.event_name == 'pull_request'
+        working-directory: ${{ env.BOTTLES_DIR }}
+
+      - name: Post-build steps
+        if: >
+          github.event_name == 'pull_request' &&
+          !contains(fromJson('["skipped", "cancelled"]'), steps.brew-test-bot-formulae.conclusion)
+        uses: Homebrew/actions/post-build@master
+        with:
+          bottles-directory: ${{ env.BOTTLES_DIR }}
+          logs-directory: ${{ format('{0}/logs', env.BOTTLES_DIR) }}
+          runner: ${{ matrix.runs-on }}
+          cleanup: false

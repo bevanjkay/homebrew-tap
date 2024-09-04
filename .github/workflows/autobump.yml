@@ -24,10 +24,13 @@ jobs:
           core: false
           test-bot: false
 
-      - name: List applications
+      - name: Cleanup machine
         run: |
-          cd /Applications
-          ls -1
+          rm -rf /Applications/Xcode_15.3.app
+          rm -rf /Applications/Xcode_15.2.app
+          rm -rf /Applications/Xcode_15.1.app
+          rm -rf /Applications/Xcode_15.0.1.app
+          rm -rf /Applications/Xcode_14.3.1.app
 
       - name: Configure Git user
         uses: Homebrew/actions/git-user-config@master

@@ -45,6 +45,9 @@ jobs:
           cask: true
           test-bot: false
 
+      - name: List casks
+        run: brew ls
+
       - name: Check out Pull Request
         uses: actions/checkout@v4
         with:

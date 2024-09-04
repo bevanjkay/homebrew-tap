@@ -26,11 +26,11 @@ jobs:
 
       - name: Cleanup machine
         run: |
-          rm -rf /Applications/Xcode_15.3.app
-          rm -rf /Applications/Xcode_15.2.app
-          rm -rf /Applications/Xcode_15.1.app
-          rm -rf /Applications/Xcode_15.0.1.app
-          rm -rf /Applications/Xcode_14.3.1.app
+          sudo rm -rf /Applications/Xcode_14.3.1.app
+          sudo rm -rf /Applications/Xcode_15.0.1.app
+          sudo rm -rf /Applications/Xcode_15.1.app
+          sudo rm -rf /Applications/Xcode_15.2.app
+          sudo rm -rf /Applications/Xcode_15.3.app
 
       - name: Configure Git user
         uses: Homebrew/actions/git-user-config@master

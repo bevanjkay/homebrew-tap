@@ -24,8 +24,10 @@ jobs:
           core: false
           test-bot: false
 
-      - name: List installed casks
-        run: brew ls --cask
+      - name: List applications
+        run: |
+          cd /Applications
+          ls -1
 
       - name: Configure Git user
         uses: Homebrew/actions/git-user-config@master

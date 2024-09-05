@@ -94,9 +94,12 @@ jobs:
         if: matrix.runner == 'macos-14'
         run: |
           df -hI /dev/disk3s1s1
+          sudo rm -rf /Applications/Xcode_14.3.1.app
+          sudo rm -rf /Applications/Xcode_15.0.1.app
           sudo rm -rf /Applications/Xcode_15.1.app
           sudo rm -rf /Applications/Xcode_15.2.app
           sudo rm -rf /Applications/Xcode_15.3.app
+          sudo rm -rf /Applications/Xcode_*_beta.app
           df -hI /dev/disk3s1s1
 
       - name: Clean up CI machine

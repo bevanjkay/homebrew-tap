@@ -91,7 +91,7 @@ jobs:
           persist-credentials: false
 
       - name: Clean up CI Xcode Versions
-        if: matrix.os == 'macos-latest' || matrix.os == 'macos-14'
+        if: matrix.runner == 'macos-latest' || matrix.runner == 'macos-14'
         run: |
           df -hI /dev/disk3s1s1
           sudo rm -rf /Applications/Xcode_14.3.1.app

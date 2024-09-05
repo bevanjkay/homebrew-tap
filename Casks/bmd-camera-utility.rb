@@ -1,8 +1,8 @@
 cask "bmd-camera-utility" do
   require "net/http"
 
-  version "8.5.1,1e4d1891e55d46798ff850ad9ce5743d,60d22266bfd0443082f5132f51a829af"
-  sha256 "8be7e31cfc655e90b1af82d2dc121e0fa6fdc62dbc888049e4fea2e4885108b3"
+  version "9.0.0,8b2be678ff2d42e783b515bc097aa999,c94e8a4445cf4766b46067487e12c726"
+  sha256 "871a127da3e39e4caacde67470518606ffbe74b33047e5cb6c07c2e3ace2456e"
 
   url do
     params = {
@@ -39,7 +39,6 @@ cask "bmd-camera-utility" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_Camera_Setup_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install Cameras #{version.csv.first.chomp(".0")}.pkg"
 

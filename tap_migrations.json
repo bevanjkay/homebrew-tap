@@ -1,4 +1,5 @@
 {
     "adobe-fonts-revealer": "bevanjkay/formulae",
-    "bible-import": "bevanjkay/formulae"
+    "bible-import": "bevanjkay/formulae",
+    "zen-browser": "homebrew/cask"
 }

@@ -1,8 +1,8 @@
 cask "tallyarbiter" do
-  version "3.0.10"
-  sha256 "9d5f39fffe2e0127a5608f8beccc40a83811b1d995b127199429d13f1bc34b81"
+  version "3.1.1"
+  sha256 "7100aa56714618c8efd4afbf93d732f89c59039eff6114a0ccfb13ef8878e7bc"
 
-  url "https://github.com/josephdadams/TallyArbiter/releases/download/v#{version}/TallyArbiter-#{version}.dmg",
+  url "https://github.com/josephdadams/TallyArbiter/releases/download/v#{version}/TallyArbiter-#{version}-arm64.dmg",
       verified: "github.com/josephdadams/TallyArbiter/"
   name "TallyArbiter"
   desc "Camera tally light system"
@@ -26,8 +26,4 @@ cask "tallyarbiter" do
     "~/Library/Preferences/com.electron.tallyarbiter.plist",
     "~/Library/Preferences/TallyArbiter",
   ]
-
-  caveats do
-    requires_rosetta
-  end
 end

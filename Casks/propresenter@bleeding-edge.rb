@@ -1,6 +1,6 @@
 cask "propresenter@bleeding-edge" do
-  version "17,285212709"
-  sha256 "7c60673e0cf202c1b297e7ba8fe48e91758ef834e1e3c2622e6b584bf2ce5de3"
+  version "17.1,285278212"
+  sha256 "5627ffb7b430228a1c6ac4f3315672f17aef6f7476bc9494dfd067658f50ecdd"
 
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"
@@ -18,13 +18,13 @@ cask "propresenter@bleeding-edge" do
       current_build = version.csv.second.to_i
       future_build = current_build.to_i + 5
       (current_build..future_build).each do |build|
-        url = "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_17_#{build}.zip"
+        url = "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{build}.zip"
 
         system_result, _err, _st = Open3.capture3("curl -sLI #{url} | grep -i http/2")
 
         next unless system_result
 
-        tested_version = "17,#{build}"
+        tested_version = "#{version.csv.first},#{build}"
 
         if system_result.include?("200")
           matched << tested_version

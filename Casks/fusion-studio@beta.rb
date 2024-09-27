@@ -1,25 +1,20 @@
 cask "fusion-studio@beta" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "19.0.1,1df985fed9494c5789a0f8617ea736cf,c5777daf38aa4c5c9de20b95671d30d9,"
   sha256 "2aaffea731a136a876434d181c0b7377617aab309279c0960636d7f8242438d4"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "product"      => {
-        "name" => "Fusion Studio",
-      },
-      "policy"       => "true",
-      "downloadOnly" => "true",
-      "country"      => "au",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/au/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/au/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "product"      => {
+          "name" => "Fusion Studio",
+        },
+        "policy"       => "true",
+        "downloadOnly" => "true",
+        "country"      => "au",
+      }
   name "Fusion Studio"
   desc "Visual effects software"
   homepage "https://www.blackmagicdesign.com/au/products/fusion/"

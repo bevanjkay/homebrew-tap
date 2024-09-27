@@ -1,22 +1,17 @@
 cask "bmd-atem" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "9.6.2,e6f0c8377c884da3a5f0f6c80805932c,5c29221e523a43ccbb1825848d44f1e0"
   sha256 "ab421e1eb3f649a3b9b63c83cdcfa7a1f9e6c1e6a2b22dc2a907ba58988a1c47"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "downloadOnly" => "true",
-      "country"      => "us",
-      "policy"       => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "downloadOnly" => "true",
+        "country"      => "us",
+        "policy"       => "true",
+      }
   name "Blackmagic ATEM"
   desc "Update and manage Blackmagic ATEM Switchers"
   homepage "https://www.blackmagicdesign.com/"

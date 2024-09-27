@@ -1,22 +1,17 @@
 cask "bmd-teranex" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "7.1.7,583104158c604f65ac35cef95587410d,268c803a889542a699d3795c4114cf73"
   sha256 "a6195febd8f73ade38bc1ba62c6bc579c20fcfe31ede4b5b11df362ecf79fea2"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "downloadOnly" => "true",
-      "country"      => "us",
-      "policy"       => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "downloadOnly" => "true",
+        "country"      => "us",
+        "policy"       => "true",
+      }
   name "Blackmagic Teranex"
   desc "Update and manage Blackmagic Teranex Hardware"
   homepage "https://www.blackmagicdesign.com/products/teranex"

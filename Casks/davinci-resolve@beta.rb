@@ -1,47 +1,45 @@
 cask "davinci-resolve@beta" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "19.0.1,cdc2a8536bc647f3a9502565d53d8869,9d291aff341c4d3e99978dc1be0eab2e,"
   sha256 "baf700221556d5c8ca577fd622236ebd6f99d845d49bdae3e448a1c17c503f5b"
 
-  url do
-    if File.exist?("#{Dir.home}/.personal_details.json")
-      personal_details = JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
-    else
-      opoo "Please create a personal details file at `~/.personal_details.json` - using placeholder data"
-      personal_details = {
-        "firstname"   => "Joe",
-        "lastname"    => "Bloggs",
-        "email"       => "email@example.com",
-        "phone"       => "61412345678",
-        "address"     => "123 Main Street",
-        "city"        => "Melbourne",
-        "state"       => "Victoria",
-        "zip"         => "3000",
-        "countrycode" => "au",
-      }
-    end
-
-    params = {
-      "platform"  => "Mac OS X",
-      "product"   => "DaVinci Resolve",
-      "firstname" => personal_details["firstname"],
-      "lastname"  => personal_details["lastname"],
-      "email"     => personal_details["email"],
-      "phone"     => personal_details["phone"],
-      "city"      => personal_details["city"],
-      "street"    => personal_details["address"],
-      "state"     => personal_details["state"],
-      "zip"       => personal_details["postcode"],
-      "country"   => personal_details["countrycode"],
-      "policy"    => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/au/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
+  if File.exist?("#{Dir.home}/.personal_details.json")
+    personal_details = JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
+  else
+    opoo "Please create a personal details file at `~/.personal_details.json` - using placeholder data"
+    personal_details = {
+      "firstname"   => "Joe",
+      "lastname"    => "Bloggs",
+      "email"       => "email@example.com",
+      "phone"       => "61412345678",
+      "address"     => "123 Main Street",
+      "city"        => "Melbourne",
+      "state"       => "Victoria",
+      "zip"         => "3000",
+      "countrycode" => "au",
+    }
   end
+
+  params = {
+    "platform"         => "Mac OS X",
+    "product"          => "Davinci Resolve",
+    "firstname"        => personal_details["firstname"],
+    "lastname"         => personal_details["lastname"],
+    "email"            => personal_details["email"],
+    "phone"            => personal_details["phone"],
+    "street"           => personal_details["address"],
+    "city"             => personal_details["city"],
+    "state"            => personal_details["state"],
+    "zip"              => personal_details["postcode"],
+    "country"          => personal_details["countrycode"],
+    "policy"           => true,
+    "hasAgreedToTerms" => true,
+  }
+
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  params
   name "Davinci Resolve"
   desc "Video Editing Software"
   homepage "https://www.blackmagicdesign.com/au/products/davinciresolve/"

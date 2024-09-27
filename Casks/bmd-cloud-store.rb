@@ -1,22 +1,17 @@
 cask "bmd-cloud-store" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "1.4.0,3d18ff6a7bac4108bacc85c0f98c80a6,4b860cc4137b4f93b8aa9e6e511d7a1a"
   sha256 "7b584a7973aab49fa8bcccd42211016e8da70155cfcd1dadfeae8f790968d460"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "downloadOnly" => "true",
-      "country"      => "us",
-      "policy"       => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "downloadOnly" => "true",
+        "country"      => "us",
+        "policy"       => "true",
+      }
   name "Blackmagic Cloud Store"
   desc "Update and manage Blackmagic Cloud Hardware"
   homepage "https://www.blackmagicdesign.com/products/blackmagiccloudpod"

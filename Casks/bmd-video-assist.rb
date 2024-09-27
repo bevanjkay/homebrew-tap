@@ -1,22 +1,17 @@
 cask "bmd-video-assist" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "3.16.0,095418c38ed94d6c97b0baa9e0c84a63,0e42cfd6e197427d88f62b4ea4bce013"
   sha256 "e0d116e2832b61d67076a21c08ed091e6537b7ef55425ee861442f82ebf5c3d0"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "downloadOnly" => "true",
-      "country"      => "us",
-      "policy"       => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "downloadOnly" => "true",
+        "country"      => "us",
+        "policy"       => "true",
+      }
   name "Blackmagic Video Assist"
   desc "Update and manage Blackmagic Video Assist Hardware"
   homepage "https://www.blackmagicdesign.com/"

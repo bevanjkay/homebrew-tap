@@ -1,22 +1,17 @@
 cask "bmd-cintel" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "6.0.0,3d6d964a3ec94a5d8bc9084d2827b65f,60ef3d64394a448ba486be4b792fd450"
   sha256 "59cfe3abbc0601446a3a9ac5d73bc5353c59eb31531f91b915ee4431882b88d4"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "downloadOnly" => "true",
-      "country"      => "us",
-      "policy"       => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "downloadOnly" => "true",
+        "country"      => "us",
+        "policy"       => "true",
+      }
   name "Blackmagic Cintel"
   desc "Update and manage Blackmagic Cintel Scanner Hardware"
   homepage "https://www.blackmagicdesign.com/products/cintel"

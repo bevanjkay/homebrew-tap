@@ -34,7 +34,6 @@ cask "bmd-ultimatte" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_Ultimatte_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install Ultimatte #{version.csv.first.chomp(".0")}.pkg"
 

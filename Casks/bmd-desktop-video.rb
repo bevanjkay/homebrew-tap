@@ -1,22 +1,17 @@
 cask "bmd-desktop-video" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "14.2.1,b7c1baef38584d7895c537a6f7fbd26b,ee68ede150844742b5973f2b9c11a82b"
   sha256 "2d88776bc6dd6ff9abdceb6917f46f87b1a0255271c09f9eea9416605fe7a441"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "downloadOnly" => "true",
-      "country"      => "us",
-      "policy"       => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "downloadOnly" => "true",
+        "country"      => "us",
+        "policy"       => "true",
+      }
   name "Blackmagic Desktop Video"
   desc "Device drivers and management tools for Blackmagic Design devices"
   homepage "https://www.blackmagicdesign.com/"

@@ -1,22 +1,17 @@
 cask "bmd-videohub" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "10.0.0,5e3f35becfca43dfab67f57d08d5de47,960e27fc010840a1bc54a43423b8e106"
   sha256 "2406b6d3665705d2d3ae5d8cbe4a728ce89a5b39a94dcfb8cfd98453f987a627"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "downloadOnly" => "true",
-      "country"      => "us",
-      "policy"       => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "downloadOnly" => "true",
+        "country"      => "us",
+        "policy"       => "true",
+      }
   name "Blackmagic Videohub"
   desc "Control and update Blackmagic Videohub Devices"
   homepage "https://www.blackmagicdesign.com/"
@@ -39,7 +34,6 @@ cask "bmd-videohub" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_Videohub_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install Videohub #{version.csv.first.chomp(".0")}.pkg"
 

@@ -1,48 +1,45 @@
 cask "bmd-braw" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "4.2.0,3e7ca1517ba044659e32eb530b94d208,726db318e02b443dae262051225347ab"
   sha256 "4b3a52c38996c1fd2ea4c99a272243b22a18739b029ea3f4c0ccc96eea4c2956"
 
-  url do
-    if File.exist?("#{Dir.home}/.personal_details.json")
-      personal_details = JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
-    else
-      opoo "Please create a personal details file at `~/.personal_details.json` - using placeholder data"
-      personal_details = {
-        "firstname"   => "Joe",
-        "lastname"    => "Bloggs",
-        "email"       => "email@example.com",
-        "phone"       => "61412345678",
-        "address"     => "123 Main Street",
-        "city"        => "Melbourne",
-        "state"       => "Victoria",
-        "zip"         => "3000",
-        "countrycode" => "au",
-      }
-    end
-
-    params = {
-      "platform"         => "Mac OS X",
-      "product"          => "Blackmagic RAW 3.0",
-      "firstname"        => personal_details["firstname"],
-      "lastname"         => personal_details["lastname"],
-      "email"            => personal_details["email"],
-      "phone"            => personal_details["phone"],
-      "street"           => personal_details["address"],
-      "city"             => personal_details["city"],
-      "state"            => personal_details["state"],
-      "zip"              => personal_details["postcode"],
-      "country"          => personal_details["countrycode"],
-      "policy"           => true,
-      "hasAgreedToTerms" => true,
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
+  if File.exist?("#{Dir.home}/.personal_details.json")
+    personal_details = JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
+  else
+    opoo "Please create a personal details file at `~/.personal_details.json` - using placeholder data"
+    personal_details = {
+      "firstname"   => "Joe",
+      "lastname"    => "Bloggs",
+      "email"       => "email@example.com",
+      "phone"       => "61412345678",
+      "address"     => "123 Main Street",
+      "city"        => "Melbourne",
+      "state"       => "Victoria",
+      "zip"         => "3000",
+      "countrycode" => "au",
+    }
   end
+
+  params = {
+    "platform"         => "Mac OS X",
+    "product"          => "Blackmagic RAW 3.0",
+    "firstname"        => personal_details["firstname"],
+    "lastname"         => personal_details["lastname"],
+    "email"            => personal_details["email"],
+    "phone"            => personal_details["phone"],
+    "street"           => personal_details["address"],
+    "city"             => personal_details["city"],
+    "state"            => personal_details["state"],
+    "zip"              => personal_details["postcode"],
+    "country"          => personal_details["countrycode"],
+    "policy"           => true,
+    "hasAgreedToTerms" => true,
+  }
+
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  params
   name "Blackmagic Converters"
   desc "Utility to update and control Blackmagic Design Converters"
   homepage "https://www.blackmagicdesign.com/"

@@ -1,22 +1,17 @@
 cask "bmd-hyperdeck" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "8.4.1,6a188e38dd6f4c739eb880af5c4dfd69,9e5000bcc0324a82b6cabe51a3c25bf9"
   sha256 "3648722e19f737eae07b98eec5ecc9108cb13d015a3f134a5cecfc2a82695325"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "downloadOnly" => "true",
-      "country"      => "us",
-      "policy"       => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "downloadOnly" => "true",
+        "country"      => "us",
+        "policy"       => "true",
+      }
   name "Blackmagic HyperDeck"
   desc "Update and manage Blackmagic HyperDeck Hardwarecd"
   homepage "https://www.blackmagicdesign.com/"

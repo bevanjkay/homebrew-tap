@@ -1,22 +1,17 @@
 cask "bmd-converters" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "10.0.0,4487cc22ab5040728f801b0a798e71f6,828d26d6bc03462595c75cdb5477e72d"
   sha256 "e8089a45a48b75eca9959949e434bb4277dddaa03126cfae8771741c5b14d22f"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "downloadOnly" => "true",
-      "country"      => "us",
-      "policy"       => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "downloadOnly" => "true",
+        "country"      => "us",
+        "policy"       => "true",
+      }
   name "Blackmagic Converters"
   desc "Utility to update and control Blackmagic Design Converters"
   homepage "https://www.blackmagicdesign.com/"

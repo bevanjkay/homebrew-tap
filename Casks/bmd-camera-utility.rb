@@ -1,22 +1,17 @@
 cask "bmd-camera-utility" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "9.1.0,bdf791cdd81048d0bd31c9d32fd78087,e5864c00d0004f96bbecf1280b2cc85c"
   sha256 "989ef7b472000c287e21c46a1b7646a997f766a2014426d2526db65b6594b1fe"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "downloadOnly" => "true",
-      "country"      => "us",
-      "policy"       => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "downloadOnly" => "true",
+        "country"      => "us",
+        "policy"       => "true",
+      }
   name "Blackmagic Camera Utility"
   desc "Update and manage Blackmagic Cameras"
   homepage "https://www.blackmagicdesign.com/"

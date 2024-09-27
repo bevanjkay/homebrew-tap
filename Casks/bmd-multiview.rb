@@ -1,22 +1,17 @@
 cask "bmd-multiview" do
-  require "net/http"
+  require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "2.2.5,ffbee5ff3bb744c39112959e4119c696,ba9774141d0148138d21ce6e7cb630f4"
   sha256 "c494900f70d50fb1d6a65df308226935f686ea6a2977c039d1266dfb0829ab53"
 
-  url do
-    params = {
-      "platform"     => "Mac OS X",
-      "downloadOnly" => "true",
-      "country"      => "us",
-      "policy"       => "true",
-    }.to_json
-
-    uri = URI("https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}")
-    resp = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-
-    resp.body
-  end
+  url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
+      using: BmdDownloadStrategy,
+      data:  {
+        "platform"     => "Mac OS X",
+        "downloadOnly" => "true",
+        "country"      => "us",
+        "policy"       => "true",
+      }
   name "Blackmagic Multiview"
   desc "Update and manage Blackmagic Multiview Hardware"
   homepage "https://www.blackmagicdesign.com/products/multiview"
@@ -39,7 +34,6 @@ cask "bmd-multiview" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
-  container nested: "Blackmagic_MultiView_#{version.csv.first.chomp(".0")}.dmg"
 
   pkg "Install Multiview #{version.csv.first.chomp(".0")}.pkg"
 

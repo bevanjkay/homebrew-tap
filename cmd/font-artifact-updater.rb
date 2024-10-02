@@ -13,7 +13,8 @@ module Homebrew
         usage_banner <<~EOS
           `font-artifact-updater` <token>
 
-          Generates cask stanzas from OTF/TTF files within <token>.
+          Updates the font artifacts for a given font cask.
+          Adds all fonts from the binary package, so may require manual filtering.
         EOS
 
         named_args :token, min: 1, max: 1
@@ -71,6 +72,11 @@ module Homebrew
           "zipinfo -1 #{archive}"
         when ".7z"
           "sh -c '7z l -ba #{archive} | grep -o \"[^ ]*$\"'"
+        when ".gz"
+          raise "Unsupported .gz archive type" unless File.basename(archive, ".gz").end_with?(".tar")
+
+          "tar -tzf #{archive}"
+
         else
           raise "Unsupported archive type"
         end
@@ -79,13 +85,27 @@ module Homebrew
       def font_paths(archive)
         cmd = list_cmd(archive)
 
-        IO.popen(cmd, "r") do |io|
+        all_fonts = IO.popen(cmd, "r") do |io|
           io.read.chomp.split("\n")
-            .grep(FONT_EXT_PATTERN)
-            .reject { |x| x.start_with?("__MACOSX") }
-            .grep_v(%r{(?:\A|/)\._})
-            .sort
+            .grep(FONT_EXT_PATTERN)                        # Filter by font file extensions
+            .reject { |x| x.start_with?("__MACOSX") }      # Reject files in __MACOSX directory
+            .grep_v(%r{(?:\A|/)\._})                       # Reject metadata files
+            .sort                                          # Sort the list of files
         end
+
+        # Hash to store basenames and preferred font paths
+        preferred_fonts = {}
+
+        all_fonts.each do |font|
+          basename = File.basename(font, ".*")
+          ext = File.extname(font).downcase
+
+          # Keep the .otf version if it exists, otherwise, keep any version
+          preferred_fonts[basename] = font if preferred_fonts[basename].nil? || ext == ".otf"
+        end
+
+        # Return only the preferred font paths
+        preferred_fonts.values
       end
 
       def update_cask_content(cask, fonts)

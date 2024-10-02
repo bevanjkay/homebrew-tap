@@ -1,5 +1,6 @@
 {
     "adobe-fonts-revealer": "bevanjkay/formulae",
+    "b-output-factory": "homebrew/cask/output-factory",
     "bible-import": "bevanjkay/formulae",
     "zen-browser": "homebrew/cask"
 }

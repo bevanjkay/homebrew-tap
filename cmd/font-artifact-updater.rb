@@ -91,7 +91,7 @@ module Homebrew
       def update_cask_content(cask, fonts)
         content = cask.source.split("\n")
         font_content = fonts.map do |font|
-          "  font \"#{font}\""
+          "  font \"#{font}\"".gsub(cask.version.to_s, "\#{version}")
         end
         new_content = []
         last_match = nil

@@ -1,8 +1,8 @@
 cask "ffmpeg-static" do
   version "7.1"
-  sha256 "50a2c54bbd5f92159add3669a081728d0df3fa7ba5fc300c3171bfbeba4a2765"
+  sha256 "5a1303c7babaffff3c32c141ff49c7f44bd3b3b3e7dcea992fd7d04b6558ef43"
 
-  url "https://evermeet.cx/ffmpeg/ffmpeg-#{version}.7z"
+  url "https://evermeet.cx/ffmpeg/ffmpeg-#{version}.zip"
   name "ffmpeg"
   desc "Static builds of ffmpeg"
   homepage "https://evermeet.cx/ffmpeg"

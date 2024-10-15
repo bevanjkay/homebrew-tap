@@ -1,7 +1,7 @@
 cask "bmd-converters" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "10.1.0,120715f1ca6849878c69ee47c9ea83fc,f622e29e96534d468adfa0cd42cc44d5"
+  version "10.1.1,13fdae1e7f4a4b5b8c4a4f64ca99c288,13c5c21da1c84d8cbd369a6246ee2792"
   sha256 "a9cd67a1d56b0220117891592c5eff6f82c203e6c41921fd8afbf33cb087cb57"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
@@ -35,7 +35,7 @@ cask "bmd-converters" do
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
 
-  pkg "Install Converters #{version.csv.first.chomp(".0")}.pkg"
+  pkg "Install Converters #{version.csv.first.chomp(".0").chomp(".1")}.pkg"
 
   uninstall pkgutil: [
     "com.blackmagic-design.Converters",

@@ -117,17 +117,6 @@ jobs:
           contains(fromJSON('["success", "skipped"]'), steps.tap-syntax.outcome) &&
           matrix.cask
 
-      - name: Run brew audit --cask${{ (matrix.cask && ' ') || ' --tap ' }}${{ matrix.cask.token || matrix.tap }}
-        id: audit
-        run: |
-          brew audit --cask ${{ join(matrix.audit_args, ' ') }}${{ (matrix.cask && ' ') || ' --tap ' }}'${{ matrix.cask.token || matrix.tap }}'
-        timeout-minutes: 30
-        if: >
-          always() &&
-          contains(fromJSON('["success", "skipped"]'), steps.tap-syntax.outcome) &&
-          (!matrix.cask || steps.fetch.outcome == 'success') &&
-          !matrix.skip_audit
-
       - name: Gather cask information
         id: info
         run: |
@@ -168,6 +157,23 @@ jobs:
             end
           EOF
         if: always() && steps.fetch.outcome == 'success' && matrix.cask
+
+      - name: Install formula dependencies
+        run: |
+          brew install --formula ${{ join(fromJSON(steps.info.outputs.formula_dependencies), ' ') }}
+        if: always() && matrix.cask && join(fromJSON(steps.info.outputs.formula_dependencies)) != ''
+        timeout-minutes: 30
+
+      - name: Run brew audit --cask${{ (matrix.cask && ' ') || ' --tap ' }}${{ matrix.cask.token || matrix.tap }}
+        id: audit
+        run: |
+          brew audit --cask ${{ join(matrix.audit_args, ' ') }}${{ (matrix.cask && ' ') || ' --tap ' }}'${{ matrix.cask.token || matrix.tap }}'
+        timeout-minutes: 30
+        if: >
+          always() &&
+          contains(fromJSON('["success", "skipped"]'), steps.tap-syntax.outcome) &&
+          (!matrix.cask || steps.fetch.outcome == 'success') &&
+          !matrix.skip_audit
 
       - name: Uninstall conflicting formulae
         run: |

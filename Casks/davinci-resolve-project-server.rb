@@ -4,11 +4,10 @@ cask "davinci-resolve-project-server" do
   version "19.0.1,6,e4a174ed084343bd857c32eaf38e267a,"
   sha256 "2c9b17ee5eefdc03b32b02a3988648497b86e76f3dab2f6408a5cfeea172ce6c"
 
-  if File.exist?("#{Dir.home}/.personal_details.json")
-    personal_details = JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
+  personal_details = if File.exist?("#{Dir.home}/.personal_details.json")
+    JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
   else
-    opoo "Please create a personal details file at `~/.personal_details.json` - using placeholder data"
-    personal_details = {
+    {
       "firstname"   => "Joe",
       "lastname"    => "Bloggs",
       "email"       => "email@example.com",

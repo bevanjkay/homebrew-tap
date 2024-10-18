@@ -4,11 +4,10 @@ cask "bmd-braw" do
   version "4.3.0,8ea7b8d5ba934e18a28b8647defa817f,07802c93825747d4b9eee424df80be02"
   sha256 "73f855578db49c0c81b08c16d34e38010e9cb3b3aeaf94aed6b52d4da1deee6f"
 
-  if File.exist?("#{Dir.home}/.personal_details.json")
-    personal_details = JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
+  personal_details = if File.exist?("#{Dir.home}/.personal_details.json")
+    JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
   else
-    opoo "Please create a personal details file at `~/.personal_details.json` - using placeholder data"
-    personal_details = {
+    {
       "firstname"   => "Joe",
       "lastname"    => "Bloggs",
       "email"       => "email@example.com",

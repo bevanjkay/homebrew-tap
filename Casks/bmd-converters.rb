@@ -35,7 +35,7 @@ cask "bmd-converters" do
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
 
-  pkg "Install Converters #{version.csv.first.chomp(".0").chomp(".1")}.pkg"
+  pkg "Install Converters #{version.csv.first.chomp(".0")}.pkg"
 
   uninstall pkgutil: [
     "com.blackmagic-design.Converters",

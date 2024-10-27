@@ -1,6 +1,6 @@
 cask "propresenter@bleeding-edge" do
-  version "17.1,285278217"
-  sha256 "340f24d866740729bf27bb423f5e5192d25fa1675715f8799206911a14c43913"
+  version "18,301989899"
+  sha256 "a712f4ca594d8e852ea7aeab12dbc50e0b724527943bff203e87fb32a00283ef"
 
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"
@@ -8,10 +8,8 @@ cask "propresenter@bleeding-edge" do
   homepage "https://www.renewedvision.com/propresenter/"
 
   livecheck do
-    url :homepage
+    url "https://api.renewedvision.com/v1/pro/upgrade?platform=macos&osVersion=#{MacOS.full_version}&appVersion=0&buildNumber=0&includeNotes=0"
     strategy :page_match do
-      url = "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
-
       matched = []
       unmatched = []
 

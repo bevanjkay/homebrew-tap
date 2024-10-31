@@ -1,4 +1,5 @@
 cask "propresenter@bleeding-edge" do
+  # debug
   version "18,301989901"
   sha256 "8f112371d2f2bffd2772b748c76dbff6e47107c1d3b4418ff8561af4da7dfe54"
 

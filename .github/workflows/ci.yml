@@ -53,12 +53,19 @@ jobs:
 
       - name: Generate CI matrix
         id: generate-matrix
+        env:
+          SKIP_INSTALL: ${{ github.event.inputs.skip_install && '--skip-install' }}
+          NEW_CASK: ${{ github.event.inputs.new_cask && '--new' }}
+          PULL_REQUEST: ${{ github.event.pull_request.url }}
         run: |
           if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]
           then
-            brew ruby -- "$(brew --repository homebrew/cask)/cmd/lib/generate-matrix.rb" ${{ github.event.inputs.skip_install  && '--skip-install' }} ${{ github.event.inputs.new_cask  && '--new' }} --casks=${{ github.event.inputs.casks }}
+            brew ruby -- "$(brew --repository homebrew/cask)/cmd/lib/generate-matrix.rb" "${SKIP_INSTALL}" "${NEW_CASK}" --casks="$INPUT_CASKS"
+          elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]
+          then
+            brew ruby -- "$(brew --repository homebrew/cask)/cmd/lib/generate-matrix.rb" --syntax-only
           else
-            brew ruby -- "$(brew --repository homebrew/cask)/cmd/lib/generate-matrix.rb" --url="${{ github.event.pull_request.url }}"
+            brew ruby -- "$(brew --repository homebrew/cask)/cmd/lib/generate-matrix.rb" --url="${PULL_REQUEST}"
           fi
 
   test:
@@ -159,9 +166,12 @@ jobs:
         if: always() && steps.fetch.outcome == 'success' && matrix.cask
 
       - name: Install formula dependencies
+        env:
+          FORMULA_DEPENDENCIES: ${{ join(fromJSON(steps.info.outputs.formula_dependencies || '[]'), ' ') }}
         run: |
-          brew install --formula ${{ join(fromJSON(steps.info.outputs.formula_dependencies), ' ') }}
-        if: always() && matrix.cask && join(fromJSON(steps.info.outputs.formula_dependencies)) != ''
+          # shellcheck disable=SC2086
+          brew install --formula $FORMULA_DEPENDENCIES
+        if: always() && matrix.cask && env.FORMULA_DEPENDENCIES != ''
         timeout-minutes: 30
 
       - name: Run brew audit --cask${{ (matrix.cask && ' ') || ' --tap ' }}${{ matrix.cask.token || matrix.tap }}
@@ -176,15 +186,21 @@ jobs:
           !matrix.skip_audit
 
       - name: Uninstall conflicting formulae
+        env:
+          FORMULA_CONFLICTS: ${{ join(fromJSON(steps.info.outputs.formula_conflicts || '[]'), ' ') }}
         run: |
-          brew uninstall --formula ${{ join(fromJSON(steps.info.outputs.formula_conflicts), ' ') }}
-        if: always() && steps.info.outcome == 'success' && join(fromJSON(steps.info.outputs.formula_conflicts)) != ''
+          # shellcheck disable=SC2086
+          brew uninstall --formula $FORMULA_CONFLICTS
+        if: always() && steps.info.outcome == 'success' && env.FORMULA_CONFLICTS != ''
         timeout-minutes: 30
 
       - name: Uninstall conflicting casks
+        env:
+          CASK_CONFLICTS: ${{ join(fromJSON(steps.info.outputs.cask_conflicts || '[]'), ' ') }}
         run: |
-          brew uninstall --cask ${{ join(fromJSON(steps.info.outputs.cask_conflicts), ' ') }}
-        if: always() && steps.info.outcome == 'success' && join(fromJSON(steps.info.outputs.cask_conflicts)) != ''
+          # shellcheck disable=SC2086
+          brew uninstall --cask $CASK_CONFLICTS
+        if: always() && steps.info.outcome == 'success' && env.CASK_CONFLICTS != ''
         timeout-minutes: 30
 
       - name: Run brew uninstall --cask --zap --force ${{ matrix.cask.token }}
@@ -213,31 +229,29 @@ jobs:
         timeout-minutes: 30
 
       - name: Run brew uninstall --cask ${{ matrix.cask.token }}
-        run: brew uninstall --cask ${{ matrix.cask.token }}
+        run: brew uninstall --cask '${{ matrix.cask.path }}'
         if: always() && steps.install.outcome == 'success' && !fromJSON(steps.info.outputs.manual_installer)
         timeout-minutes: 30
 
-      - name: Uninstall formula dependencies
-        run: |
-          brew uninstall --formula ${{ join(fromJSON(steps.info.outputs.formula_dependencies), ' ') }}
-        if: always() && steps.install.outcome == 'success' && join(fromJSON(steps.info.outputs.formula_dependencies)) != ''
-        timeout-minutes: 30
-
       - name: Uninstall cask dependencies
+        env:
+          CASK_DEPENDENCIES: ${{ join(fromJSON(steps.info.outputs.cask_dependencies || '[]'), ' ') }}
         run: |
-          brew uninstall --cask ${{ join(fromJSON(steps.info.outputs.cask_dependencies), ' ') }}
-        if: always() && steps.install.outcome == 'success' && join(fromJSON(steps.info.outputs.cask_dependencies)) != ''
+          # shellcheck disable=SC2086
+          brew uninstall --cask $CASK_DEPENDENCIES
+        if: always() && steps.install.outcome == 'success' && env.CASK_DEPENDENCIES != ''
         timeout-minutes: 30
 
       - name: Compare installed and running apps and services with snapshot
+        env:
+          SNAPSHOT_BEFORE: ${{ steps.snapshot.outputs.before }}
         run: |
           brew ruby -r "$(brew --repository homebrew/cask)/cmd/lib/check.rb" <<'EOF'
             require "cask/cask_loader"
             require "utils/github/actions"
 
-            before = JSON.parse(<<~'EOS').transform_keys(&:to_sym)
-              ${{ steps.snapshot.outputs.before }}
-            EOS
+            before = JSON.parse(#{ENV['SNAPSHOT_BEFORE']}).transform_keys(&:to_sym)
+
             after = Check.all
 
             cask = Cask::CaskLoader.load('${{ matrix.cask.token }}')
@@ -257,6 +271,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: always()
+    env:
+      RESULT: ${{ needs.test.result == 'success' }}
     steps:
       - name: Result
-        run: ${{ needs.test.result == 'success' }}
+        run: $RESULT

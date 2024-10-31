@@ -13,6 +13,7 @@ cask "amphetamine-enhancer" do
   end
 
   depends_on macos: ">= :high_sierra"
+  depends_on formula: "actionlint"
 
   app "Amphetamine Enhancer.app"
 
@@ -21,9 +22,13 @@ cask "amphetamine-enhancer" do
     "~/Library/Saved Application State/com.if.Amphetamine-Enhancer.savedState",
   ]
 
-  caveats <<~EOS
-    #{name.first} is a helper application for Amphetamine. It is not a standalone application.
-    Amphetamine must be installed from the Mac App Store for #{name.first} to work.
-      mas install 937984704
-  EOS
+  caveats do
+    requires_rosetta
+
+    <<~EOS
+      #{name.first} is a helper application for Amphetamine. It is not a standalone application.
+      Amphetamine must be installed from the Mac App Store for #{name.first} to work.
+        mas install 937984704
+    EOS
+  end
 end

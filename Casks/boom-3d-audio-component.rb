@@ -16,8 +16,8 @@ cask "boom-3d-audio-component" do
       main_cask_version = Homebrew::Livecheck::Strategy::ExtractPlist.find_versions(cask: main_cask)[:matches]
                                                                      .values
                                                                      .first
-                                                                     &.to_s
-                                                                     &.split(",")&.first
+                                                                     .to_s
+                                                                     .split(",")&.first
       next if main_cask_version.blank?
 
       if ARGV.include?("-v") || ARGV.include?("--verbose")

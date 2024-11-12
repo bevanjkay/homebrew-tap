@@ -1,8 +1,8 @@
 cask "fusion-studio@beta" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "19.0.3,874774dda70e4cf8b33e01f9e3397607,075c50069cd944c6a31d80d4daae864d,"
-  sha256 "d79282d041aa06c540865e15d1b90e8fcfb726e170e49d2edd139bfa858de9ad"
+  version "19.1.0,202fe6d5bcfe4890a1fe0e01b76114d2,19a53a7bb5bc4773a6b6afaeaeb8d02f,"
+  sha256 "8a5a0db1b07a2ac2f7525a2f3835b264aec966e41642928a8712642f6dae899e"
 
   url "https://www.blackmagicdesign.com/api/register/au/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

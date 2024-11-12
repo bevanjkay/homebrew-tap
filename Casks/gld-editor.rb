@@ -2,7 +2,8 @@ cask "gld-editor" do
   version "1.61,2023,06"
   sha256 "7e7902447b686950167c134680d16dcdab697412a8855ad54a9a844e5e6cd834"
 
-  url "https://www.allen-heath.com/content/uploads/#{version.csv.second}/#{version.csv.third}/GLD-Editor-#{version.csv.first}-Installer-Mac.zip"
+  url "https://www.allen-heath.com/content/uploads/#{version.csv.second}/#{version.csv.third}/GLD-Editor-#{version.csv.first}-Installer-Mac.zip",
+      user_agent: :fake
   name "Allen & Heath GLD Editor"
   desc "Software control for Allen & Heath GLD Series Audio Console"
   homepage "https://www.allen-heath.com/hardware/legacy-products/gld-80/"

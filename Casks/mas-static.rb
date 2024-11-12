@@ -10,7 +10,7 @@ cask "mas-static" do
   conflicts_with formula: "mas"
   depends_on macos: ">= :monterey"
 
-  binary "bin/mas"
+  binary "mas/#{version}/bin/mas"
 
   # No zap stanza required
 end

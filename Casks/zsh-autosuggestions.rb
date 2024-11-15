@@ -1,6 +1,6 @@
 cask "zsh-autosuggestions" do
-  version "0.7.0"
-  sha256 "ccd97fe9d7250b634683c651ef8a2fe3513ea917d1b491e8696a2a352b714f08"
+  version "0.7.1"
+  sha256 "0df7affff21cd87ed298e6a3970ed08a1dd66a6efa676454ee5b091ad503badf"
 
   url "https://github.com/zsh-users/zsh-autosuggestions/archive/refs/tags/v#{version}.tar.gz"
   name "ZSH Autosuggestions Plugin"

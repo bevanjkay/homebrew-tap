@@ -51,7 +51,7 @@ module Homebrew
       sig { params(args: T::Array[String]).void }
       def initialize(*args)
         super
-        repository = ENV.fetch("GITHUB_REPOSITORY", "homebrew/homebrew-cask")
+        repository = ENV.fetch("GITHUB_REPOSITORY", nil)
         raise UsageError, "The GITHUB_REPOSITORY environment variable must be set." if repository.blank?
 
         @tap = T.let(Tap.fetch(repository), Tap)
@@ -68,11 +68,6 @@ module Homebrew
 
         raise UsageError, "Either `--cask` or `--url` must be specified." if casks.blank? && pr_url.blank?
         raise UsageError, "Only one url can be specified" if pr_url&.count&.> 1
-
-        puts "Current path: #{Dir.pwd.to_s}"
-        puts "Tap path: #{tap.path.to_s}"
-
-        raise UsageError, "This command must be run from inside a tap directory." if Dir.pwd.to_s != tap.path.to_s
 
         labels = if pr_url
           pr = GitHub::API.open_rest(pr_url)

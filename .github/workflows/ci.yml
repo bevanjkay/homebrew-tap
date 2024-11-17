@@ -60,7 +60,7 @@ jobs:
             ls -l
             if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]
             then
-              brew generate-cask-matrix ${{ github.event.inputs.skip_install && '--skip-install' }} ${{ github.event.inputs.new_cask && '--new' }} --casks "$INPUT_CASKS"
+              brew generate-cask-matrix ${{ github.event.inputs.skip_install && '--skip-install' }} ${{ github.event.inputs.new_cask && '--new' }} --casks $INPUT_CASKS
             elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]
             then
               brew generate-cask-matrix --url --syntax-only "${{ github.event.pull_request.url }}"

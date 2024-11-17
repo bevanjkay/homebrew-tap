@@ -69,11 +69,18 @@ module Homebrew
         raise UsageError, "Either `--cask` or `--url` must be specified." if casks.blank? && pr_url.blank?
         raise UsageError, "Only one url can be specified" if pr_url&.count&.> 1
 
-        labels = if pr_url
-          pr = GitHub::API.open_rest(pr_url)
-          pr.fetch("labels").map { |l| l.fetch("name") }
+        if pr_url
+          pr_url = pr_url.first # Assuming pr_url is an array with one element
+          puts "PR URL: #{pr_url}" # Debug statement to print the URL
+        
+          begin
+            pr = GitHub::API.open_rest(pr_url)
+            labels = pr.fetch("labels").map { |l| l.fetch("name") }
+          rescue StandardError => e
+            raise UsageError, "Failed to fetch PR details: #{e.message}"
+          end
         else
-          []
+          labels = []
         end
 
         runner = random_runner[:name]

@@ -9,7 +9,7 @@ require "system_command"
 
 module Homebrew
   module DevCmd
-    class GenerateCaskCiMatrix < AbstractCommand
+    class GenerateCaskMatrix < AbstractCommand
       MAX_JOBS = 256
 
       # Weight for each arch must add up to 1.0.

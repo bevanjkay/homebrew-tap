@@ -51,7 +51,7 @@ module Homebrew
       sig { params(args: T::Array[String]).void }
       def initialize(*args)
         super
-        repository = ENV.fetch("GITHUB_REPOSITORY", nil)
+        repository = ENV.fetch("GITHUB_REPOSITORY", "homebrew/cask")
         raise UsageError, "The GITHUB_REPOSITORY environment variable must be set." if repository.blank?
 
         @tap = T.let(Tap.fetch(repository), Tap)

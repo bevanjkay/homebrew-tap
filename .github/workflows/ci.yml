@@ -53,6 +53,8 @@ jobs:
 
       - name: Generate CI matrix
         id: generate-matrix
+        env:
+          INPUT_CASKS: ${{ github.event.inputs.casks }}
         working-directory: ${{steps.set-up-homebrew.outputs.repository-path}}
         run: |
             ls -l

@@ -56,11 +56,12 @@ module Homebrew
         pr_url = args.named if args.url?
         syntax_only = args.syntax_only?
 
+        pp pr_url
+
         repository = ENV.fetch("GITHUB_REPOSITORY", "bevanjkay/tap")
         raise UsageError, "The GITHUB_REPOSITORY environment variable must be set." if repository.blank?
         
         tap = T.let(Tap.fetch(repository), Tap)
-
 
         raise UsageError, "Either `--cask` or `--url` must be specified." if casks.blank? && pr_url.blank?
         raise UsageError, "Only one url can be specified" if pr_url&.count&.> 1

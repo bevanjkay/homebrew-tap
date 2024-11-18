@@ -57,7 +57,6 @@ jobs:
           INPUT_CASKS: ${{ github.event.inputs.casks }}
         working-directory: ${{steps.set-up-homebrew.outputs.repository-path}}
         run: |
-            ls -l
             if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]
             then
               brew generate-cask-matrix ${{ github.event.inputs.skip_install && '--skip-install' }} ${{ github.event.inputs.new_cask && '--new' }} --casks $INPUT_CASKS

@@ -48,15 +48,6 @@ module Homebrew
         hide_from_man_page!
       end
 
-      sig { params(args: T::Array[String]).void }
-      def initialize(*args)
-        super
-        repository = ENV.fetch("GITHUB_REPOSITORY", "homebrew/cask")
-        raise UsageError, "The GITHUB_REPOSITORY environment variable must be set." if repository.blank?
-
-        @tap = T.let(Tap.fetch(repository), Tap)
-      end
-
       sig { override.void }
       def run
         skip_install = args.skip_install?
@@ -64,23 +55,21 @@ module Homebrew
         casks = args.named if args.casks?
         pr_url = args.named if args.url?
         syntax_only = args.syntax_only?
-        tap = @tap
+
+        repository = ENV.fetch("GITHUB_REPOSITORY", "bevanjkay/tap")
+        raise UsageError, "The GITHUB_REPOSITORY environment variable must be set." if repository.blank?
+        
+        tap = T.let(Tap.fetch(repository), Tap)
+
 
         raise UsageError, "Either `--cask` or `--url` must be specified." if casks.blank? && pr_url.blank?
         raise UsageError, "Only one url can be specified" if pr_url&.count&.> 1
 
-        if pr_url
-          pr_url = pr_url.first # Assuming pr_url is an array with one element
-          puts "PR URL: #{pr_url}" # Debug statement to print the URL
-        
-          begin
-            pr = GitHub::API.open_rest(pr_url)
-            labels = pr.fetch("labels").map { |l| l.fetch("name") }
-          rescue StandardError => e
-            raise UsageError, "Failed to fetch PR details: #{e.message}"
-          end
+        labels = if pr_url
+          pr = GitHub::API.open_rest(pr_url)
+          pr.fetch("labels").map { |l| l.fetch("name") }
         else
-          labels = []
+          []
         end
 
         runner = random_runner[:name]
@@ -231,7 +220,7 @@ module Homebrew
       def generate_matrix(tap, labels: [], cask_names: [], skip_install: false, new_cask: false)
         odie "This command must be run from inside a tap directory." unless tap
 
-        changed_files = find_changed_files
+        changed_files = find_changed_files(tap)
 
         ruby_files_in_wrong_directory =
           T.must(changed_files[:modified_ruby_files]) - (
@@ -316,10 +305,8 @@ module Homebrew
         end
       end
 
-      sig { returns(T::Hash[Symbol, T::Array[String]]) }
-      def find_changed_files
-        tap = @tap
-
+      sig { params(tap: Tap).returns(T::Hash[Symbol, T::Array[String]]) }
+      def find_changed_files(tap)
         commit_range_start = Utils.safe_popen_read("git", "rev-parse", "origin").chomp
         commit_range_end = Utils.safe_popen_read("git", "rev-parse", "HEAD").chomp
         commit_range = "#{commit_range_start}...#{commit_range_end}"

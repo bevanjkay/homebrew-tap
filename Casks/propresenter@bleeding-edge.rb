@@ -1,6 +1,6 @@
 cask "propresenter@bleeding-edge" do
-  version "18,301989922"
-  sha256 "d4ba26276ca656018566d34a29a829440d8ef581b8ccf94a2abd2ec1ade73a54"
+  version "18.1,302055463"
+  sha256 "8f931e9ad923d72ee410508ea38d8210364392cba7829c8b5f16c82bcdbaf409"
 
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"
@@ -13,16 +13,20 @@ cask "propresenter@bleeding-edge" do
       matched = []
       unmatched = []
 
-      current_build = version.csv.second.to_i
+      beta = CaskLoader.load("propresenter@beta")
+
+      current_version = (version.csv.first.to_i > beta.version.csv.first.to_i) ? version : beta.version
+      puts current_version
+      current_build = current_version.csv.second.to_i
       future_build = current_build.to_i + 5
       (current_build..future_build).each do |build|
-        url = "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{build}.zip"
+        url = "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{current_version.csv.first}_#{build}.zip"
 
         system_result, _err, _st = Open3.capture3("curl -sLI #{url} | grep -i http/2")
 
         next unless system_result
 
-        tested_version = "#{version.csv.first},#{build}"
+        tested_version = "#{current_version.csv.first},#{build}"
 
         if system_result.include?("200")
           matched << tested_version
@@ -34,8 +38,8 @@ cask "propresenter@bleeding-edge" do
       if ARGV.include?("-v") || ARGV.include?("--verbose")
         puts "#{Tty.blue}==>#{Tty.reset} b-propresenter-bleeding-edge: #{matched.count} versions found, " \
              "#{unmatched.count} versions not found."
-        matched.each { |version| puts "#{Tty.green}==>#{Tty.reset} Version #{version} found." }
-        unmatched.each { |version| puts "#{Tty.red}==>#{Tty.reset} Version #{version} not found." }
+        matched.each { |v| puts "#{Tty.green}==>#{Tty.reset} Version #{v} found." }
+        unmatched.each { |v| puts "#{Tty.red}==>#{Tty.reset} Version #{v} not found." }
       end
 
       matched

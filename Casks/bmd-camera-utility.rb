@@ -1,8 +1,8 @@
 cask "bmd-camera-utility" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "9.1.3,709cc807cc9647a5bec1dce20fb2a463,fb24b9c284b14481a4cb7f3b544355c9"
-  sha256 "68a536917d4c68a0678551287e0ecf8b127edce9457d1a8bb0063c719bae49f9"
+  version "9.2.0,2c29904bef0f437aa259f5a18369d82a,5c9ebc8561054e53a45c90e8deed2c5a"
+  sha256 "00db58fb3013803906f0f23ad698b27932d9d0067fb85857a2419b3d1fdf8f1c"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

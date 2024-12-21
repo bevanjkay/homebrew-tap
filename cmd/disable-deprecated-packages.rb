@@ -32,7 +32,12 @@ module Homebrew
         packages_to_disable.each do |package|
           file_path = sourcefile_path(package)
           content = File.read(file_path)
-          new_content = content.gsub(/deprecate! date: ".*"/, "disable! date: \"#{Date.today}\"")
+          new_content = content
+                        # Transform the `deprecate!` line
+                        .gsub(/(deprecate! date: ".*?"(, because: .*?)?)$/,
+                              "\\1\n  disable! date: \"#{Date.today}\"\\2")
+                        # Remove the `livecheck` block, including nested content
+                        .gsub(/^\s*livecheck\s+do\s*\n(?:\s*.*\n)*?\s*end\n?/, "")
           File.write(file_path, new_content)
         end
 

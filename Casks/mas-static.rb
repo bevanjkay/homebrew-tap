@@ -1,8 +1,8 @@
 cask "mas-static" do
-  version "1.8.7"
-  sha256 "5d0214faef2a956c72a4c610ff73ecec0ffa14555547a48e50a4432f1c655565"
+  version "1.8.8"
+  sha256 "fa8842e1b4e875dbe33bc050c2cee88d1bca8f9d144f1ae7dfa55ac21b7facdb"
 
-  url "https://github.com/mas-cli/mas/releases/download/v#{version}/mas-#{version}.arm64_sequoia.bottle.tar.gz"
+  url "https://github.com/mas-cli/mas/releases/download/v#{version}/mas-#{version}.pkg"
   name "mas-static"
   desc "Command-line interface for the App Store"
   homepage "https://github.com/mas-cli/mas"
@@ -10,7 +10,9 @@ cask "mas-static" do
   conflicts_with formula: "mas"
   depends_on macos: ">= :monterey"
 
-  binary "mas/#{version}/bin/mas"
+  pkg "mas-#{version}.pkg"
+
+  uninstall pkgutil: "com.mphys.mas-cli"
 
   # No zap stanza required
 end

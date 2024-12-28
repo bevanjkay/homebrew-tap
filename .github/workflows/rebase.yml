@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Rebase Pull Request
-        uses: peter-evans/rebase@56c359b35ff7ba8426d0fdb842958b35b1db8277
+        uses: peter-evans/rebase@87c3fd9344792e51ab1c7494c3369620c84ed852
         id: rebase
         with:
           token: ${{ secrets.BOT_TOKEN }}

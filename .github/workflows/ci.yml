@@ -242,7 +242,8 @@ jobs:
 
       - name: Uninstall formula dependencies
         run: |
-          brew uninstall --formula ${{ join(fromJSON(steps.info.outputs.formula_dependencies), ' ') }}
+          # shellcheck disable=SC2086
+          brew uninstall --formula $FORMULA_DEPENDENCIES
         if: always() && steps.install.outcome == 'success' && join(fromJSON(steps.info.outputs.formula_dependencies)) != ''
         timeout-minutes: 30
 

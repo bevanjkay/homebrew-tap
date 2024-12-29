@@ -168,10 +168,10 @@ jobs:
               end
               
               File.open(ENV.fetch("GITHUB_ENV"), "a") do |f|
-              f.puts "CASK_CONFLICTS=\"#{cask_conflicts&.join(" ")}\"" if cask_conflicts.present?
-              f.puts "CASK_DEPENDENCIES=\"#{cask_dependencies&.join(" ")}\"" if cask_dependencies.present?
-              f.puts "FORMULA_CONFLICTS=\"#{formula_conflicts&.join(" ")}\"" if formula_conflicts.present?
-              f.puts "FORMULA_DEPENDENCIES=\"#{formula_dependencies&.join(" ")}\"" if formula_dependencies.present?
+              f.puts "CASK_CONFLICTS=#{cask_conflicts&.join(' ')}" if cask_conflicts.present?
+              f.puts "CASK_DEPENDENCIES=#{cask_dependencies&.join(' ')}" if cask_dependencies.present?
+              f.puts "FORMULA_CONFLICTS=#{formula_conflicts&.join(' ')}" if formula_conflicts.present?
+              f.puts "FORMULA_DEPENDENCIES=#{formula_dependencies&.join(' ')}" if formula_dependencies.present?
             end
           EOF
         if: always() && steps.fetch.outcome == 'success' && matrix.cask
@@ -180,7 +180,7 @@ jobs:
         run: |
           # shellcheck disable=SC2086
           brew install --formula $FORMULA_DEPENDENCIES
-        if: always() && matrix.cask && join(fromJSON(steps.info.outputs.formula_dependencies)) != ''
+        if: ${{ always() && matrix.cask && env.FORMULA_DEPENDENCIES != '' }}
         timeout-minutes: 30
 
       - name: Run brew audit --cask${{ (matrix.cask && ' ') || ' --tap ' }}${{ matrix.cask.token || matrix.tap }}
@@ -244,7 +244,7 @@ jobs:
         run: |
           # shellcheck disable=SC2086
           brew uninstall --formula $FORMULA_DEPENDENCIES
-        if: always() && steps.install.outcome == 'success' && join(fromJSON(steps.info.outputs.formula_dependencies)) != ''
+        if: ${{ always() && steps.install.outcome == 'success' && env.FORMULA_DEPENDENCIES != '' }}
         timeout-minutes: 30
 
       - name: Uninstall cask dependencies

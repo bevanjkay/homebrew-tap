@@ -1,4 +1,5 @@
 cask "rpcs3" do
+  #
   version "0.0.34-17282-e135012a,e135012acd76ae965d2137e5bd16130be3d4d44f"
   sha256 "f847ecc08b2ba5e658aa344d883ec32eab2f72c7a6b39e26a95a8606c9679c03"
 

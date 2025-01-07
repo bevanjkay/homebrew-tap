@@ -1,4 +1,4 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 require "abstract_command"
@@ -15,33 +15,33 @@ module Homebrew
           Opens the GitHub repository of a formula.
         EOS
 
-        named_args :formula, min: 1, max: 1
+        named_args :formula, min: 1
       end
 
+      sig { override.void }
       def run
-        formula_name = args.named.first
-        formula = Formula[formula_name]
+        formulae = args.named.to_formulae
 
-        formula.homepage
-        github_repo = if formula.homepage.include?("github.com")
+        homepages = formulae.filter_map do |formula|
           formula.homepage
-        else
-          stable_url = infer_github_repo(formula.stable.url)
-          head_url = formula.head&.url && infer_github_repo(formula.head.url)
+          if formula.homepage.include?("github.com")
+            formula.homepage
+          else
+            stable_url = infer_github_repo(T.must(formula.stable).url)
+            head_url = formula.head&.url && infer_github_repo(T.must(formula.head).url) if formula.head
 
-          stable_url || head_url
+            stable_url || head_url
+          end
         end
 
-        if github_repo
-          ohai "Opening GitHub repository for #{formula_name}: #{github_repo}"
-          system "open", github_repo
-        else
-          onoe "Could not infer GitHub repository for #{formula_name}"
-        end
+        odie "No GitHub repository found for the given formulae." if homepages.empty?
+
+        exec_browser(*homepages)
       end
 
       private
 
+      sig { params(url: String).returns(T.nilable(String)) }
       def infer_github_repo(url)
         match = url.match(%r{https?://github.com/([^/]+)/([^/]+)})
         return unless match

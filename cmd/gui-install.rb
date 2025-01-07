@@ -1,4 +1,4 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 require "abstract_command"
@@ -18,15 +18,16 @@ module Homebrew
         named_args :token, min: 1, max: 1
       end
 
+      sig { override.void }
       def run
         token = args.named.first
-        cask = Cask::CaskLoader.load(token)
+        cask = Cask::CaskLoader.load(T.must(token))
 
         # Find the manual installer artifact
         manual_installer = cask.artifacts.select { |artifact| artifact.is_a?(Cask::Artifact::Installer) }&.first
         installer_path = File.join(cask.caskroom_path, cask.version.to_s, manual_installer.path)
 
-        system "brew", "reinstall", token
+        system "brew", "reinstall", T.must(token)
 
         system "open '#{installer_path}' -W"
       end

@@ -1,4 +1,4 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 require "abstract_command"
@@ -20,9 +20,9 @@ module Homebrew
         named_args :token, min: 1, max: 1
       end
 
-      FONT_EXT_PATTERN = /.(otf|ttf)\Z/i
+      FONT_EXT_PATTERN = T.let(/.(otf|ttf)\Z/i, Regexp)
 
-      FONT_WEIGHTS = [
+      FONT_WEIGHTS = T.let([
         /black/i,
         /bold/i,
         /book/i,
@@ -35,28 +35,30 @@ module Homebrew
         /roman/i,
         /thin/i,
         /ultra/i,
-      ].freeze
+      ].freeze, T::Array[Regexp])
 
-      FONT_STYLES = [
+      FONT_STYLES = T.let([
         /italic/i,
         /oblique/i,
         /roman/i,
         /slanted/i,
         /upright/i,
-      ].freeze
+      ].freeze, T::Array[Regexp])
 
-      FONT_WIDTHS = [
+      FONT_WIDTHS = T.let([
         /compressed/i,
         /condensed/i,
         /extended/i,
         /narrow/i,
         /wide/i,
-      ].freeze
+      ].freeze, T::Array[Regexp])
 
+      sig { params(enum: T::Array[String]).returns(T.nilable(String)) }
       def mce(enum)
-        enum.group_by(&:itself).values.max_by(&:size).first
+        enum.group_by(&:itself).values.max_by(&:size)&.first
       end
 
+      sig { params(cmd: String, blob: String).returns(String) }
       def eval_bin_cmd(cmd, blob)
         IO.popen(cmd, "r+b") do |io|
           io.print(blob)
@@ -66,6 +68,7 @@ module Homebrew
       end
 
       # Determine archive type and return the appropriate command for listing files
+      sig { params(archive: Pathname).returns(String) }
       def list_cmd(archive)
         case File.extname(archive).downcase
         when ".zip"
@@ -82,6 +85,7 @@ module Homebrew
         end
       end
 
+      sig { params(archive: Pathname).returns(T::Array[String]) }
       def font_paths(archive)
         cmd = list_cmd(archive)
 
@@ -108,13 +112,14 @@ module Homebrew
         preferred_fonts.values
       end
 
+      sig { params(cask: Cask::Cask, fonts: T::Array[String]).returns(String) }
       def update_cask_content(cask, fonts)
         content = cask.source.split("\n")
         font_content = fonts.map do |font|
           "  font \"#{font}\"".gsub(cask.version.to_s, "\#{version}")
         end
         new_content = []
-        last_match = nil
+        last_match = T.let(nil, T.nilable(Integer))
         content.each_with_index do |line, index|
           if line.match?(/^  font /)
             last_match = index
@@ -127,6 +132,7 @@ module Homebrew
         new_content.join("\n")
       end
 
+      sig { override.void }
       def run
         token = args.named.first
 
@@ -148,7 +154,7 @@ module Homebrew
         File.write(cask.sourcefile_path, new_content)
 
         ohai "Running brew style --fix #{token}" if args.debug?
-        system("brew", "style", "--fix", token)
+        system("brew", "style", "--fix", T.must(token))
       end
     end
   end

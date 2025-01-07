@@ -22,11 +22,14 @@ module Homebrew
         formula_name = args.named.first
         formula = Formula[formula_name]
 
-        homepage = formula.homepage
-        github_repo = if homepage.include?("github.com")
-          homepage
+        formula.homepage
+        github_repo = if formula.homepage.include?("github.com")
+          formula.homepage
         else
-          infer_github_repo(formula.stable.url)
+          stable_url = infer_github_repo(formula.stable.url)
+          head_url = formula.head&.url && infer_github_repo(formula.head.url)
+
+          stable_url || head_url
         end
 
         if github_repo

@@ -1,6 +1,6 @@
 cask "node-static" do
-  version "23.5.0"
-  sha256 "e064e69b5b9fa0ef61fe09ed925b4a8a3ac19ff96ae1b987147917ab0b23dbef"
+  version "23.6.0"
+  sha256 "cfe71d64ded340cae85cc734645a4aacab2355186ec3a45f43953f2af71ad859"
 
   url "https://nodejs.org/dist/v#{version}/node-v#{version}.pkg"
   name "Node"

@@ -1,6 +1,6 @@
 cask "propresenter@bleeding-edge" do
-  version "18.1,302055490"
-  sha256 "61ebc003e027d3b873ff831f5b7cdc91d0494b2a2dff454db446295e24f6b2db"
+  version "18.2,302120962"
+  sha256 "9b0d6f337f55b3d7423f4bc8d69d920a1831501e718ee48571f40b630c5618d6"
 
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"
@@ -15,7 +15,7 @@ cask "propresenter@bleeding-edge" do
 
       beta = CaskLoader.load("propresenter@beta")
 
-      current_version = (version.csv.first.to_i > beta.version.csv.first.to_i) ? version : beta.version
+      current_version = (version.csv.first > beta.version.csv.first) ? version : beta.version
       puts current_version
       current_build = current_version.csv.second.to_i
       future_build = current_build.to_i + 5

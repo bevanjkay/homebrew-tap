@@ -1,8 +1,8 @@
 cask "bmd-braw" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "4.3.1,9883d0218afa40979cce1d7fc6b981bf,4d387546f7dd4758ab07a9df7eb07dbc"
-  sha256 "94e31b989a7e459afe7782323941b6aa4e3f56a8c0dcd534855e2a94dcd37c70"
+  version "4.4.0,bda0b7ec70014f6b83d0289f974a87a6,63ab22dbafc4411dad5d40bb5d788302"
+  sha256 "154ecafe40cf96f4a52c9ec38641a31a8c84aa0569559584349cdbdec4fb5c04"
 
   personal_details = if File.exist?("#{Dir.home}/.personal_details.json")
     JSON.parse(File.read("#{Dir.home}/.personal_details.json"))

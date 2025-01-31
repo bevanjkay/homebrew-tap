@@ -1,8 +1,8 @@
 cask "bmd-videohub" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "10.0.0,5e3f35becfca43dfab67f57d08d5de47,960e27fc010840a1bc54a43423b8e106"
-  sha256 "2406b6d3665705d2d3ae5d8cbe4a728ce89a5b39a94dcfb8cfd98453f987a627"
+  version "10.0.1,df6c82f491ff4021823c6a895141e689,70996683e6a74be0b6873ed8fb24664b"
+  sha256 "712672b351705beded8db6a16e3a203817140685b612285374534cc9807dbaf8"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

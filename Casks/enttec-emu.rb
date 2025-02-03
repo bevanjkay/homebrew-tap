@@ -1,6 +1,6 @@
 cask "enttec-emu" do
-  version "25.01.20.1"
-  sha256 "af620a655470c67ce794dd91d65eb4b5ae434c9c50a0c623c8d3a144999047de"
+  version "25.01.27.1"
+  sha256 "750f01476cb19fe2754706e0636813e1c439e18a13b0151f95419616ff4c5fa1"
 
   url "https://s3-us-west-2.amazonaws.com/enttec-software-builds/emu/EMU-#{version}.pkg",
       verified: "s3-us-west-2.amazonaws.com/enttec-software-builds/emu/"

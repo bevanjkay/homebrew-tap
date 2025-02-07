@@ -13,10 +13,17 @@ class BmdDownloadStrategy < CurlDownloadStrategy
   def _fetch(url:, resolved_url:, timeout:)
     # Custom logic for POST request to get the actual download URL
     uri = URI(url)
-    params = @params.to_json
+    @params.to_json
 
-    response = Net::HTTP.post(uri, params, { "Content-Type" => "application/json" })
-    download_url = response.body
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = uri.scheme == "https"
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE # Only disable SSL for this request
+
+    request = Net::HTTP::Post.new(uri, { "Content-Type" => "application/json" })
+    request.body = @params.to_json
+
+    response = http.request(request)
+    download_url = JSON.parse(response.body)["download_url"]
 
     # Download from the resolved URL
     curl_download download_url, to: temporary_path

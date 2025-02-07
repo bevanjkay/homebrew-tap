@@ -2,7 +2,6 @@
 
 require "json"
 require "net/http"
-# require "cask/download_strategy"
 
 class BmdDownloadStrategy < CurlDownloadStrategy
   def initialize(url, name, version, **options)
@@ -23,7 +22,7 @@ class BmdDownloadStrategy < CurlDownloadStrategy
     request.body = @params.to_json
 
     response = http.request(request)
-    download_url = JSON.parse(response.body)["download_url"]
+    download_url = response.body
 
     # Download from the resolved URL
     curl_download download_url, to: temporary_path

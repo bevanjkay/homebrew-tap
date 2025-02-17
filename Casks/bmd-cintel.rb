@@ -37,16 +37,12 @@ cask "bmd-cintel" do
 
   pkg "Install Cintel #{version.csv.first.chomp(".0")}.pkg"
 
-  uninstall script:  {
-              executable: "/Applications/Blackmagic Cintel/Uninstall Cintel.app/Contents/Resources/uninstall.sh",
-              sudo:       true,
-              args:       ["--path", "/Applications/Blackmagic Cintel/Uninstall Cintel.app/Contents/Resources"],
-            },
-            pkgutil: [
+  uninstall pkgutil: [
               "com.blackmagic-design.Cintel",
               "com.blackmagic-design.CintelAssets",
               "com.blackmagic-design.CintelUninstaller",
-            ]
+            ],
+            delete:  "/Applications/Blackmagic Cintel/Blackmagic Cintel Setup.app"
 
   zap trash: [
     "/Library/PreferencePanes/Blackmagic Cintel.prefPane",

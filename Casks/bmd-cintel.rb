@@ -1,8 +1,8 @@
 cask "bmd-cintel" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "6.0.0,3d6d964a3ec94a5d8bc9084d2827b65f,60ef3d64394a448ba486be4b792fd450"
-  sha256 "59cfe3abbc0601446a3a9ac5d73bc5353c59eb31531f91b915ee4431882b88d4"
+  version "6.1.0,ffae80f0d41947debae40cbd300b54b5,83c36d7b04144b8996338380473c3998"
+  sha256 "cfd382dff86244f0ceb29a5ad4acedc1b06297d3c710588d1d5ecfea72514f40"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

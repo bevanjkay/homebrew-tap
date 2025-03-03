@@ -63,7 +63,7 @@ cask "davinci-resolve-studio" do
   auto_updates true
   conflicts_with cask: "davinci-resolve-studio@beta"
 
-  pkg "Install Resolve #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
+  pkg "Install Resolve #{version.csv.first.chomp(".0")}.pkg"
 
   uninstall script:  {
               executable: "/Applications/DaVinci Resolve/Uninstall Resolve.app/Contents/Resources/uninstall.sh",

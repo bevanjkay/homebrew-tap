@@ -1,7 +1,7 @@
 cask "davinci-resolve" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "19.1.3,382284a785ce42d697b067484699ba02,f290a17380a94f0dab916eb2794e31e8,b"
+  version "19.1.3,382284a785ce42d697b067484699ba02,f290a17380a94f0dab916eb2794e31e8"
   sha256 "590437cabc5ec4c177181768a6f001da17a43c2fe7dab36384a63141352b26ca"
 
   personal_details = if File.exist?("#{Dir.home}/.personal_details.json")
@@ -54,7 +54,7 @@ cask "davinci-resolve" do
       end
       matched.map do |download|
         v = download["urls"]["Mac OS X"].first
-        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{v["beta"] ? "b" : ""}"
+        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]}"
       end
     end
   end

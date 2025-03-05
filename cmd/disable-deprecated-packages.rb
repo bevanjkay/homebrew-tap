@@ -84,7 +84,7 @@ module Homebrew
         packages.select do |package|
           next false if package.tap != @target_tap
           next false unless package.deprecated?
-          next false if package.disabled?
+          next false if package.disable_date
           next false if package.deprecation_date.nil?
 
           package.deprecation_date <= twelve_months_ago

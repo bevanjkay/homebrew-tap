@@ -1,8 +1,11 @@
 cask "auracle-x" do
-  version "2.2.0"
-  sha256 "59da20f711b7f240d6e82ce487bee80222f97e310302f7bf5209e409ac742f57"
+  arch arm: "arm64", intel: "x86_64"
 
-  url "https://cdn.iconnectivity.com/software/AuracleX#{version}.dmg"
+  version "2.3.1"
+  sha256 arm:   "e4b52fa867b5536bf404d45afbcfaa865fbf7519432ce80f5203e90ad1e1dc1a",
+         intel: "a14a074884c14c70bf582baa30f10842a67276bce5d7cde78aa2c12e586d973a"
+
+  url "https://cdn.iconnectivity.com/software/AuracleX#{version}-#{arch}.dmg"
   name "Auracle for X-Series"
   desc "Control iConnectivity Audio Devices"
   homepage "https://www.iconnectivity.com/auracle-x-series"
@@ -25,8 +28,4 @@ cask "auracle-x" do
     "~/Library/Preferences/com.iconnectivity.auracle.plist",
     "~/Library/Saved Application State/com.iconnectivity.auracle.savedState",
   ]
-
-  caveats do
-    requires_rosetta
-  end
 end

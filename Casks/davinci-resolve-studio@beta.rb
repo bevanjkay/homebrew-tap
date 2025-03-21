@@ -1,8 +1,8 @@
 cask "davinci-resolve-studio@beta" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "19.1.3,9e7d67956ee34e71ad901d9ce1d77b18,e4bcce5789c2424aa36fe6908647877b,"
-  sha256 "d852e8c1512305ccb85f13484eb354013cdb6fba925012b2cb71a73c5bccc863"
+  version "19.1.4,0dc287e90d53499dbeb74c1e9ce09fcd,f0d6494827a0420688c3dfda05a0934e,"
+  sha256 "83e4fb49a63675e14df313e9227442d731ce7c7ad2a68d3dfce10adb63f7f461"
 
   personal_details = if File.exist?("#{Dir.home}/.personal_details.json")
     JSON.parse(File.read("#{Dir.home}/.personal_details.json"))

@@ -2,6 +2,12 @@
     "adobe-fonts-revealer": "bevanjkay/formulae",
     "b-output-factory": "homebrew/cask/output-factory",
     "bible-import": "bevanjkay/formulae",
+    "companion": "homebrew/cask",
+    "companion@beta": "homebrew/cask",
+    "companion-satellite": "homebrew/cask",
+    "dante-controller": "homebrew/cask",
+    "dante-via": "homebrew/cask",
     "mixing-station": "homebrew/cask",
+    "ndi-core-suite": "homebrew/cask/ndi-tools",
     "zen-browser": "homebrew/cask"
 }

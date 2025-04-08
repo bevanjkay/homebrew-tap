@@ -243,14 +243,14 @@ jobs:
       - name: Uninstall formula dependencies
         run: |
           read -r -a formula_dependencies_array <<< "$FORMULA_DEPENDENCIES"
-          brew uninstall --formula "${formula_dependencies_array[@]}"
+          brew uninstall --formula --force "${formula_dependencies_array[@]}"
         if: ${{ always() && steps.install.outcome == 'success' && env.FORMULA_DEPENDENCIES != '' }}
         timeout-minutes: 30
 
       - name: Uninstall cask dependencies
         run: |
           read -r -a cask_dependencies_array <<< "$CASK_DEPENDENCIES"
-          brew uninstall --cask "${cask_dependencies_array[@]}"
+          brew uninstall --cask --force "${cask_dependencies_array[@]}"
         if: ${{ always() && steps.install.outcome == 'success' && env.CASK_DEPENDENCIES != '' }}
         timeout-minutes: 30
 

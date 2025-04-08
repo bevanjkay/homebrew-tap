@@ -12,11 +12,14 @@ module Homebrew
     class DisableDeprecatedPackages < AbstractCommand
       cmd_args do
         usage_banner <<~EOS
-          `disable-deprecated-packages` <tap>
+          `disable-deprecated-packages` <tap> [--dry-run]
 
           Disables deprecated packages in the specified tap.
+          Use `--dry-run` to skip git commands and print the list of packages
+          that would be disabled.
         EOS
 
+        switch "--dry-run", description: "Skip git commands and print the list of packages to be disabled."
         named_args :tap, min: 1, max: 1
       end
 
@@ -28,7 +31,18 @@ module Homebrew
 
         odie "Invalid tap: #{tap_string}" if @target_tap.nil?
 
+        dry_run = args.dry_run?
+
         packages_to_disable = find_deprecated(packages: Formula.all + Cask::Cask.all)
+
+        if dry_run
+          puts "Dry run mode: The following packages would be disabled:"
+          packages_to_disable.each do |package|
+            name = package.is_a?(Formula) ? package.name : package.token
+            puts "- #{name}"
+          end
+          return
+        end
 
         if packages_to_disable.any?
           branch_name = "disable-packages-#{Date.today.strftime("%Y-%m-%d")}"
@@ -86,6 +100,7 @@ module Homebrew
           next false unless package.deprecated?
           next false if package.disable_date
           next false if package.deprecation_date.nil?
+          next false if package.name == "terraform"
 
           package.deprecation_date <= twelve_months_ago
         end

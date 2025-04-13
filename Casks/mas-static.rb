@@ -1,6 +1,6 @@
 cask "mas-static" do
-  version "1.9.0"
-  sha256 "3224ab0872dbcb77624c0cc33c2617d59c1d9b3707c0ec7f509b96ae54497b9e"
+  version "2.0.0"
+  sha256 "ffcc397025191798e098a4d91df7af9c174d1370a10bbe7dc95e56b19986c3a8"
 
   url "https://github.com/mas-cli/mas/releases/download/v#{version}/mas-#{version}.pkg"
   name "mas-static"

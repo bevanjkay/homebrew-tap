@@ -13,7 +13,7 @@ cask "shadps4" do
     strategy :github_latest
   end
 
-  depends_on macos: :sonoma
+  depends_on macos: ">= :sonoma"
 
   app "shadps4.app"
 

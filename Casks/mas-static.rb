@@ -12,7 +12,7 @@ cask "mas-static" do
 
   pkg "mas-#{version}.pkg"
 
-  uninstall pkgutil: "com.mphys.mas-cli"
+  uninstall pkgutil: "io.github.mas-cli"
 
   # No zap stanza required
 end

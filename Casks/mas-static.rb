@@ -1,6 +1,6 @@
 cask "mas-static" do
-  version "2.2.1"
-  sha256 "364e2b24ff6f119810b6f79107337679836754c0a9a5506e882a5767f3df344f"
+  version "2.2.2"
+  sha256 "bfeb620f964c545cde4a1cae3adf12b37cb0ea9f158e8a4768c8a6390ce72faa"
 
   url "https://github.com/mas-cli/mas/releases/download/v#{version}/mas-#{version}.pkg"
   name "mas-static"
@@ -12,7 +12,7 @@ cask "mas-static" do
 
   pkg "mas-#{version}.pkg"
 
-  uninstall pkgutil: "com.mphys.mas-cli"
+  uninstall pkgutil: "io.github.mas-cli"
 
   # No zap stanza required
 end

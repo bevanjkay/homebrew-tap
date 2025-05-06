@@ -1,11 +1,11 @@
 cask "companion@experimental" do
   arch arm: "arm64", intel: "x64"
 
-  version "4.99.0+7908-develop-dc9daeb1"
-  sha256 arm:   "ef95014b5d76184042172f5d09646c5c8fa48c0a1819e1667ac32106cf8d156e",
-         intel: "05fa009a9ca2f0f7e03e0600954f7b52ee17f06888837fc8a60e051d1dd450df"
+  version "4.99.0+7949-develop-bab440d1"
+  sha256 arm:   "10cd0087fff69acf7bec3e55cd214a8c85209c2ff84510e05512c20dc7f19150",
+         intel: "66e27377cfefbe479f555f64218b7364be3fac4902a16d7c047302f03f1f0f3b"
 
-  url "https://s3.bitfocus.io/builds/companion/companion-mac-#{arch}-#{version}.dmg"
+  url "https://s4.bitfocus.io/builds/companion/companion-mac-#{arch}-#{version}.dmg"
   name "Bitfocus Companion"
   desc "Streamdeck extension and emulation software"
   homepage "https://bitfocus.io/companion"

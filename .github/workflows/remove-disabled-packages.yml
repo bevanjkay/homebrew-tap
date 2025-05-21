@@ -21,7 +21,7 @@ permissions:
 jobs:
   remove-disabled-packages:
     # if: github.repository_owner == 'Homebrew'
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     container:
       image: ghcr.io/homebrew/ubuntu22.04:master
     env:
@@ -50,16 +50,17 @@ jobs:
 
       - name: Remove disabled packages
         id: remove_disabled
-        uses: bevanjkay/actions/remove-disabled-packages@master
+        uses: Homebrew/actions/remove-disabled-packages@master
         env:
           HOMEBREW_EVAL_ALL: 1
+          HOMEBREW_NO_INSTALL_FROM_API: 1
 
       - name: Push commits
         if: fromJson(steps.remove_disabled.outputs.packages-removed)
         uses: Homebrew/actions/git-try-push@master
         with:
           token: ${{ secrets.BOT_TOKEN }}
-          directory: /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/bevanjkay/homebrew-tap
+          directory: ${{ steps.set-up-homebrew.outputs.repository-path }}
           branch: ${{ env.REMOVAL_BRANCH }}
         env:
           GIT_COMMITTER_NAME: "${{ steps.git-user-config.outputs.name }}"
@@ -68,7 +69,7 @@ jobs:
       - name: Create pull request
         id: pr-create
         if: fromJson(steps.remove_disabled.outputs.packages-removed)
-        working-directory: /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/bevanjkay/homebrew-tap
+        working-directory: ${{ steps.set-up-homebrew.outputs.repository-path }}
         env:
           GH_TOKEN: ${{ secrets.BOT_TOKEN }}
           PR_BODY: >

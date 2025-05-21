@@ -45,40 +45,9 @@ jobs:
         with:
           persist-credentials: false
 
-      - run: zizmor --format sarif . > results.sarif
-
-      - name: Upload SARIF file
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: results.sarif
-          path: results.sarif
+      - run: zizmor .
 
       - name: Set up actionlint
         run: echo "::add-matcher::$(brew --repository)/.github/actionlint-matcher.json"
 
       - run: actionlint
-
-  upload_sarif:
-    needs: workflow_syntax
-    # We want to always upload this even if `actionlint` failed.
-    # This is only available on public repositories.
-    if: >
-      always() &&
-      !contains(fromJSON('["cancelled", "skipped"]'), needs.workflow_syntax.result) &&
-      !github.event.repository.private
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
-    steps:
-      - name: Download SARIF file
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
-        with:
-          name: results.sarif
-          path: results.sarif
-
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3.28.18
-        with:
-          sarif_file: results.sarif
-          category: zizmor

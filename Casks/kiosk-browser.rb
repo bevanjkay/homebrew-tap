@@ -1,6 +1,6 @@
 cask "kiosk-browser" do
-  version "0.18.0"
-  sha256 "5616873915d6420230ea4dc9875ce6bd4f9e589519c64d791a2bb379bdc88010"
+  version "0.18.1"
+  sha256 "1e4f97d3eeaa7f7099d99d7bb1adaf41effac9ea34a6cc5a59ea5436cbcdced1"
 
   url "https://github.com/IMAGINARY/kiosk-browser/releases/download/v#{version}/kiosk-browser-#{version}.dmg"
   name "Kiosk Browser"

@@ -1,9 +1,9 @@
 cask "jq-static" do
   arch arm: "arm64", intel: "amd64"
 
-  version "1.7.1"
-  sha256 arm:   "0bbe619e663e0de2c550be2fe0d240d076799d6f8a652b70fa04aea8a8362e8a",
-         intel: "4155822bbf5ea90f5c79cf254665975eb4274d426d0709770c21774de5407443"
+  version "1.8.0"
+  sha256 arm:   "aaf1efbb376d6e3eaf61f63807c32c1df519f5857dfc4f581826fa2df4b715ae",
+         intel: "a594f3740bf570f0dbc43ff102a9034c17719d1bb5b40f0192751234d67f172a"
 
   on_intel do
     postflight do

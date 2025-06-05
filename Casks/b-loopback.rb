@@ -1,5 +1,5 @@
 cask "b-loopback" do
-  version "2.3.3"
+  version "2.4.6"
   sha256 :no_check
 
   url "https://rogueamoeba.com/loopback/download/Loopback.zip"
@@ -8,7 +8,7 @@ cask "b-loopback" do
   homepage "https://rogueamoeba.com/loopback/"
 
   livecheck do
-    url "https://rogueamoeba.net/ping/versionCheck.cgi?format=sparkle&system=1231&bundleid=com.rogueamoeba.Loopback&platform=osx&version=#{version.no_dots}8000"
+    url "https://rogueamoeba.net/ping/versionCheck.cgi?format=sparkle&system=999&bundleid=com.rogueamoeba.Loopback&platform=osx&version=#{version.no_dots}8000"
     strategy :sparkle
   end
 

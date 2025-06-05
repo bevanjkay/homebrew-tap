@@ -1,8 +1,9 @@
 cask "allen-and-heath-midi-control" do
-  version "2.10,2024,06"
-  sha256 "8b6aed7ce59b295ac27c4f4c7d3d9058b1aea909ddd90ced9105d62158ee98bb"
+  version "2.20,2025,06"
+  sha256 "5396e21f51a9f951b0582435716e7dda1e93a2b20ddb20e7fe2a1ba4ae134756"
 
-  url "https://www.allen-heath.com/content/uploads/#{version.csv.second}/#{version.csv.third}/Allen-and-Heath-MIDI-Control-#{version.csv.first}-Mac.zip"
+  url "https://www.allen-heath.com/content/uploads/#{version.csv.second}/#{version.csv.third}/Allen-and-Heath-MIDI-Control-V#{version.csv.first}-Mac.zip",
+      user_agent: :browser
   name "Allen & Heath Midi Control"
   desc "Midi control software for Allen & Heath audio consoles"
   homepage "https://www.allen-heath.com/midi-control/"
@@ -15,7 +16,7 @@ cask "allen-and-heath-midi-control" do
     end
   end
 
-  container nested: "Allen and Heath MIDI Control #{version.csv.first}.dmg"
+  container nested: "Allen and Heath MIDI Control #{version.csv.first.chomp("0")}.dmg"
 
   app "Allen and Heath MIDI Control.app"
 
@@ -23,4 +24,8 @@ cask "allen-and-heath-midi-control" do
     "~/Library/Preferences/com.allenheath.midicontrol.plist",
     "~/Library/Preferences/com.com-allenheath.MIDI Control.plist",
   ]
+
+  caveats do
+    requires_rosetta
+  end
 end

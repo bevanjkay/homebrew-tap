@@ -1,6 +1,6 @@
 cask "allen-and-heath-midi-control" do
-  version "2.20,2025,06"
-  sha256 "5396e21f51a9f951b0582435716e7dda1e93a2b20ddb20e7fe2a1ba4ae134756"
+  version "2.2,2025,06"
+  sha256 "8acabe7640b39c0a20dcb356b32f0e9cee27cd75381b7aef22efc2db988ae6e8"
 
   url "https://www.allen-heath.com/content/uploads/#{version.csv.second}/#{version.csv.third}/Allen-and-Heath-MIDI-Control-V#{version.csv.first}-Mac.zip",
       user_agent: :browser
@@ -16,7 +16,7 @@ cask "allen-and-heath-midi-control" do
     end
   end
 
-  container nested: "Allen and Heath MIDI Control #{version.csv.first.chomp("0")}.dmg"
+  container nested: "Allen and Heath MIDI Control #{version.csv.first}.dmg"
 
   app "Allen and Heath MIDI Control.app"
 

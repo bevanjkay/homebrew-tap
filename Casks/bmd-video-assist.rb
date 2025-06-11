@@ -1,8 +1,8 @@
 cask "bmd-video-assist" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "3.19.0,e4ae7ddb784544c48cb6cfdb8a7e7b13,35b4149276b444ebaa2f2f7a88e30fa2"
-  sha256 "4979847af61e749cf5bd84c0373ef3fad9ccd4c2918bdd6d0e25ebfbef2811fd"
+  version "3.20.0,a1dbbb485997494ca3aeaffe10d772dc,8de4d8b73d914b418bab874863b9ade6"
+  sha256 "508fbe74284f711a6591b1c1832ab76c4c1d299a5043f4f943a4005b41f5b3ce"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

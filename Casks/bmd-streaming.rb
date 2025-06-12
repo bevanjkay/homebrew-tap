@@ -1,4 +1,4 @@
-cask "bmd-web-presenter" do
+cask "bmd-streaming" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "4.0.0,860fad1b6a2f4f6392ff3fe4ea93f853,58cf4c8b31ae4109a02baf869060eb54"
@@ -12,9 +12,9 @@ cask "bmd-web-presenter" do
         "country"      => "us",
         "policy"       => "true",
       }
-  name "Blackmagic Web Presenter"
-  desc "Update and manage Blackmagic Web Presenter Hardware"
-  homepage "https://www.blackmagicdesign.com/products/blackmagicwebpresenter"
+  name "Blackmagic Streaming"
+  desc "Update and manage Blackmagic Streaming Encoder Hardware"
+  homepage "https://www.blackmagicdesign.com/products/blackmagicstreamingprocessors"
 
   livecheck do
     url "https://www.blackmagicdesign.com/api/support/us/downloads.json"
@@ -35,10 +35,10 @@ cask "bmd-web-presenter" do
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
 
-  pkg "Install Web Presenter #{version.csv.first.chomp(".0")}.pkg"
+  pkg "Install Streaming #{version.csv.first.chomp(".0")}.pkg"
 
   uninstall script:  {
-              executable: "/Applications/Blackmagic Web Presenter/Uninstall Web Presenter.app/Contents/Resources/uninstall.sh",
+              executable: "/Applications/Blackmagic Streaming/Uninstall Streaming.app/Contents/Resources/uninstall.sh",
               sudo:       true,
             },
             pkgutil: [
@@ -47,5 +47,5 @@ cask "bmd-web-presenter" do
               "com.blackmagic-design.WebPresenterUninstaller",
             ]
 
-  zap trash: "~/Library/Preferences/com.blackmagic-design.Web Presenter Setup.plist"
+  zap trash: "~/Library/Preferences/com.blackmagic-design.Streaming Setup.plist"
 end

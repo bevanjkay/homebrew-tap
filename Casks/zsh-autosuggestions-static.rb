@@ -1,4 +1,4 @@
-cask "zsh-autosuggestions" do
+cask "zsh-autosuggestions-static" do
   version "0.7.1"
   sha256 "0df7affff21cd87ed298e6a3970ed08a1dd66a6efa676454ee5b091ad503badf"
 

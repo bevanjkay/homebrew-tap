@@ -1,4 +1,4 @@
-cask "zsh-syntax-highlighting" do
+cask "zsh-syntax-highlighting-static" do
   version "0.8.0"
   sha256 "5981c19ebaab027e356fe1ee5284f7a021b89d4405cc53dc84b476c3aee9cc32"
 

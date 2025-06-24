@@ -8,5 +8,7 @@
     "companion-experimental": "companion@experimental",
     "mixing-station-beta": "mixing-station@beta",
     "ndi-tools": "ndi-core-suite",
-    "propresenter-bleeding-edge": "propresenter@bleeding-edge"
+    "propresenter-bleeding-edge": "propresenter@bleeding-edge",
+    "zsh-autosuggestions": "zsh-autosuggestions-static",
+    "zsh-syntax-highlighting": "zsh-syntax-highlighting-static"
 }

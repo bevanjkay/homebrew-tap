@@ -1,6 +1,6 @@
 cask "yt-dlp-static" do
-  version "2025.06.25"
-  sha256 "d111922f25f665a8f49dbb0226a6b852b0fb9402c6adf0ee3f106023ca8ae885"
+  version "2025.06.30"
+  sha256 "e2273b717c09c87413fc8cc2bedea5ed436bdfd9b2cf62b5458d7301aa5e769b"
 
   on_monterey :or_older do
     depends_on cask: "bevanjkay/tap/ffmpeg-static"

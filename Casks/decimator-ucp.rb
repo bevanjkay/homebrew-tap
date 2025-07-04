@@ -1,9 +1,9 @@
 cask "decimator-ucp" do
   arch arm: "ARM", intel: "Intel"
 
-  version "3.0.3"
-  sha256 arm:   "185cf47b55f5c2892d0092692a1f19db013209e3bf38b6e0aaf90625ed15ddd7",
-         intel: "d9ef6767323fc78cc5cb10180857e84dfc4a8cf381fffbdff24d97c611aed882"
+  version "3.0.4"
+  sha256 arm:   "2a9c6971f9f011270645cb04c818de98c7caae97fd2923550db535c79ab1feb3",
+         intel: "be3b38c2dea817e29df545c85b2f2d49d5ac70b8fc8fd01de896891d465ec352"
 
   url "http://decimator.com/specs/UCP%20#{version}%20#{arch}.dmg"
   name "Decimator USB Control Panel"

@@ -1,8 +1,8 @@
 cask "bmd-cloud-store" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "1.6.1,b48b9fe7c8f14801b72f41cdc048123a,0459055d67a94823a7bbdd9fca125415"
-  sha256 "e37a259a7b2ff857895373d16fd8385130bc3d9e9ed8038b4e785d1b7667bee3"
+  version "1.7.0,7ff184c2ef6e4ced8a7d14d9c1568353,52b40539830b4b559252787a0e51d2d3"
+  sha256 "1d9eee441914d35fab36281fe5275cda60285dc7eb7c185059a56ca8d55dc5ba"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

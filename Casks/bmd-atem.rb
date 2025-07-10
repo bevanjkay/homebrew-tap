@@ -1,8 +1,8 @@
 cask "bmd-atem" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "9.8.0,85a980612c174cc095e8c7737c3fa675,48a4c5841ebf4513b0f533b86671fd33"
-  sha256 "e5c560d52cd8299da6bc0d3d99f71218cb7e101a8464db2e2e27d3c44a5ec606"
+  version "9.8.1,2b59d2ae9db6421f9f90cb2fab55f60b,a7073224fa424e489afb5942dc4d221f"
+  sha256 "8c897b135ac5cb161c718cab26f55627f62ef9cc3a718160e4991b093b7b43b8"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

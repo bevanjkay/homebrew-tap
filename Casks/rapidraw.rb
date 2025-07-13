@@ -1,10 +1,11 @@
 cask "rapidraw" do
   arch arm: "aarch64", intel: "x64"
 
-  version "1.2.1"
-  sha256 "20d7c72eb5bfb1dd03e5475a6312d8e9987b63a0605c2b5686cebd901815034b"
+  version "1.2.4"
+  sha256 arm:   "8fdaa7518fcb26908f80de425cb2bb9bbedd5f9d47e11732f547773b75cba836",
+         intel: "2b8515c76517bdebe8414857a7f497648398b68db6a858e80e6f62297f0718cb"
 
-  url "https://github.com/CyberTimon/RapidRAW/releases/download/v#{version}/RapidRAW_#{version}_#{arch}.dmg"
+  url "https://github.com/CyberTimon/RapidRAW/releases/download/v#{version}/RapidRAW_v#{version}_macos_#{arch}.dmg"
   name "RapidRAW"
   desc "GPU-accelerated RAW image editor"
   homepage "https://github.com/CyberTimon/RapidRAW"
@@ -15,11 +16,11 @@ cask "rapidraw" do
 
   postflight do
     file_path = "#{appdir}/RapidRAW.app"
-    quarantine_value = `xattr -p com.apple.quarantine "#{file_path}" 2>/dev/null`.strip
+    quarantine_value = `spctl --assess --type execute "#{file_path}" 2>/dev/null`.strip
     if $CHILD_STATUS.success? && !quarantine_value.empty?
-      system "xattr", "-d", "com.apple.quarantine", file_path
-    else
       odie "RapidRAW is already marked as safe. Please remove the postflight block"
+    else
+      system "xattr", "-d", "com.apple.quarantine", file_path
     end
   end
 

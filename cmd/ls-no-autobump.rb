@@ -35,7 +35,14 @@ module Homebrew
           cask.autobump? == false && !cask.disabled? && !cask.version.latest?
         end
 
-        puts no_autobump_casks.map(&:token)
+        all_formulae = Formula.all
+        tap_formulae = all_formulae.select { |formula| formula.tap == @target_tap }
+        no_autobump_formulae = tap_formulae.select do |formula|
+          formula.autobump? == false && !formula.disabled?
+        end
+
+        puts no_autobump_casks.map(&:token) unless no_autobump_casks.nil?
+        puts no_autobump_formulae.map(&:name) unless no_autobump_formulae.nil?
       end
     end
   end

@@ -53,7 +53,7 @@ cask "davinci-resolve-project-server" do
       version_info = JSON.parse(res)["mac"]
       next if version_info.blank?
 
-      "#{version_info["major"]}.#{version_info["minor"]}.#{version_info["releaseNum"]},#{version_info["build"]},#{version_info["downloadId"]},#{version_info["beta"] ? "b" : ""}"
+      "#{version_info["major"]}.#{version_info["minor"]}.#{version_info["releaseNum"]},#{version_info["build"]},#{version_info["downloadId"]},#{"b" if version_info["beta"]}"
     end
   end
 

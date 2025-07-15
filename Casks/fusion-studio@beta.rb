@@ -30,7 +30,7 @@ cask "fusion-studio@beta" do
       matched.map do |download|
         beta = /beta/i.match?(download["name"])
         v = download["urls"]["Mac OS X"].first
-        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{beta ? "b" : ""}"
+        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{"b" if beta}"
       end&.first
     end
   end

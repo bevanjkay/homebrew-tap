@@ -1,6 +1,6 @@
 cask "sevenzip-static" do
-  version "25.00"
-  sha256 "fc7bf340ce41b1ef08eb468e2900152a61ca83dc227d925ac73f49c1ea1f59a2"
+  version "25.01"
+  sha256 "26aa75bc262bb10bf0805617b95569c3035c2c590a99f7db55c7e9607b2685e0"
 
   url "https://7-zip.org/a/7z#{version.no_dots}-mac.tar.xz"
   name "7zip"

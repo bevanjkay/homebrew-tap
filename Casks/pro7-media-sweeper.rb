@@ -7,6 +7,11 @@ cask "pro7-media-sweeper" do
   desc "Find and sweep orphaned media files that are not being used by ProPresenter7"
   homepage "https://github.com/arlinsandbulte/Pro7-Media-Sweeper"
 
+  depends_on macos: [
+    ":sonoma",
+    ":sequoia",
+  ]
+
   app "Pro7 Media Sweeper.app"
 
   zap trash: "~/Library/Saved Application State/Pro7 Media Sweeper.savedState",

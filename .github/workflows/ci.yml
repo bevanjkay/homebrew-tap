@@ -85,6 +85,8 @@ jobs:
           cask: true
           test-bot: true
 
+      - name: debug spctl output
+        run: spctl --global-status
       - name: Enable debug mode
         run: |
           echo 'HOMEBREW_DEBUG=1' >> "${GITHUB_ENV}"

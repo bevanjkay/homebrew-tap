@@ -1,8 +1,8 @@
 cask "davinci-resolve" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "20.0.1,4cda8043eecf4c00a40a781dffed2bc9,7169bc56f42647a0ac614b2791fe64c5"
-  sha256 "d2d51d0bb38a0ef7386ef99aa1ccb553dfee40dc0b40d041ef62e25cb2e8d961"
+  version "20.1.0,36b3d032892b4396baa614417fa76ee8,861fd440e52444b2a5da11ed2be55215"
+  sha256 "56f0392eaffde19a3f6ecf154ba83746fa4ccb6469ae91655fb5b6d2a4892478"
 
   personal_details = if File.exist?("#{Dir.home}/.personal_details.json")
     JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
@@ -62,6 +62,7 @@ cask "davinci-resolve" do
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
   conflicts_with cask: "davinci-resolve@beta"
+  depends_on macos: ">= :sonoma"
 
   pkg "Install Resolve #{version.csv.first.chomp(".0")}.pkg"
 

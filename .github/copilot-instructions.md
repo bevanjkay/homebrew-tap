@@ -4,6 +4,8 @@ Always reference these instructions first and fallback to search or bash command
 
 This repository is a Homebrew tap containing macOS casks (app installers) and custom Homebrew commands for professional audio-visual production environments and personal use. It includes specialized casks for Blackmagic Design software and other professional tools.
 
+**Repository Contents**: 57 casks + 7 custom commands = 64 total Ruby files
+
 ## Critical Requirements
 
 **NEVER CANCEL BUILDS OR LONG-RUNNING COMMANDS** - Operations may take up to 30 minutes. Always set timeouts to 45+ minutes for any testing operations.

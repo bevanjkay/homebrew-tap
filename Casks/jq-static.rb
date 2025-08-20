@@ -17,8 +17,6 @@ cask "jq-static" do
   desc "JSON processor"
   homepage "https://jqlang.github.io/jq/"
 
-  conflicts_with formula: "jq"
-
   binary "jq-macos-#{arch}", target: "jq"
 
   # No zap stanza required

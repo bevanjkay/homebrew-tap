@@ -12,8 +12,6 @@ cask "ffmpeg-static" do
     regex(/ffmpeg[._-]v?(\d+(?:\.\d+)+)\.7z/i)
   end
 
-  conflicts_with formula: "ffmpeg"
-
   binary "ffmpeg"
 
   postflight do

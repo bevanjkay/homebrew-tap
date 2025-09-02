@@ -21,7 +21,7 @@ jobs:
         uses: Homebrew/actions/setup-homebrew@master
         with:
           cask: false
-          core: false
+          core: true
           test-bot: false
 
       - name: Configure Git user

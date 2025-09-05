@@ -2,7 +2,7 @@ cask "kiosk-browser" do
   version "0.18.1"
   sha256 "1e4f97d3eeaa7f7099d99d7bb1adaf41effac9ea34a6cc5a59ea5436cbcdced1"
 
-  url "https://github.com/IMAGINARY/kiosk-browser/releases/download/v#{version}/kiosk-browser-#{version}.dmg"
+  url "https://github.com/IMAGINARY/kiosk-browser/releases/download/v#{version}/kioskY-browser-#{version}.dmg"
   name "Kiosk Browser"
   desc "Web kiosk system"
   homepage "https://github.com/IMAGINARY/kiosk-browser"

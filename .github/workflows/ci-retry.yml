@@ -1,0 +1,62 @@
+name: CI Retry Failed Jobs
+
+on:
+  schedule:
+    - cron: "0 */2 * * *" # every 2 hours
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  actions: write
+
+concurrency:
+  group: ci-retry
+  cancel-in-progress: false
+
+jobs:
+  retry-failed:
+    name: Re-run failed jobs for labeled PRs
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Re-run failed jobs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          mapfile -t prs < <(gh pr list --label ci-retry --state open --json number,headRefName,headRefOid \
+            --jq '.[] | "\(.number) \(.headRefName) \(.headRefOid)"') || true
+
+          if [ ${#prs[@]} -eq 0 ]; then
+            echo "No open PRs with label ci-retry."; exit 0
+          fi
+
+          for line in "${prs[@]}"; do
+            pr_number="${line%% *}"; rest="${line#* }"; head_ref="${rest%% *}"; head_sha="${rest##* }"
+            echo "Processing PR #$pr_number (ref: $head_ref sha: $head_sha)"
+
+            # List recent runs on that branch; filter by matching head commit and failed-ish conclusions.
+            mapfile -t run_ids < <(gh run list --branch "$head_ref" --limit 50 \
+              --json databaseId,headSha,status,conclusion,event \
+              --jq '.[] | select(.headSha=="'$head_sha'") | select(.status=="completed") | select(.conclusion=="failure" or .conclusion=="cancelled" or .conclusion=="timed_out") | .databaseId') || true
+
+            if [ ${#run_ids[@]} -eq 0 ]; then
+              echo " No failed/cancelled runs to retry for PR #$pr_number."; continue
+            fi
+
+            # Optionally keep only the latest run per workflow to avoid spamming reruns.
+            # We'll just rerun all matching run IDs (could be refined later).
+            for run_id in "${run_ids[@]}"; do
+              echo "  Re-running failed jobs for run $run_id"
+              if gh run rerun "$run_id" --failed >/dev/null 2>&1; then
+                echo "    Rerun requested."
+              else
+                echo "    Failed to request rerun for $run_id" >&2
+              fi
+            done
+          done
+
+          echo "Done."

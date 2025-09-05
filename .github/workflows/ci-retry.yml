@@ -1,0 +1,74 @@
+name: CI Retry Failed Jobs
+
+on:
+  schedule:
+    - cron: "0 */2 * * *" # every 2 hours
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  actions: write
+
+concurrency:
+  group: ci-retry
+  cancel-in-progress: false
+
+jobs:
+  retry-failed:
+    name: Re-run failed jobs for labeled PRs
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Re-run failed jobs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          mapfile -t prs < <(gh pr list --label ci-retry --state open --json number,headRefName,headRefOid \
+            --jq '.[] | "\(.number) \(.headRefName) \(.headRefOid)"') || true
+
+          if [ ${#prs[@]} -eq 0 ]; then
+            echo "No open PRs with label ci-retry."; exit 0
+          fi
+
+          for line in "${prs[@]}"; do
+            # Parse line into pr_number, head_ref, and head_sha
+            read -r pr_number head_ref head_sha <<< "$line"
+            echo "Processing PR #$pr_number (ref: $head_ref sha: $head_sha)"
+
+            # List recent runs on that branch; filter by matching head commit and failed-ish conclusions.
+            # Get all runs as JSON
+            runs_json="$(gh run list --branch "$head_ref" --limit 50 \
+              --json databaseId,headSha,status,conclusion,event)"
+
+            # Filter runs by headSha
+            filtered_by_sha="$(jq '.[] | select(.headSha=="'"$head_sha"'")' <<< "$runs_json")"
+
+            # Further filter by status == "completed"
+            filtered_by_status="$(jq 'select(.status=="completed")' <<< "$filtered_by_sha")"
+
+            # Further filter by conclusion
+            filtered_by_conclusion="$(jq 'select(.conclusion=="failure" or .conclusion=="cancelled" or .conclusion=="timed_out")' <<< "$filtered_by_status")"
+
+            # Extract databaseId
+            mapfile -t run_ids < <(jq -r '.databaseId' <<< "$filtered_by_conclusion") || true
+            if [ ${#run_ids[@]} -eq 0 ]; then
+              echo " No failed/cancelled runs to retry for PR #$pr_number."; continue
+            fi
+
+            # Optionally keep only the latest run per workflow to avoid spamming reruns.
+            # We'll just rerun all matching run IDs (could be refined later).
+            for run_id in "${run_ids[@]}"; do
+              echo "  Re-running failed jobs for run $run_id"
+              if gh run rerun "$run_id" --failed >/dev/null 2>&1; then
+                echo "    Rerun requested."
+              else
+                echo "    Failed to request rerun for $run_id" >&2
+              fi
+            done
+          done
+
+          echo "Done."

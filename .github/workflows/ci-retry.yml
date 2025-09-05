@@ -39,10 +39,21 @@ jobs:
             echo "Processing PR #$pr_number (ref: $head_ref sha: $head_sha)"
 
             # List recent runs on that branch; filter by matching head commit and failed-ish conclusions.
-            mapfile -t run_ids < <(gh run list --branch "$head_ref" --limit 50 \
-              --json databaseId,headSha,status,conclusion,event \
-              --jq '.[] | select(.headSha=="'$head_sha'") | select(.status=="completed") | select(.conclusion=="failure" or .conclusion=="cancelled" or .conclusion=="timed_out") | .databaseId') || true
+            # Get all runs as JSON
+            runs_json="$(gh run list --branch "$head_ref" --limit 50 \
+              --json databaseId,headSha,status,conclusion,event)"
 
+            # Filter runs by headSha
+            filtered_by_sha="$(jq '.[] | select(.headSha=="'"$head_sha"'")' <<< "$runs_json")"
+
+            # Further filter by status == "completed"
+            filtered_by_status="$(jq 'select(.status=="completed")' <<< "$filtered_by_sha")"
+
+            # Further filter by conclusion
+            filtered_by_conclusion="$(jq 'select(.conclusion=="failure" or .conclusion=="cancelled" or .conclusion=="timed_out")' <<< "$filtered_by_status")"
+
+            # Extract databaseId
+            mapfile -t run_ids < <(jq -r '.databaseId' <<< "$filtered_by_conclusion") || true
             if [ ${#run_ids[@]} -eq 0 ]; then
               echo " No failed/cancelled runs to retry for PR #$pr_number."; continue
             fi

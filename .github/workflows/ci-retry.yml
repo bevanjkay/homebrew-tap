@@ -35,7 +35,8 @@ jobs:
           fi
 
           for line in "${prs[@]}"; do
-            pr_number="${line%% *}"; rest="${line#* }"; head_ref="${rest%% *}"; head_sha="${rest##* }"
+            # Parse line into pr_number, head_ref, and head_sha
+            read -r pr_number head_ref head_sha <<< "$line"
             echo "Processing PR #$pr_number (ref: $head_ref sha: $head_sha)"
 
             # List recent runs on that branch; filter by matching head commit and failed-ish conclusions.

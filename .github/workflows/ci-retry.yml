@@ -49,6 +49,14 @@ jobs:
             # Filter runs by commit SHA
             filtered_by_sha="$(jq '.[] | select(.headSha=="'"$head_sha"'")' <<< "$runs_json")"
             
+            # Check if there are any currently running or queued runs for this commit
+            running_runs="$(jq 'select(.status=="in_progress" or .status=="queued") | .databaseId' <<< "$filtered_by_sha")"
+            
+            if [[ -n "$running_runs" ]]; then
+              echo "  Skipping rerun - found running/queued jobs for PR #$pr_number (commit: $head_sha)"
+              continue
+            fi
+            
             # Filter by completed status
             filtered_by_status="$(jq 'select(.status=="completed")' <<< "$filtered_by_sha")"
             

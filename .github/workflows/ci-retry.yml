@@ -27,37 +27,42 @@ jobs:
         run: |
           set -euo pipefail
 
-          mapfile -t prs < <(gh pr list --repo "$REPO" --label ci-retry --state open --json number,headRefName,headRefOid \
-            --jq '.[] | "\(.number) \(.headRefName) \(.headRefOid)"') || true
+          # Get PRs with ci-retry label and process them
+          prs_json="$(gh pr list --repo "$REPO" --label ci-retry --state open --json number,headRefName,headRefOid)" || {
+            echo "Failed to fetch PRs with ci-retry label" >&2; exit 1
+          }
 
-          if [ ${#prs[@]} -eq 0 ]; then
+          if [[ "$(jq length <<< "$prs_json")" -eq 0 ]]; then
             echo "No open PRs with label ci-retry."; exit 0
           fi
 
-          for line in "${prs[@]}"; do
-            read -r pr_number head_ref head_sha <<< "$line"
+          # Process each PR
+          jq -r '.[] | "\(.number) \(.headRefName) \(.headRefOid)"' <<< "$prs_json" | while IFS=' ' read -r pr_number head_ref head_sha; do
             echo "Processing PR #$pr_number (ref: $head_ref sha: $head_sha)"
 
-            runs_json="$(gh run list --repo "$REPO" --branch "$head_ref" --limit 50 \
-              --json databaseId,headSha,status,conclusion,event)"
+            # Get failed runs for this specific commit with a single API call and combined filtering
+            failed_run_ids="$(gh run list --repo "$REPO" --branch "$head_ref" --limit 20 \
+              --json databaseId,headSha,status,conclusion \
+              --jq --arg sha "$head_sha" \
+              ".[] | select(.headSha == \$sha and .status == \"completed\" and (.conclusion == \"failure\" or .conclusion == \"cancelled\" or .conclusion == \"timed_out\")) | .databaseId")" || {
+              echo "  Failed to fetch runs for PR #$pr_number" >&2; continue
+            }
 
-            filtered_by_sha="$(jq '.[] | select(.headSha=="'"$head_sha"'")' <<< "$runs_json")"
-            filtered_by_status="$(jq 'select(.status=="completed")' <<< "$filtered_by_sha")"
-            filtered_by_conclusion="$(jq 'select(.conclusion=="failure" or .conclusion=="cancelled" or .conclusion=="timed_out")' <<< "$filtered_by_status")"
-
-            mapfile -t run_ids < <(jq -r '.databaseId' <<< "$filtered_by_conclusion") || true
-            if [ ${#run_ids[@]} -eq 0 ]; then
-              echo " No failed/cancelled runs to retry for PR #$pr_number."; continue
+            if [[ -z "$failed_run_ids" ]]; then
+              echo "  No failed/cancelled runs to retry for PR #$pr_number."
+              continue
             fi
 
-            for run_id in "${run_ids[@]}"; do
+            # Retry each failed run
+            while IFS= read -r run_id; do
+              [[ -z "$run_id" ]] && continue
               echo "  Re-running failed jobs for run $run_id"
               if gh run rerun --repo "$REPO" "$run_id" --failed >/dev/null 2>&1; then
                 echo "    Rerun requested."
               else
                 echo "    Failed to request rerun for $run_id" >&2
               fi
-            done
+            done <<< "$failed_run_ids"
           done
 
           echo "Done."

@@ -1,6 +1,6 @@
 cask "yarc-launcher" do
-  version "1.1.0"
-  sha256 "531f85a01d8b615778d1c845d061b98c64a8a3f4c2f587f9a917282f4fd219c3"
+  version "1.2.0"
+  sha256 "f63e6cff4b4f129b896ff8dd0cc505423c3e79e7666761cb98143cddbcd55763"
 
   url "https://github.com/YARC-Official/YARC-Launcher/releases/download/v#{version}/YARC.Launcher_universal.app.tar.gz",
       verified: "github.com/YARC-Official/YARC-Launcher/"

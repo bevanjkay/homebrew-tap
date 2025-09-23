@@ -1,8 +1,8 @@
 cask "bmd-smartview" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "5.0.2,51b77ef7798a422fb9faf09e30e95d4f,e172d8dc200249648cea0bf2aa41a163"
-  sha256 "ffe432bcbc2825d35f2480bf9c46e49ba073234edc3658c8ff048510ca03ec19"
+  version "5.0.3,657731b0094543ceac66211017f2bf27,dda8f0bca6eb4037b9386079ec980386"
+  sha256 "b4c6e1c03e126b3af7cb12c94e5719951916f110f55ef1a2c0a03ef241143bd4"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

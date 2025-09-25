@@ -18,7 +18,8 @@ cask "companion@experimental" do
   end
 
   auto_updates true
-
+  depends_on macos: ">= :monterey"
+  
   app "Companion.app", target: "Companion Experimental.app"
 
   # No zap stanza required

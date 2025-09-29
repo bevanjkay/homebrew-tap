@@ -10,7 +10,7 @@ cask "rapidraw" do
   desc "GPU-accelerated RAW image editor"
   homepage "https://github.com/CyberTimon/RapidRAW"
 
-  depends_on macos: ">= :high_sierra"
+  depends_on macos: ">= :ventura"
 
   app "RapidRAW.app"
 

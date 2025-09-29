@@ -1,16 +1,16 @@
 cask "rapidraw" do
   arch arm: "aarch64", intel: "x64"
 
-  version "1.3.13"
-  sha256 arm:   "72a7ca1b5797f138185aaf1be7672849dbee9c639fd5d68c6a8c1e2150bf2129",
-         intel: "000a64f54b343b13e09b9d5748650e7f1071dde6f328598d81301564d1c50e7d"
+  version "1.4.0"
+  sha256 arm:   "6679a1098788c25e7c312c16193063bb28dab313708d587e814d296329684186",
+         intel: "280bde710448ab63572ff6fd5b7517ff8b42f15b2c0a2c9d6fd6a9a5f5df014b"
 
   url "https://github.com/CyberTimon/RapidRAW/releases/download/v#{version}/02_RapidRAW_v#{version}_macos-13_#{arch}.dmg"
   name "RapidRAW"
   desc "GPU-accelerated RAW image editor"
   homepage "https://github.com/CyberTimon/RapidRAW"
 
-  depends_on macos: ">= :high_sierra"
+  depends_on macos: ">= :ventura"
 
   app "RapidRAW.app"
 

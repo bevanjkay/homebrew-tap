@@ -1,8 +1,8 @@
 cask "bmd-hyperdeck" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "9.0.0,9c175e71cd1a4b528ca3eeeb9f5b6a62,7100dbf3dce747659ca3afab810fea5d"
-  sha256 "10ebe681a245fabccd25abd2b1257bf569d125913734f5c9a0905452e3eda109"
+  version "9.0.1,a7d9f0332af24f7fae56d64f52efe9e8,c48a9021225f453e9b7b99731c85b726"
+  sha256 "8071e4690bf3960bf51301242b878ab29a4c782ac7a386dab92fd67c965aedb6"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

@@ -1,8 +1,8 @@
 cask "bmd-ultimatte" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "2.2.0,f001d704c39e4887adba3b120ee56d12,869bb3e513494cddba1e4aa2fe494762"
-  sha256 "9cb136b834c4e7b9ac47657fef3e0fe26b51714c5749be260a2a7167ac5ba1ad"
+  version "2.3.0,b2d542e0ed344976a75c9ba05f487e26,26a25a71817347f4b65e7bb28931c505"
+  sha256 "4944edb93a52140df7da0d58749e35a047dcc5f0488e2fa5a986b9897c7e7593"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

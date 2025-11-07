@@ -88,6 +88,9 @@ jobs:
           cask: true
           test-bot: true
 
+      - name: debug
+        run: sha256 $(which gktool)
+
       - name: Enable debug mode
         run: |
           echo 'HOMEBREW_DEBUG=1' >> "${GITHUB_ENV}"

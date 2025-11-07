@@ -20,4 +20,5 @@ cask "jq-static" do
   binary "jq-macos-#{arch}", target: "jq"
 
   # No zap stanza required
+  # Debug
 end

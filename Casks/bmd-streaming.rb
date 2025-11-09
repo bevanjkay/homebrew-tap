@@ -1,8 +1,8 @@
 cask "bmd-streaming" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "4.1.0,f1bf81517fef4939b45453e5aff72e02,495bfe3a95034ca493ad9da60b52004b"
-  sha256 "3221cc8a94a62dca8ab9a7dfc661c08497433988c63be38cc43b03fbfff950c7"
+  version "4.1.1,9f209d8f9ea34c838efb003e3d075980,198dfbfbe91b459b93e48afea8dbaa5e"
+  sha256 "6a1615365a3440c6ddf75d7d947a368c969e8d5d120d8d6d559346c7ad5b238e"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

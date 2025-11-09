@@ -12,8 +12,6 @@ cask "amphetamine-enhancer" do
     strategy :sparkle
   end
 
-  depends_on macos: ">= :high_sierra"
-
   app "Amphetamine Enhancer.app"
 
   zap trash: [

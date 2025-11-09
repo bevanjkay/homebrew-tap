@@ -8,8 +8,6 @@ cask "piano-trainer" do
   desc "Piano learning application"
   homepage "https://zaneh.itch.io/piano-trainer"
 
-  depends_on macos: ">= :high_sierra"
-
   app "Piano Trainer.app"
 
   zap trash: [

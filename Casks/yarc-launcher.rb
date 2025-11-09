@@ -8,8 +8,6 @@ cask "yarc-launcher" do
   desc "Launcher for YARG (Yet Another Rhthym Game)"
   homepage "https://yarg.in/"
 
-  depends_on macos: ">= :high_sierra"
-
   app "YARC Launcher.app"
 
   postflight do

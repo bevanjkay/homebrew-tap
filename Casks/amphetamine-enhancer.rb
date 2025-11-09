@@ -12,8 +12,6 @@ cask "amphetamine-enhancer" do
     strategy :sparkle
   end
 
-  depends_on macos: ">= :high_sierra"
-
   app "Amphetamine Enhancer.app"
 
   zap trash: [
@@ -21,9 +19,12 @@ cask "amphetamine-enhancer" do
     "~/Library/Saved Application State/com.if.Amphetamine-Enhancer.savedState",
   ]
 
-  caveats <<~EOS
-    #{name.first} is a helper application for Amphetamine. It is not a standalone application.
-    Amphetamine must be installed from the Mac App Store for #{name.first} to work.
-      mas install 937984704
-  EOS
+  caveats do
+    requires_rosetta
+    <<~EOS
+      Amphetamine Enhancer is a helper application for Amphetamine. It is not a standalone application.
+      Amphetamine must be installed from the Mac App Store for Amphetamine Enhancer to work.
+        mas install 937984704
+    EOS
+  end
 end

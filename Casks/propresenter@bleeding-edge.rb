@@ -5,7 +5,7 @@ cask "propresenter@bleeding-edge" do
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"
   desc "Presentation and production application for live events"
-  homepage "https://www.renewedvision.com/propresenter/"
+  homepage "https://www.renewedvision.com/propresenter/" # debug
 
   livecheck do
     url "https://api.renewedvision.com/v1/pro/upgrade?platform=macos&osVersion=#{MacOS.full_version}&appVersion=0&buildNumber=0&includeNotes=0"

@@ -12,7 +12,7 @@ cask "mas-static" do
 
   depends_on macos: ">= :monterey"
 
-  pkg "mas-#{version}.pkg"
+  pkg "mas-#{version}-#{arch}.pkg"
 
   uninstall pkgutil: "io.github.mas-cli"
 

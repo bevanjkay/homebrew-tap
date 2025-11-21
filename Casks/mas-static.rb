@@ -14,7 +14,7 @@ cask "mas-static" do
 
   pkg "mas-#{version}-#{arch}.pkg"
 
-  uninstall pkgutil: "io.github.mas-cli"
+  uninstall pkgutil: "io.github.mas-cli.mas"
 
   # No zap stanza required
 end

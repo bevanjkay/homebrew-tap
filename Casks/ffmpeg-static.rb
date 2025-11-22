@@ -1,6 +1,6 @@
 cask "ffmpeg-static" do
-  version "8.0"
-  sha256 "3bd3f23f12bd84d21a5756efb8c5d841cb4c1d6aac42ea817bf39ec5c602a807"
+  version "8.0.1"
+  sha256 "470e482f6e290eac92984ac12b2d67bad425b1e5269fd75fb6a3536c16e824e4"
 
   url "https://evermeet.cx/ffmpeg/ffmpeg-#{version}.zip"
   name "ffmpeg"

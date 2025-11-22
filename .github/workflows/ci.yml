@@ -97,6 +97,12 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: debug
+        run: |
+          uname -a 
+          sw_vers
+          system_profiler SPSoftwareDataType SPHardwareDataType
+
       - name: Clean up CI machine
         if: runner.os == 'macOS'
         run: brew test-bot --cleanup --only-cleanup-before

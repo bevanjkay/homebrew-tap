@@ -51,6 +51,9 @@ jobs:
             fetch-depth: 0
             persist-credentials: false
 
+      - name: debug
+        run: sha256 $(which gktool)
+
       - name: Generate CI matrix
         id: generate-matrix
         env:
@@ -84,6 +87,9 @@ jobs:
           core: false
           cask: true
           test-bot: true
+
+      - name: debug
+        run: sha256 $(which gktool)
 
       - name: Enable debug mode
         run: |

@@ -1,9 +1,9 @@
 cask "mas-static" do
   arch arm: "arm64", intel: "x86_64"
 
-  version "3.0.1"
-  sha256 arm:   "5eaf4edc13b33a077e47aecd74e2158157f64112f247834c32bbe8c4e8f09540",
-         intel: "8736290c63267fceef7bd06356fb79ed687c4971107f0b2002c2b08e9db2df85"
+  version "3.1.0"
+  sha256 arm:   "51a01a5d6767769b94d6dccf55be9b02d3b5c073ce317118e87a38c8566d4b8e",
+         intel: "1fe738fa66f9e1a05e1e70feebe5e93ea577cb94859fcb82a5dc8add5d316d08"
 
   url "https://github.com/mas-cli/mas/releases/download/v#{version}/mas-#{version}-#{arch}.pkg"
   name "mas-static"

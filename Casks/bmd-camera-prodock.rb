@@ -12,8 +12,8 @@ cask "bmd-camera-prodock" do
         "country"      => "us",
         "policy"       => "true",
       }
-  name "Blackmagic Camera Utility"
-  desc "Update and manage Blackmagic Cameras"
+  name "Blackmagic Camera Prodock"
+  desc "Update and manage Blackmagic Camera Prodock"
   homepage "https://www.blackmagicdesign.com/"
 
   livecheck do

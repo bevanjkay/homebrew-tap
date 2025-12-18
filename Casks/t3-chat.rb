@@ -1,6 +1,6 @@
 cask "t3-chat" do
-  version "1.0.4"
-  sha256 "c7b76744053d0216831b39cc93bc634400ceda4112d4271d7c8075f94125f114"
+  version "1.1.0"
+  sha256 "ba45f86ca059d3a49762fd0c5dc623b0b7aea19b0646f88e7c59853db7eb4ea7"
 
   url "https://github.com/bevanjkay/pake-builder/releases/download/t3-chat-#{version}/T3.Chat.dmg",
       verified: "github.com/bevanjkay/pake-builder/"

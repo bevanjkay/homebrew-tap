@@ -15,6 +15,10 @@ cask "t3-chat" do
 
   app "T3 Chat.app"
 
+  postflight do
+    system "xattr", "-d", "com.apple.quarantine", "#{staged_path}/T3 Chat.app"
+  end
+
   zap trash: [
     "~/Library/Application Support/T3 Chat",
     "~/Library/Application Support/T3Chat",

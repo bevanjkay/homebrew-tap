@@ -1,6 +1,6 @@
 cask "qik" do
-  version "1.0.0"
-  sha256 "ec46018e9c3115a1d2ecf4cf73ca51ab0e618cedece5d7c878a32ea20c9ab14a"
+  version "1.1.1"
+  sha256 "2b872c0f546c8cfde86dd5ae94609b0ee73e0a61d7d1252c997805f41691914c"
 
   url "https://github.com/bevanjkay/pake-builder/releases/download/qik-#{version}/Qik.dmg",
       verified: "github.com/bevanjkay/pake-builder/"

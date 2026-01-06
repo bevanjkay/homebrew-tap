@@ -19,6 +19,7 @@ cask "mole-static" do
     sudo:       true,
   }
   binary "mo"
+  binary "mole"
 
   uninstall script: {
     executable: "mo",

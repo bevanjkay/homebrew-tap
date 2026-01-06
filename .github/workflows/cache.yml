@@ -19,9 +19,9 @@ jobs:
     strategy:
       matrix:
         runner:
-          - macos-13
           - macos-14
           - macos-15
+          - macos-26
           - ubuntu-latest
     runs-on: ${{ matrix.runner }}
     steps:

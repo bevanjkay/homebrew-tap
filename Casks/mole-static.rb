@@ -1,6 +1,6 @@
 cask "mole-static" do
-  version "1.19.0"
-  sha256 "2d87022a9a0cfdc3eb33317404352cd4dbc0aae7ef68b311becca212752d990e"
+  version "1.20.0"
+  sha256 "a74ba75d54825504434ccb8ce4ff3ae02049b7ad61299e7c62e8695d7059e640"
 
   url "https://raw.githubusercontent.com/tw93/mole/V#{version}/install.sh",
       verified: "raw.githubusercontent.com/tw93/mole/"
@@ -20,6 +20,17 @@ cask "mole-static" do
   }
   binary "mo"
   binary "mole"
+
+  preflight do
+    # Fix unbound variable error by expanding tmp directory in trap
+    file = "#{staged_path}/install.sh"
+    if File.exist?(file)
+      content = File.read(file)
+      content.gsub!("trap 'stop_line_spinner 2>/dev/null; rm -rf \"$tmp\"' EXIT",
+                    "trap \"stop_line_spinner 2>/dev/null; rm -rf '$tmp'\" EXIT")
+      File.write(file, content)
+    end
+  end
 
   uninstall script: {
     executable: "mo",

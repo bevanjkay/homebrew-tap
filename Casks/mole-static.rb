@@ -21,6 +21,17 @@ cask "mole-static" do
   binary "mo"
   binary "mole"
 
+  preflight do
+    # Fix unbound variable error by expanding tmp directory in trap
+    file = "#{staged_path}/install.sh"
+    if File.exist?(file)
+      content = File.read(file)
+      content.gsub!("trap 'stop_line_spinner 2>/dev/null; rm -rf \"$tmp\"' EXIT",
+                    "trap \"stop_line_spinner 2>/dev/null; rm -rf '$tmp'\" EXIT")
+      File.write(file, content)
+    end
+  end
+
   uninstall script: {
     executable: "mo",
     args:       ["remove"],

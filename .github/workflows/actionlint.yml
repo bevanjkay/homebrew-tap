@@ -51,3 +51,29 @@ jobs:
         run: echo "::add-matcher::$(brew --repository)/.github/actionlint-matcher.json"
 
       - run: actionlint
+
+  upload_sarif:
+    needs: workflow_syntax
+    # We want to always upload this even if `actionlint` failed.
+    # This is only available on public repositories.
+    if: >
+      always() &&
+      !contains(fromJSON('["cancelled", "skipped"]'), needs.workflow_syntax.result) &&
+      !github.event.repository.private &&
+      github.event_name != 'merge_group'
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Download SARIF file
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: results.sarif
+          path: results.sarif
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@5d4e8d1aca955e8d8589aabd499c5cae939e33c7 # v4.31.9
+        with:
+          sarif_file: results.sarif
+          category: zizmor

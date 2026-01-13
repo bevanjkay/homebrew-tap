@@ -45,8 +45,17 @@ jobs:
         with:
           persist-credentials: false
 
-      - run: zizmor .
+      - run: zizmor --format sarif . > results.sarif
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload SARIF file
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        # We can't use the SARIF file when triggered by `merge_group` so we don't upload it.
+        if: always() && github.event_name != 'merge_group'
+        with:
+          name: results.sarif
+          path: results.sarif
       - name: Set up actionlint
         run: echo "::add-matcher::$(brew --repository)/.github/actionlint-matcher.json"
 

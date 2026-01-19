@@ -1,8 +1,8 @@
 cask "bome-midi-translator-pro" do
-  version "1.9.2,1087"
-  sha256 "e180ef47a4b814f151095fe0242cc817dedff71bbe35737cc5449ec1c4c61c39"
+  version "1.9.2,1090"
+  sha256 "56d112b6d105d28ca533ff1ddf172d684bf5ab2a29291e48c738311a627d4c33"
 
-  url "https://download.bome.com/dl.php/21C2B86022897/MIDITranslatorPro#{version.csv.first}_Full.dmg"
+  url "https://download.bome.com/dl.php/3BCB8B8705D79/MIDITranslatorPro#{version.csv.first}_Full.dmg"
   name "Bome MIDI Translator Pro"
   desc "MIDI Translator Application"
   homepage "https://www.bome.com/products/miditranslator"
@@ -14,6 +14,8 @@ cask "bome-midi-translator-pro" do
       page.scan(regex).map { |match| "#{match.first},#{match.second}" }
     end
   end
+
+  depends_on macos: ">= :big_sur"
 
   app "Bome MIDI Translator Pro.app"
 

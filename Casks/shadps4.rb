@@ -1,28 +1,34 @@
 cask "shadps4" do
-  version "0.12.0"
-  sha256 "2fa767266ee51449aa2c26f10e6ebd2dd2bc49aea4d63678de74e5b91c9ded15"
+  version "2026-01-19,1f4e59f6110d5f991cead5a3e9f72671fced2c70"
+  sha256 "c1ef4de46bbfd96e174cc07cd0f8387447ee8a5d0ea359a1d2ab054e3961201a"
 
-  url "https://github.com/shadps4-emu/shadPS4/releases/download/v.#{version}/shadps4-macos-qt-#{version}.zip",
-      verified: "github.com/shadps4-emu/shadPS4/"
+  url "https://github.com/shadps4-emu/shadps4-qtlauncher/releases/download/shadPS4QtLauncher-#{version.tr(",", "-")}/shadPS4QtLauncher-macos-qt-#{version.csv.first}-#{version.csv.second&.slice(0, 7)}.zip",
+      verified: "github.com/shadps4-emu/shadps4-qtlauncher/"
   name "shadps4"
   desc "PlayStation 4 emulator"
   homepage "https://shadps4.net/"
 
   livecheck do
     url :url
-    strategy :github_latest
+    regex(/v?shadps4QTLauncher[._-](.+)/i)
+    strategy :git do |tags, regex|
+     tags.filter_map do |tag|
+       match = tag[regex, 1]
+       split = match&.split("-")
+       part_one = split[..2]&.join("-")
+       part_two = split[3]
+
+       "#{part_one},#{part_two}"
+     end
+    end
   end
 
   depends_on macos: ">= :sequoia"
 
-  app "shadps4.app"
+  app "shadPS4QtLauncher.app"
 
   zap trash: [
     "~/Library/Application Support/shadPS4",
     "~/Library/Preferences/com.shadps4-emu.shadps4.plist",
   ]
-
-  caveats do
-    requires_rosetta
-  end
 end

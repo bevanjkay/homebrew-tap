@@ -321,4 +321,92 @@ jobs:
           (!matrix.cask || steps.fetch.outcome == 'success' || steps.download-artifact.outcome == 'success') &&
           !matrix.skip_audit
 
-      - name: Uninstall conflicting formul
+      - name: Uninstall conflicting formulae
+        run: |
+          read -r -a formula_conflicts_array <<< "$FORMULA_CONFLICTS"
+          brew uninstall --formula --force "${formula_conflicts_array[@]}"
+        if: ${{ always() && steps.info.outcome == 'success' && env.FORMULA_CONFLICTS != '' }}
+        timeout-minutes: 30
+
+      - name: Uninstall conflicting casks
+        run: |
+          read -r -a cask_conflicts_array <<< "$CASK_CONFLICTS"
+          brew uninstall --cask --force "${cask_conflicts_array[@]}"
+        if: ${{ always() && steps.info.outcome == 'success' && env.CASK_CONFLICTS != '' }}
+        timeout-minutes: 30
+
+      - name: Run brew uninstall --cask --force --zap ${{ matrix.cask.token }}
+        run: |
+          brew uninstall --cask --force --zap '${{ matrix.cask.token }}'
+        if: always() && steps.info.outcome == 'success'
+        timeout-minutes: 30
+
+      - name: Take snapshot of installed and running apps and services
+        id: snapshot
+        run: |
+          brew ruby -r "$(brew --repository homebrew/cask)/cmd/lib/check.rb" <<'EOF'
+            File.open(ENV.fetch("GITHUB_ENV"), "a") do |f|
+              # We have to use a `HOMEBREW_` prefix so it will survive the
+              # environment variable filtering in `brew`.
+              f.puts "HOMEBREW_SNAPSHOT_BEFORE=#{JSON.generate(Check.all)}"
+            end
+          EOF
+        if: always() && steps.info.outcome == 'success'
+
+      - name: Run brew install --cask ${{ matrix.cask.token }}
+        id: install
+        run: brew install --cask '${{ matrix.cask.path }}'
+        if: >
+          always() && steps.info.outcome == 'success' &&
+          fromJSON(steps.info.outputs.macos_requirement_satisfied) &&
+          !matrix.skip_install
+        timeout-minutes: 30
+
+      - name: Run brew uninstall --cask ${{ matrix.cask.token }}
+        run: brew uninstall --cask '${{ matrix.cask.path }}'
+        if: always() && steps.install.outcome == 'success' && !fromJSON(steps.info.outputs.manual_installer)
+        timeout-minutes: 30
+
+      - name: Uninstall formula dependencies
+        run: |
+          read -r -a formula_dependencies_array <<< "$FORMULA_DEPENDENCIES"
+          brew uninstall --formula --force "${formula_dependencies_array[@]}"
+        if: ${{ always() && steps.install.outcome == 'success' && env.FORMULA_DEPENDENCIES != '' }}
+        timeout-minutes: 30
+
+      - name: Uninstall cask dependencies
+        run: |
+          read -r -a cask_dependencies_array <<< "$CASK_DEPENDENCIES"
+          brew uninstall --cask --force "${cask_dependencies_array[@]}"
+        if: ${{ always() && steps.install.outcome == 'success' && env.CASK_DEPENDENCIES != '' }}
+        timeout-minutes: 30
+
+      - name: Compare installed and running apps and services with snapshot
+        run: |
+          brew ruby -r "$(brew --repository homebrew/cask)/cmd/lib/check.rb" <<'EOF'
+            require "cask/cask_loader"
+            require "utils/github/actions"
+
+            before = JSON.parse(ENV.fetch("HOMEBREW_SNAPSHOT_BEFORE", "{}"))
+                         .transform_keys(&:to_sym)
+            after = Check.all
+
+            cask = Cask::CaskLoader.load('${{ matrix.cask.path }}')
+            errors = Check.errors(before, after, cask: cask)
+
+            errors.each do |error|
+              puts GitHub::Actions::Annotation.new(:error, error, file: '${{ matrix.cask.path }}')
+            end
+
+            exit 1 if errors.any?
+          EOF
+        if: always() && steps.snapshot.outcome == 'success'
+
+  conclusion:
+    name: conclusion
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Result
+        run: ${{ needs.test.result == 'success' }}

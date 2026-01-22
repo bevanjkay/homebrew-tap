@@ -111,7 +111,7 @@ jobs:
           {
             echo "### Wget Fetch"
             echo '```'
-            wget --spider -v --timeout="$TIMEOUT" "$URL" 2>&1 || true
+            wget --spider -v --timeout="$TIMEOUT" --tries=2 "$URL" 2>&1 || true
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 

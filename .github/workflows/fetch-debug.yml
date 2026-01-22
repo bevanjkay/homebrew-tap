@@ -118,17 +118,6 @@ jobs:
       - name: Setup Homebrew
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Homebrew Fetch (curl)
-        env:
-          URL: ${{ inputs.url }}
-        run: |
-          {
-            echo "### Homebrew Fetch (curl)"
-            echo '```'
-            brew fetch --curl "$URL" 2>&1 || true
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-
       - name: Homebrew curl config
         run: |
           {

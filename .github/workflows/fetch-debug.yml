@@ -1,0 +1,170 @@
+name: Debug URL Fetch
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "URL to debug"
+        required: true
+        type: string
+      timeout:
+        description: "Request timeout in seconds"
+        required: false
+        default: "30"
+        type: string
+      user_agent:
+        description: "Custom User-Agent (leave empty for default)"
+        required: false
+        type: string
+
+permissions: {}
+
+jobs:
+  debug-url:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: System Info
+        run: |
+          {
+            echo "### System Information"
+            echo "- **OS:** $(uname -a)"
+            echo "- **Runner:** ${{ matrix.os }}"
+            echo "- **Date:** $(date -u)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: DNS Resolution
+        env:
+          URL: ${{ inputs.url }}
+        run: |
+          HOST="${URL#*://}"
+          HOST="${HOST%%/*}"
+          {
+            echo "### DNS Resolution for $HOST"
+            echo '```'
+            echo "=== nslookup ==="
+            nslookup "$HOST" 2>&1 || true
+            echo ""
+            echo "=== dig (if available) ==="
+            dig "$HOST" +short 2>&1 || echo "dig not available"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: SSL/TLS Check
+        env:
+          URL: ${{ inputs.url }}
+        run: |
+          if [[ "$URL" == https://* ]]; then
+            HOST="${URL#*://}"
+            HOST="${HOST%%/*}"
+            {
+              echo "### SSL/TLS Information"
+              echo '```'
+              echo | openssl s_client -connect "$HOST:443" -servername "$HOST" 2>&1 | \
+                grep -E "(subject|issuer|notBefore|notAfter|Protocol|Cipher)" || true
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Curl Fetch (verbose)
+        env:
+          URL: ${{ inputs.url }}
+          TIMEOUT: ${{ inputs.timeout }}
+          USER_AGENT: ${{ inputs.user_agent }}
+        run: |
+          {
+            echo "### Curl Fetch"
+            echo '```'
+
+            CURL_ARGS=(-fsSL -v --connect-timeout "$TIMEOUT" --max-time "$((TIMEOUT * 2))" -o /dev/null)
+            CURL_ARGS+=(-w "HTTP Code: %{http_code}\nTime Total: %{time_total}s\nTime Connect: %{time_connect}s\nTime DNS: %{time_namelookup}s\nSpeed: %{speed_download} bytes/sec\nSize: %{size_download} bytes\nRedirects: %{num_redirects}\nFinal URL: %{url_effective}\n")
+
+            if [[ -n "$USER_AGENT" ]]; then
+              CURL_ARGS+=(-A "$USER_AGENT")
+            fi
+
+            curl "${CURL_ARGS[@]}" "$URL" 2>&1 || true
+
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Curl Fetch (with headers)
+        env:
+          URL: ${{ inputs.url }}
+          TIMEOUT: ${{ inputs.timeout }}
+        run: |
+          {
+            echo "### Response Headers"
+            echo '```'
+            curl -fsSL -I --connect-timeout "$TIMEOUT" "$URL" 2>&1 | head -50 || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Wget Fetch
+        env:
+          URL: ${{ inputs.url }}
+          TIMEOUT: ${{ inputs.timeout }}
+        run: |
+          {
+            echo "### Wget Fetch"
+            echo '```'
+            wget --spider -v --timeout="$TIMEOUT" "$URL" 2>&1 || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Setup Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Homebrew Fetch (curl)
+        env:
+          URL: ${{ inputs.url }}
+        run: |
+          {
+            echo "### Homebrew Fetch (curl)"
+            echo '```'
+            brew fetch --curl "$URL" 2>&1 || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Homebrew curl config
+        run: |
+          {
+            echo "### Homebrew curl Configuration"
+            echo '```'
+            echo "HOMEBREW_CURL: $(which curl)"
+            curl --version
+            echo ""
+            echo "HOMEBREW_CURLRC: ${HOMEBREW_CURLRC:-not set}"
+            echo "HOMEBREW_CURL_RETRIES: ${HOMEBREW_CURL_RETRIES:-not set}"
+            echo "HOMEBREW_USER_AGENT: $(brew --user-agent)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Network Configuration
+        env:
+          URL: ${{ inputs.url }}
+        run: |
+          HOST="${URL#*://}"
+          HOST="${HOST%%/*}"
+          {
+            echo "### Network Configuration"
+            echo '```'
+            echo "=== IP Address ==="
+            curl -s https://ifconfig.me 2>/dev/null || curl -s https://api.ipify.org || true
+            echo ""
+            echo "=== Route to host ==="
+            traceroute -m 10 "$HOST" 2>&1 | head -15 || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Compare with known good URL
+        run: |
+          {
+            echo "### Control Test (github.com)"
+            echo '```'
+            curl -fsSL -o /dev/null -w "HTTP: %{http_code}, Time: %{time_total}s\n" "https://github.com" 2>&1
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

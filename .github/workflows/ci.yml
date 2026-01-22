@@ -17,6 +17,11 @@ on:
         required: false
         default: false
         type: boolean
+      fetch_on_linux:
+        description: Fetch cask on Linux runner (for blocked URLs)
+        required: false
+        default: false
+        type: boolean
 
 env:
   HOMEBREW_DEVELOPER: 1
@@ -35,6 +40,7 @@ jobs:
   generate-matrix:
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
+      fetch_on_linux: ${{ steps.check-label.outputs.fetch_on_linux }}
     runs-on: macos-latest
     steps:
       - name: Set up Homebrew
@@ -48,8 +54,20 @@ jobs:
       - name: Check out Pull Request
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
-            fetch-depth: 0
-            persist-credentials: false
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check for fetch-on-linux label
+        id: check-label
+        env:
+          LABELS: ${{ toJson(github.event.pull_request.labels.*.name) }}
+          INPUT_FETCH_ON_LINUX: ${{ github.event.inputs.fetch_on_linux }}
+        run: |
+          if [[ "$INPUT_FETCH_ON_LINUX" == "true" ]] || echo "$LABELS" | jq -e 'index("fetch-on-linux")' > /dev/null 2>&1; then
+            echo "fetch_on_linux=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "fetch_on_linux=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Generate CI matrix
         id: generate-matrix
@@ -68,9 +86,78 @@ jobs:
             brew generate-cask-ci-matrix --url "$PULL_REQUEST_URL"
           fi
 
+  fetch-on-linux:
+    name: Fetch ${{ matrix.cask.token }} (Linux)
+    needs: generate-matrix
+    if: needs.generate-matrix.outputs.fetch_on_linux == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+    steps:
+      - name: Skip if not a cask job
+        if: ${{ !matrix.cask }}
+        run: echo "Not a cask job, skipping"
+
+      - name: Set up Homebrew
+        if: matrix.cask
+        uses: Homebrew/actions/setup-homebrew@master
+        with:
+          core: false
+          cask: true
+          test-bot: false
+
+      - name: Check out Pull Request
+        if: matrix.cask
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Fetch cask and prepare artifact
+        if: matrix.cask
+        id: fetch
+        run: |
+          brew ruby <<'EOF'
+            require "cask/cask_loader"
+            require "cask/download"
+            require "fileutils"
+
+            cask = Cask::CaskLoader.load('${{ matrix.cask.path }}')
+            download = Cask::Download.new(cask)
+
+            # Perform the download
+            cached_path = download.fetch
+
+            # Get the cache filename that Homebrew uses
+            cache_filename = cached_path.basename.to_s
+
+            # Copy to workspace for artifact upload
+            FileUtils.mkdir_p("cask-download")
+            FileUtils.cp(cached_path, "cask-download/#{cache_filename}")
+
+            File.open(ENV.fetch("GITHUB_OUTPUT"), "a") do |f|
+              f.puts "cache_filename=#{cache_filename}"
+            end
+
+            puts "Downloaded: #{cache_filename}"
+          EOF
+        timeout-minutes: 30
+
+      - name: Upload cask download
+        if: matrix.cask && steps.fetch.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: cask-download-${{ matrix.cask.token }}
+          path: cask-download/
+          retention-days: 1
+          if-no-files-found: error
+
   test:
     name: ${{ matrix.name }}
-    needs: generate-matrix
+    needs: [generate-matrix, fetch-on-linux]
+    if: always() && needs.generate-matrix.result == 'success'
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -108,7 +195,7 @@ jobs:
           path: ${{ steps.set-up-homebrew.outputs.gems-path }}
           key: ${{ matrix.runner }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
           restore-keys: ${{ matrix.runner }}-rubygems-
-      
+
       - name: Cache style cache
         if: runner.os == 'macOS'
         uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
@@ -122,6 +209,31 @@ jobs:
         run: brew test-bot --tap '${{ matrix.tap }}' --only-tap-syntax
         if: always() && !matrix.cask
 
+      - name: Download pre-fetched cask
+        id: download-artifact
+        if: >
+          matrix.cask &&
+          needs.generate-matrix.outputs.fetch_on_linux == 'true' &&
+          needs.fetch-on-linux.result == 'success'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: cask-download-${{ matrix.cask.token }}
+          path: cask-download/
+        continue-on-error: true
+
+      - name: Move pre-fetched cask to Homebrew cache
+        if: steps.download-artifact.outcome == 'success'
+        run: |
+          CACHE_DIR="$(brew --cache)/downloads"
+          mkdir -p "$CACHE_DIR"
+          for file in cask-download/*; do
+            if [[ -f "$file" ]]; then
+              cp "$file" "$CACHE_DIR/"
+              echo "Copied $(basename "$file") to Homebrew cache"
+            fi
+          done
+          ls -la "$CACHE_DIR"
+
       - name: Run brew fetch --cask ${{ matrix.cask.token }}
         id: fetch
         run: |
@@ -130,7 +242,13 @@ jobs:
         if: >
           always() &&
           contains(fromJSON('["success", "skipped"]'), steps.tap-syntax.outcome) &&
-          matrix.cask
+          matrix.cask &&
+          steps.download-artifact.outcome != 'success'
+
+      - name: Mark fetch as successful (pre-fetched)
+        id: fetch-prefetched
+        if: steps.download-artifact.outcome == 'success'
+        run: echo "Using pre-fetched cask from Linux runner"
 
       - name: Gather cask information
         id: info
@@ -174,7 +292,9 @@ jobs:
               f.puts "FORMULA_DEPENDENCIES=#{formula_dependencies&.join(" ")}" if formula_dependencies.present?
             end
           EOF
-        if: always() && steps.fetch.outcome == 'success' && matrix.cask
+        if: >
+          always() && matrix.cask &&
+          (steps.fetch.outcome == 'success' || steps.download-artifact.outcome == 'success')
 
       - name: Install formula dependencies
         run: |
@@ -198,95 +318,7 @@ jobs:
         if: >
           always() &&
           contains(fromJSON('["success", "skipped"]'), steps.tap-syntax.outcome) &&
-          (!matrix.cask || steps.fetch.outcome == 'success') &&
+          (!matrix.cask || steps.fetch.outcome == 'success' || steps.download-artifact.outcome == 'success') &&
           !matrix.skip_audit
 
-      - name: Uninstall conflicting formulae
-        run: |
-          read -r -a formula_conflicts_array <<< "$FORMULA_CONFLICTS"
-          brew uninstall --formula --force "${formula_conflicts_array[@]}"
-        if: ${{ always() && steps.info.outcome == 'success' && env.FORMULA_CONFLICTS != '' }}
-        timeout-minutes: 30
-  
-      - name: Uninstall conflicting casks
-        run: |
-          read -r -a cask_conflicts_array <<< "$CASK_CONFLICTS"
-          brew uninstall --cask --force "${cask_conflicts_array[@]}"
-        if: ${{ always() && steps.info.outcome == 'success' && env.CASK_CONFLICTS != '' }}
-        timeout-minutes: 30
-
-      - name: Run brew uninstall --cask --force --zap ${{ matrix.cask.token }}
-        run: |
-          brew uninstall --cask --force --zap '${{ matrix.cask.token }}'
-        if: always() && steps.info.outcome == 'success'
-        timeout-minutes: 30
-
-      - name: Take snapshot of installed and running apps and services
-        id: snapshot
-        run: |
-          brew ruby -r "$(brew --repository homebrew/cask)/cmd/lib/check.rb" <<'EOF'
-            File.open(ENV.fetch("GITHUB_ENV"), "a") do |f|
-              # We have to use a `HOMEBREW_` prefix so it will survive the
-              # environment variable filtering in `brew`.
-              f.puts "HOMEBREW_SNAPSHOT_BEFORE=#{JSON.generate(Check.all)}"
-            end
-          EOF
-        if: always() && steps.info.outcome == 'success'
-
-      - name: Run brew install --cask ${{ matrix.cask.token }}
-        id: install
-        run: brew install --cask '${{ matrix.cask.path }}'
-        if: >
-          always() && steps.info.outcome == 'success' &&
-          fromJSON(steps.info.outputs.macos_requirement_satisfied) &&
-          !matrix.skip_install
-        timeout-minutes: 30
-
-      - name: Run brew uninstall --cask ${{ matrix.cask.token }}
-        run: brew uninstall --cask '${{ matrix.cask.path }}'
-        if: always() && steps.install.outcome == 'success' && !fromJSON(steps.info.outputs.manual_installer)
-        timeout-minutes: 30
-
-      - name: Uninstall formula dependencies
-        run: |
-          read -r -a formula_dependencies_array <<< "$FORMULA_DEPENDENCIES"
-          brew uninstall --formula --force "${formula_dependencies_array[@]}"
-        if: ${{ always() && steps.install.outcome == 'success' && env.FORMULA_DEPENDENCIES != '' }}
-        timeout-minutes: 30
-
-      - name: Uninstall cask dependencies
-        run: |
-          read -r -a cask_dependencies_array <<< "$CASK_DEPENDENCIES"
-          brew uninstall --cask --force "${cask_dependencies_array[@]}"
-        if: ${{ always() && steps.install.outcome == 'success' && env.CASK_DEPENDENCIES != '' }}
-        timeout-minutes: 30
-
-      - name: Compare installed and running apps and services with snapshot
-        run: |
-          brew ruby -r "$(brew --repository homebrew/cask)/cmd/lib/check.rb" <<'EOF'
-            require "cask/cask_loader"
-            require "utils/github/actions"
-
-            before = JSON.parse(ENV.fetch("HOMEBREW_SNAPSHOT_BEFORE", "{}"))
-                         .transform_keys(&:to_sym)
-            after = Check.all
-
-            cask = Cask::CaskLoader.load('${{ matrix.cask.path }}')
-            errors = Check.errors(before, after, cask: cask)
-
-            errors.each do |error|
-              puts GitHub::Actions::Annotation.new(:error, error, file: '${{ matrix.cask.path }}')
-            end
-
-            exit 1 if errors.any?
-          EOF
-        if: always() && steps.snapshot.outcome == 'success'
-
-  conclusion:
-    name: conclusion
-    needs: test
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: Result
-        run: ${{ needs.test.result == 'success' }}
+      - name: Uninstall conflicting formul

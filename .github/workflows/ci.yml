@@ -117,6 +117,68 @@ jobs:
           key: macos-style-cache-${{ github.sha }}
           restore-keys: macos-style-cache-
 
+      - name: Patch brew for large file handling
+        run: |
+          cat > /tmp/curl.patch << 'PATCH'
+          --- a/Library/Homebrew/utils/curl.rb
+          +++ b/Library/Homebrew/utils/curl.rb
+          @@ -557,26 +557,34 @@ module Utils
+                 content_length = headers["content-length"]
+
+                 if status.success?
+          -        open_args = {}
+          -        content_type = headers["content-type"]
+          -
+          -        # Use the last `Content-Type` header if there is more than one instance
+          -        # in the response
+          -        content_type = content_type.last if content_type.is_a?(Array)
+          -
+          -        # Try to get encoding from Content-Type header
+          -        # TODO: add guessing encoding by <meta http-equiv="Content-Type" ...> tag
+          -        if content_type &&
+          -           (match = content_type.match(/;\s*charset\s*=\s*([^\s]+)/)) &&
+          -           (charset = match[1])
+          -          begin
+          -            open_args[:encoding] = Encoding.find(charset)
+          -          rescue ArgumentError
+          -            # Unknown charset in Content-Type header
+          +        file_path = T.must(file.path)
+          +        file_hash = Digest::SHA256.file(file_path).hexdigest if hash_needed
+          +
+          +        # Only load file contents for text-based content comparison on small files.
+          +        # Large binary files don't benefit from content comparison.
+          +        max_read_size = 100 * 1024 * 1024
+          +        if File.size(file_path) <= max_read_size
+          +          open_args = {}
+          +          content_type = headers["content-type"]
+          +
+          +          # Use the last `Content-Type` header if there is more than one instance
+          +          # in the response
+          +          content_type = content_type.last if content_type.is_a?(Array)
+          +
+          +          # Try to get encoding from Content-Type header
+          +          # TODO: add guessing encoding by <meta http-equiv="Content-type" ...> tag
+          +          if content_type &&
+          +             (match = content_type.match(/;\s*charset\s*=\s*([^\s]+)/)) &&
+          +             (charset = match[1])
+          +            begin
+          +              open_args[:encoding] = Encoding.find(charset)
+          +            rescue ArgumentError
+          +              # Unknown charset in Content-Type header
+          +            end
+                     end
+          +
+          +          file_contents = File.read(file_path, **open_args)
+                   end
+          -        file_contents = File.read(T.must(file.path), **open_args)
+          -        file_hash = Digest::SHA256.hexdigest(file_contents) if hash_needed
+                 end
+
+                 {
+          PATCH
+          cd "$(brew --repository)" && git apply /tmp/curl.patch
+        if: matrix.cask
+
       - name: Run brew test-bot --only-tap-syntax
         id: tap-syntax
         run: brew test-bot --tap '${{ matrix.tap }}' --only-tap-syntax

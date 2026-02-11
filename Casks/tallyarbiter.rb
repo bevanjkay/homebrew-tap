@@ -1,8 +1,11 @@
 cask "tallyarbiter" do
-  version "3.1.1"
-  sha256 "7100aa56714618c8efd4afbf93d732f89c59039eff6114a0ccfb13ef8878e7bc"
+  arch arm: "arm64", intel: "x64"
 
-  url "https://github.com/josephdadams/TallyArbiter/releases/download/v#{version}/TallyArbiter-#{version}-arm64.dmg",
+  version "3.2.0"
+  sha256 arm:   "4740e2fba9d6971db3083a08351c86fc157781ad78d077e8c7cc7c5212ef170b",
+         intel: "cf8b7cdc43f9b964beec12b4f9b02c7f611d75fd33b7e522c972bf5e630d00ec"
+
+  url "https://github.com/josephdadams/TallyArbiter/releases/download/v#{version}/tallyarbiter-v#{version}-mac-#{arch}.dmg",
       verified: "github.com/josephdadams/TallyArbiter/"
   name "TallyArbiter"
   desc "Camera tally light system"
@@ -13,12 +16,12 @@ cask "tallyarbiter" do
     strategy :github_latest
   end
 
-  depends_on macos: ">= :catalina"
+  depends_on macos: ">= :big_sur"
 
-  app "TallyArbiter.app"
+  app "Tally Arbiter.app"
 
   postflight do
-    system "xattr", "-d", "com.apple.quarantine", "/Applications/TallyArbiter.app"
+    system "xattr", "-d", "com.apple.quarantine", "/Applications/Tally Arbiter.app"
   end
 
   zap trash: [

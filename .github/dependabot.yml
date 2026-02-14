@@ -1,17 +1,22 @@
----
 version: 2
 updates:
-- package-ecosystem: github-actions
-  directory: "/"
-  schedule:
-    interval: daily
-  cooldown:
-    default-days: 7
-  allow:
-  - dependency-type: all
-  ignore:
-  - dependency-name: actions/stale
-  groups:
-    artifacts:
-      patterns:
-      - actions/*-artifact
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      npm-dependencies:
+        patterns:
+          - "*"
+    cooldown:
+      default-days: 7
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      gh-actions:
+        patterns:
+          - "*"
+    cooldown:
+      default-days: 7

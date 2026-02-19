@@ -32,7 +32,7 @@ jobs:
 
       - uses: Homebrew/actions/cache-homebrew-prefix@04a6d8cfe9d251e2afb78c5bdc6274ec9642aea2 # main
         with:
-          install: actionlint shellcheck zizmor
+          install: actionlint shellcheck zizmor osv-scanner
           uninstall: true
 
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -42,6 +42,8 @@ jobs:
       - run: zizmor .
 
       - run: actionlint
+
+      - run: osv-scanner --recursive . || { rc=$?; [[ "${rc}" -eq 128 ]]; }
 
       - run: zizmor --format sarif . > results.sarif
         env:
@@ -128,7 +130,8 @@ jobs:
 
   dependency_review:
     # Flags newly-introduced vulnerable dependencies on PRs before they land on main
-    if: github.event_name == 'pull_request'
+    # Requires GitHub Advanced Security on private repos — skip silently if not available
+    if: github.event_name == 'pull_request' && !github.event.repository.private
     runs-on: ubuntu-latest
     permissions:
       contents: read

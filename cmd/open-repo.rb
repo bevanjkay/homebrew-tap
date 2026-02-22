@@ -27,8 +27,8 @@ module Homebrew
           if formula.homepage.include?("github.com")
             formula.homepage
           else
-            stable_url = infer_github_repo(T.must(formula.stable).url)
-            head_url = formula.head&.url && infer_github_repo(T.must(formula.head).url) if formula.head
+            stable_url = infer_github_repo(T.must(T.must(formula.stable).url))
+            head_url = infer_github_repo(T.must(T.must(formula.head).url)) if formula.head
 
             stable_url || head_url
           end

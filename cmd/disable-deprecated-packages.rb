@@ -2,8 +2,6 @@
 # frozen_string_literal: true
 
 require "abstract_command"
-require "formula"
-require "cask/cask"
 require "open3"
 require "date"
 
@@ -31,16 +29,14 @@ module Homebrew
 
         odie "Invalid tap: #{tap_string}" if @target_tap.nil?
 
-        dry_run = args.dry_run?
+        dry_run = args.flags_only.include?("--dry-run")
 
-        packages_to_disable = find_deprecated(packages: Formula.all + Cask::Cask.all)
+        package_files = tap_package_files
+        packages_to_disable = find_deprecated(package_files: package_files)
 
         if dry_run
           puts "Dry run mode: The following packages would be disabled:"
-          packages_to_disable.each do |package|
-            name = package.is_a?(Formula) ? package.name : package.token
-            puts "- #{name}"
-          end
+          packages_to_disable.each { |file_path| puts "- #{package_name(file_path)}" }
           return
         end
 
@@ -51,15 +47,12 @@ module Homebrew
 
         puts "Disabling deprecated packages..."
 
-        packages_to_disable.each do |package|
-          file_path = sourcefile_path(package)
+        packages_to_disable.each do |file_path|
           content = File.read(file_path)
-          new_content = content
-                        # Transform the `deprecate!` line
-                        .gsub(/(deprecate! date: ".*?"(, because: .*?)?)$/,
-                              "\\1\n  disable! date: \"#{Date.today}\"\\2")
-                        # Remove the `livecheck` block, including nested content
-                        .gsub(/^\s*livecheck\s+do\s*\n(?:\s*.*\n)*?\s*end\n?/, "")
+          new_content = content.gsub(
+            /(deprecate! date: ".*?"(, because: .*?)?)$/,
+            "\\1\n  disable! date: \"#{Date.today}\"\\2",
+          ).gsub(/^\s*livecheck\s+do\s*\n(?:\s*.*\n)*?\s*end\n?/, "")
           File.write(file_path, new_content)
         end
 
@@ -76,10 +69,10 @@ module Homebrew
 
         git "-C", tap_dir.to_s, "add", "--all"
 
-        packages_to_disable.each do |package|
-          name = package.is_a?(Formula) ? package.name : package.token
+        packages_to_disable.each do |file_path|
+          name = package_name(file_path)
           puts "Disabled `#{name}`."
-          git "-C", tap_dir.to_s, "commit", sourcefile_path(package), "--message",
+          git "-C", tap_dir.to_s, "commit", file_path, "--message",
               "#{name}: disable", "--quiet"
         end
       end
@@ -90,27 +83,48 @@ module Homebrew
         exit $CHILD_STATUS.exitstatus unless $CHILD_STATUS.success?
       end
 
-      sig { params(packages: T::Array[T.any(Formula, Cask::Cask)]).returns(T::Array[T.any(Formula, Cask::Cask)]) }
-      def find_deprecated(packages: [])
+      sig { returns(T::Array[String]) }
+      def tap_package_files
+        files = T.let([], T::Array[String])
+
+        formula_dir = T.must(@target_tap).path/"Formula"
+        cask_dir = T.must(@target_tap).path/"Casks"
+
+        files.concat(Dir.glob((formula_dir/"**/*.rb").to_s)) if formula_dir.directory?
+        files.concat(Dir.glob((cask_dir/"**/*.rb").to_s)) if cask_dir.directory?
+
+        files
+      end
+
+      sig { params(package_files: T::Array[String]).returns(T::Array[String]) }
+      def find_deprecated(package_files:)
         puts "Finding deprecated packages..."
         twelve_months_ago = Date.today << 12 # Subtracts 12 months from the current date
 
-        packages.select do |package|
-          next false if package.tap != @target_tap
-          next false unless package.deprecated?
-          next false if package.disable_date
-          next false if package.deprecation_date.nil?
-          next false if package.name == "terraform"
+        package_files.select do |file_path|
+          content = File.read(file_path)
+          name = package_name(file_path)
 
-          package.deprecation_date <= twelve_months_ago
+          next false if name == "terraform"
+          next false if content.match?(/^\s*disable!\s+date:\s*"/)
+
+          deprecate_match = content.match(/^\s*deprecate!\s+date:\s*"(\d{4}-\d{2}-\d{2})"/)
+          next false if deprecate_match.nil?
+
+          deprecation_date = begin
+            Date.parse(T.must(deprecate_match[1]))
+          rescue Date::Error
+            nil
+          end
+          next false if deprecation_date.nil?
+
+          deprecation_date <= twelve_months_ago
         end
       end
 
-      sig { params(package: T.any(Formula, Cask::Cask)).returns(String) }
-      def sourcefile_path(package)
-        return package.path.to_s unless package.is_a?(Cask::Cask)
-
-        package.sourcefile_path.to_s if package.is_a?(Cask::Cask)
+      sig { params(file_path: String).returns(String) }
+      def package_name(file_path)
+        File.basename(file_path, ".rb")
       end
     end
   end

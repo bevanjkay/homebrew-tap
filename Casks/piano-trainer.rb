@@ -1,6 +1,6 @@
 cask "piano-trainer" do
-  version "1.3.2"
-  sha256 "99284a001e9001e618f04149b46d0bdf65f1f318ef1df531cd18f3e2bdb4993f"
+  version "1.3.3"
+  sha256 "3a41ea5c8da152984397531dbc0b25d3610c9137b32245d48b0eddb79bb09448"
 
   url "https://github.com/ZaneH/piano-trainer/releases/download/app-v#{version}/Piano.Trainer_#{version}_x64.dmg",
       verified: "github.com/ZaneH/piano-trainer/"

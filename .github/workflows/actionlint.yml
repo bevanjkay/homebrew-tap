@@ -128,54 +128,6 @@ jobs:
           sarif_file: osv-results.sarif
           category: osv-scanner
 
-  trivy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518 # 0.34.1
-        with:
-          scan-type: fs
-          format: sarif
-          output: trivy-results.sarif
-          exit-code: "0"
-
-      - name: Upload Trivy SARIF artifact
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: always() && github.event_name != 'merge_group'
-        with:
-          name: trivy-results.sarif
-          path: trivy-results.sarif
-
-  trivy_upload_sarif:
-    needs: trivy
-    if: >
-      always() &&
-      !contains(fromJSON('["cancelled", "skipped"]'), needs.trivy.result) &&
-      !github.event.repository.private &&
-      github.event_name != 'merge_group'
-    runs-on: ubuntu-slim
-    permissions:
-      contents: read
-      security-events: write
-    steps:
-      - name: Download Trivy SARIF artifact
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: trivy-results.sarif
-          path: trivy-results.sarif
-
-      - name: Upload Trivy SARIF to Code Scanning
-        uses: github/codeql-action/upload-sarif@89a39a4e59826350b863aa6b6252a07ad50cf83e # v4.32.4
-        with:
-          sarif_file: trivy-results.sarif
-          category: trivy
-
   dependency_review:
     # Flags newly-introduced vulnerable dependencies on PRs before they land on main
     # Requires GitHub Advanced Security on private repos — skip silently if not available

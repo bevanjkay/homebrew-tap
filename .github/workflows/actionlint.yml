@@ -68,6 +68,25 @@ jobs:
           path: osv-results.sarif
           if-no-files-found: ignore
 
+      - name: Add OSV summary
+        if: always() && steps.osv.outputs.sarif == 'true'
+        run: |
+          {
+            echo "## OSV Scanner"
+            if [[ -f osv-results.sarif ]]; then
+              count="$(jq '.runs[0].results | length' osv-results.sarif 2>/dev/null || echo 0)"
+              echo "- Findings: ${count}"
+              if [[ "${count}" -gt 0 ]]; then
+                echo ""
+                echo "<details><summary>Top findings (up to 20)</summary>"
+                jq -r '.runs[0].results[:20][] | "- \(.ruleId // "unknown"): \(.message.text // "No message")"' osv-results.sarif 2>/dev/null || true
+                echo "</details>"
+              fi
+            else
+              echo "- No SARIF output generated."
+            fi
+          } >> "${GITHUB_STEP_SUMMARY}"
+
       - run: zizmor --format sarif . > results.sarif
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

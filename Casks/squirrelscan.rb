@@ -3,7 +3,7 @@ cask "squirrelscan" do
 
   version "0.0.38"
   sha256 arm:   "b5ac9895d3bf084e224f7e675818e799d3f01567218a774cc45cd4a6523866a8",
-         intel: "asdf"
+         intel: "ae328d5d92a1b431aea6474ff1ddcc2b2bb63bc64ca7467d5b57afe655902606"
 
   url "https://github.com/squirrelscan/squirrelscan/releases/download/v#{version}/squirrel-#{version}-darwin-#{arch}",
       verified: "github.com/squirrelscan/squirrelscan/"

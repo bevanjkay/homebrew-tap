@@ -2,8 +2,8 @@ version: 2
 updates:
   - package-ecosystem: npm
     directories:
-      - "/"
-      - "/*"
+      - /
+      - /**/*
     schedule:
       interval: weekly
       day: monday
@@ -32,8 +32,8 @@ updates:
       default-days: 7
   - package-ecosystem: docker
     directories:
-      - "/"
-      - "/*"
+      - /
+      - /**/*
     schedule:
       interval: weekly
       day: monday
@@ -47,8 +47,8 @@ updates:
       default-days: 7
   - package-ecosystem: pip
     directories:
-      - "/"
-      - "/*"
+      - /
+      - /**/*
     schedule:
       interval: weekly
       day: monday

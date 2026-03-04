@@ -1,7 +1,9 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: /
+    directories:
+      - "/"
+      - "/*"
     schedule:
       interval: weekly
       day: monday
@@ -29,7 +31,9 @@ updates:
     cooldown:
       default-days: 7
   - package-ecosystem: docker
-    directory: /
+    directories:
+      - "/"
+      - "/*"
     schedule:
       interval: weekly
       day: monday
@@ -42,7 +46,9 @@ updates:
     cooldown:
       default-days: 7
   - package-ecosystem: pip
-    directory: /
+    directories:
+      - "/"
+      - "/*"
     schedule:
       interval: weekly
       day: monday

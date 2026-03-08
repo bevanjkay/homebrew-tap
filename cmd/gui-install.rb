@@ -24,7 +24,7 @@ module Homebrew
         cask = Cask::CaskLoader.load(T.must(token))
 
         # Find the manual installer artifact
-        manual_installer = cask.artifacts.select { |artifact| artifact.is_a?(Cask::Artifact::Installer) }&.first
+        manual_installer = cask.artifacts.grep(Cask::Artifact::Installer).first
         installer_path = File.join(cask.caskroom_path, cask.version.to_s, manual_installer.path)
 
         system "brew", "reinstall", T.must(token)

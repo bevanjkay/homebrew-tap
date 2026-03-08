@@ -41,6 +41,6 @@ cask "boom-3d-audio-component" do
       target: "#{staged_path}/#{app_path} #{version}.app"
 
   postflight do
-    system "open '#{staged_path}/#{app_path} #{version}.app' -W"
+    system "open", "#{staged_path}/#{app_path} #{version}.app", "-W"
   end
 end

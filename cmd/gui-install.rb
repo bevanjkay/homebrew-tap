@@ -25,11 +25,12 @@ module Homebrew
 
         # Find the manual installer artifact
         manual_installer = cask.artifacts.grep(Cask::Artifact::Installer).first
+        odie "No installer artifact found for #{token}" if manual_installer.nil?
         installer_path = File.join(cask.caskroom_path, cask.version.to_s, manual_installer.path)
 
         system "brew", "reinstall", T.must(token)
 
-        system "open '#{installer_path}' -W"
+        system "open", installer_path, "-W"
       end
     end
   end

@@ -61,9 +61,6 @@ jobs:
           then
             # shellcheck disable=SC2086 # $INPUT_CASKS is a space-separated list of cask tokens
             brew generate-cask-ci-matrix ${{ github.event.inputs.skip_install && '--skip-install' }} ${{ github.event.inputs.new_cask && '--new' }} --casks $INPUT_CASKS
-          elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]
-          then
-            brew generate-cask-ci-matrix --syntax-only
           else
             brew generate-cask-ci-matrix --url "$PULL_REQUEST_URL"
           fi

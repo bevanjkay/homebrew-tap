@@ -21,6 +21,7 @@ permissions:
 jobs:
   remove-disabled-packages:
     # if: github.repository_owner == 'Homebrew'
+    environment: github_actions
     runs-on: macos-latest
     env:
       REMOVAL_BRANCH: remove-disabled-packages

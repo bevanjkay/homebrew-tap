@@ -7,9 +7,9 @@ cask "mas-static" do
            intel: "89dd223c3920501e4509a288cda0955e1008b710e78cb33dbd6b25186fa94b03"
   end
   on_ventura :or_newer do
-    version "5.2.0"
-    sha256 arm:   "d17aee6b9aaad7e6bb0c1cba5e16fd5838e80509310963c525001e0f7b5756db",
-           intel: "cbdc5f8a53c460ebb5ce0d2bc7421c95f51ecbfc0e071446d1fc80edaaf12e95"
+    version "6.0.0"
+    sha256 arm:   "c720004a5e66fc8df031075e52d43f067f8b229ffbe412d15989fd793f19f2cc",
+           intel: "1f7c6c80e79e096e824500a3587633e803dc8b08a86c72592611a0ac60b34989"
   end
 
   url "https://github.com/mas-cli/mas/releases/download/v#{version}/mas-#{version}-#{arch}.pkg"

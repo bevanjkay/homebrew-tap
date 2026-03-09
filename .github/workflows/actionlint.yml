@@ -61,7 +61,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload OSV Scanner SARIF artifact
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         if: always() && steps.osv.outputs.sarif == 'true' && github.event_name != 'merge_group'
         with:
           name: osv-results.sarif
@@ -92,7 +92,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload SARIF file
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         if: always() && github.event_name != 'merge_group'
         with:
           name: results.sarif
@@ -151,7 +151,7 @@ jobs:
     # Flags newly-introduced vulnerable dependencies on PRs before they land on main
     # Requires GitHub Advanced Security on private repos — skip silently if not available
     if: github.event_name == 'pull_request' && !github.event.repository.private
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       contents: read
     steps:

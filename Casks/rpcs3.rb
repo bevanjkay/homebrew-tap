@@ -1,6 +1,6 @@
 cask "rpcs3" do
-  version "0.0.39-18761-ebf9374c,ebf9374ccdfe9bc1d8a9535d6b3c5335e03e9ac6"
-  sha256 "5891bae9828f8eaac764fbc7ce32b6a423c93bf3fb97441d99f7fed81930ba64"
+  version "0.0.40-18922-71f0d5c6,71f0d5c60233494e7fe2c3f2ff416a00c87480fb"
+  sha256 "7132912635cd40dc6ae63df75e89fac7de97574d1cb2f1f0a66c83548285272f"
 
   url "https://github.com/RPCS3/rpcs3-binaries-mac/releases/download/build-#{version.csv.second}/rpcs3-v#{version.csv.first}_macos.7z",
       verified: "github.com/RPCS3/rpcs3-binaries-mac/"
@@ -9,22 +9,10 @@ cask "rpcs3" do
   homepage "https://rpcs3.net/"
 
   livecheck do
-    url "https://rpcs3.net/download"
-    regex(%r{href=.*?([^-]+)/rpcs3[._-]v?((?:\d+(?:[.-]\d+)+)[._-](?:[a-f]|[0-9])+)[._-]macos\.7z}i)
-    strategy :page_match do |page, regex|
-      current_version, current_build = version.csv
-      build, version = page.scan(regex).max_by(&:first)
-
-      current_build_number = current_version.split("-").second
-      build_number = version.split("-").second
-
-      # If the current version is within 5 builds of the latest, use the current version
-      if build_number && current_build_number.to_i + 5 > build_number.to_i
-        version = current_version
-        build = current_build
-      end
-
-      "#{version},#{build}"
+    url "https://update.rpcs3.net/?api=v3&os_type=macos&os_arch=x64&os_version=999"
+    regex(%r{/build[._-]([^-]+)/rpcs3[._-]v?((?:\d+(?:[.-]\d+)+)[._-](?:[a-f]|[0-9])+)[._-]macos\.7z}i)
+    strategy :json do |json, regex|
+      json.dig("latest_build", "mac", "download").scan(regex).map { |match| "#{match[1]},#{match[0]}" }
     end
   end
 

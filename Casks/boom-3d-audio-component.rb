@@ -1,6 +1,6 @@
 cask "boom-3d-audio-component" do
   version "2.2.0"
-  sha256 "1efb0ec94acaf5571e0130f0e2a10b17893eb458b7b2ce2e54c325d10bad8579"
+  sha256 "80eddf50d2506ed42454e288f4bfdc0544ef12ecd6befb3d1c86c3b0b164f3ed"
 
   url "https://d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/catalina/v#{version}_tagged_surround/AudioComponentInstaller.zip",
       verified: "d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/",
@@ -41,6 +41,6 @@ cask "boom-3d-audio-component" do
       target: "#{staged_path}/#{app_path} #{version}.app"
 
   postflight do
-    system "open '#{staged_path}/#{app_path} #{version}.app' -W"
+    system "open", "#{staged_path}/#{app_path} #{version}.app", "-W"
   end
 end

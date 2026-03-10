@@ -13,7 +13,7 @@ cask "bmd-hyperdeck" do
         "policy"       => "true",
       }
   name "Blackmagic HyperDeck"
-  desc "Update and manage Blackmagic HyperDeck Hardwarecd"
+  desc "Update and manage Blackmagic HyperDeck hardware"
   homepage "https://www.blackmagicdesign.com/"
 
   livecheck do

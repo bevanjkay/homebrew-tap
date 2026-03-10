@@ -78,12 +78,6 @@ module Homebrew
         system "git", *args
         exit $CHILD_STATUS.exitstatus unless $CHILD_STATUS.success?
       end
-
-      sig { params(package: T.any(Formula, Cask::Cask)).returns(String) }
-      def sourcefile_path(package)
-        package.path.to_s unless package.is_a?(Cask::Cask)
-        package.sourcefile_path.to_s if package.is_a?(Cask::Cask)
-      end
     end
   end
 end

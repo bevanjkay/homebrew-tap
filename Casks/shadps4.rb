@@ -12,14 +12,14 @@ cask "shadps4" do
     url :url
     regex(/v?shadps4QTLauncher[._-](.+)/i)
     strategy :git do |tags, regex|
-     tags.filter_map do |tag|
-       match = tag[regex, 1]
-       split = match&.split("-")
-       part_one = split[..2]&.join("-")
-       part_two = split[3]
+      tags.filter_map do |tag|
+        match = tag[regex, 1]
+        split = match&.split("-")
+        part_one = split[..2]&.join("-")
+        part_two = split[3]
 
-       "#{part_one},#{part_two}"
-     end
+        "#{part_one},#{part_two}"
+      end
     end
   end
 

@@ -6,6 +6,7 @@ require "json"
 require "open3"
 require "pathname"
 require "tap"
+require "timeout"
 
 module Homebrew
   module Cmd
@@ -16,6 +17,7 @@ module Homebrew
         (Pathname.new(Dir.home)/".homebrew/audit_signing_results.json").freeze,
         Pathname,
       )
+      FETCH_TIMEOUT_SECONDS = T.let(120, Integer)
       MAX_ERROR_LENGTH = T.let(500, Integer)
       DOWNLOADS_WARNING_THRESHOLD_BYTES = T.let(20 * 1024 * 1024 * 1024, Integer)
       ANSI_RESET = T.let("\e[0m", String)
@@ -29,6 +31,7 @@ module Homebrew
         const :passed, T::Boolean
         const :error, T.nilable(String)
         const :failure_source, T.nilable(String)
+        const :persist_result, T::Boolean
       end
 
       class Args < Homebrew::CLI::Args
@@ -263,14 +266,29 @@ module Homebrew
       }
       def fetch_token(token, mutex, progress_index:, total_lines:)
         log_progress(mutex, progress_index, total_lines, "fetching #{token}", color: :blue)
-        fetch_stdout, fetch_stderr, fetch_status = Open3.capture3("brew", "fetch", "--cask", "--retry", token)
+        fetch_stdout, fetch_stderr, fetch_status, timed_out = fetch_with_timeout(token)
+        if timed_out
+          log_progress(mutex, progress_index, total_lines, "fetch timeout #{token}", color: :yellow)
+          return TokenResult.new(
+            passed:         false,
+            error:          "Fetch timed out after #{FETCH_TIMEOUT_SECONDS} seconds.",
+            failure_source: "fetch_timeout",
+            persist_result: false,
+          )
+        end
+
         unless fetch_status.success?
           error = extract_error(fetch_stdout, fetch_stderr)
           log_progress(mutex, progress_index, total_lines, "fetch failed #{token}", color: :orange)
-          return TokenResult.new(passed: false, error: error, failure_source: "fetch")
+          return TokenResult.new(
+            passed:         false,
+            error:          error,
+            failure_source: "fetch",
+            persist_result: true,
+          )
         end
 
-        TokenResult.new(passed: true, error: nil, failure_source: nil)
+        TokenResult.new(passed: true, error: nil, failure_source: nil, persist_result: true)
       end
 
       sig {
@@ -284,12 +302,50 @@ module Homebrew
 
         if status.success?
           log_progress(mutex, progress_index, total_lines, "passed #{token}", color: :green)
-          return TokenResult.new(passed: true, error: nil, failure_source: nil)
+          return TokenResult.new(passed: true, error: nil, failure_source: nil, persist_result: true)
         end
 
         error = extract_error(stdout, stderr)
         log_progress(mutex, progress_index, total_lines, "audit failed #{token}", color: :red)
-        TokenResult.new(passed: false, error: error, failure_source: "audit")
+        TokenResult.new(passed: false, error: error, failure_source: "audit", persist_result: true)
+      end
+
+      sig { params(token: String).returns([String, String, Process::Status, T::Boolean]) }
+      def fetch_with_timeout(token)
+        stdout_output = T.let(+"", String)
+        stderr_output = T.let(+"", String)
+        timed_out = T.let(false, T::Boolean)
+        status = T.let(nil, T.nilable(Process::Status))
+
+        Open3.popen3("brew", "fetch", "--cask", "--retry", token) do |stdin, stdout, stderr, wait_thread|
+          stdin.close
+          stdout_reader = Thread.new { stdout.read }
+          stderr_reader = Thread.new { stderr.read }
+
+          begin
+            Timeout.timeout(FETCH_TIMEOUT_SECONDS) do
+              status = wait_thread.value
+            end
+          rescue Timeout::Error
+            timed_out = true
+            Process.kill("TERM", wait_thread.pid)
+            begin
+              Timeout.timeout(5) do
+                status = wait_thread.value
+              end
+            rescue Timeout::Error
+              Process.kill("KILL", wait_thread.pid)
+              status = wait_thread.value
+            rescue Errno::ESRCH
+              status = wait_thread.value
+            end
+          ensure
+            stdout_output = T.cast(stdout_reader.value, String)
+            stderr_output = T.cast(stderr_reader.value, String)
+          end
+        end
+
+        [stdout_output, stderr_output, T.must(status), timed_out]
       end
 
       sig {
@@ -306,8 +362,10 @@ module Homebrew
       }
       def record_result(token:, result:, mutex:, results:, batch_results:, results_file:, details:, details_file:)
         mutex.synchronize do
-          results[token] = result.passed
           batch_results[token] = result
+          return unless result.persist_result
+
+          results[token] = result.passed
           if result.error.present?
             details[token] = T.must(result.error)
           else
@@ -344,7 +402,7 @@ module Homebrew
 
         failed_tokens.each do |token|
           puts "==> #{token}"
-          detail = details[token].presence || "Command failed without output."
+          detail = details[token].presence || audit_results.fetch(token).error || "Command failed without output."
           detail.each_line do |line|
             puts line.chomp
           end

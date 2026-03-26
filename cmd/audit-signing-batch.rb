@@ -4,7 +4,6 @@
 require "abstract_command"
 require "json"
 require "open3"
-require "pathname"
 require "tap"
 require "timeout"
 

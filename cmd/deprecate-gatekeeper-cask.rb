@@ -4,7 +4,6 @@
 require "abstract_command"
 require "cask/cask_loader"
 require "open3"
-require "pathname"
 require "tap"
 require "tempfile"
 

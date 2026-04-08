@@ -1,8 +1,8 @@
 cask "bmd-converters" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "12.2.0,e5ff50a541a1442e8d9960e8fa3be4a6,ce1f35a4dad54e65a5e425aa7b000099"
-  sha256 "27481a52a15f83ddf4dff36098e87deebf05a3a444ad439bb946e0d7af9b5516"
+  version "12.2.1,2a6a627befde4953b30ab218c4bf4976,f53850f3307f4d5b8b5a45f3605943ff"
+  sha256 "d28b023ede2a085461a2669582517fd03e7f4c6a4161638303cc17fb11f9173c"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

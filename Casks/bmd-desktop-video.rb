@@ -1,8 +1,8 @@
 cask "bmd-desktop-video" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "15.3.1,35ef0e94c5ad4f6eb3ee320aa18783cb,29c12a3b55f7445886addf92522f5d18"
-  sha256 "e894371c4cff92624cee1a4ac3880e75e940574711fa3b78629f572943eeada5"
+  version "16.0.0,ca121ecc631c45d2917596da7d3d6706,447cd35d170a4b499db8b7cbd7c1a07e"
+  sha256 "2f3e76fbd4d83afada4cc831d4ad02b006cd823c4e4738005675b444782bd0fa"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

@@ -13,29 +13,20 @@ cask "mole-static" do
     strategy :github_latest
   end
 
-  installer script: {
-    executable: "#{staged_path}/install.sh",
-    args:       ["--prefix", staged_path.to_s],
-    sudo:       true,
-  }
-  binary "mo"
-  binary "mole"
+  on_macos do
+    installer script: {
+      executable: "#{staged_path}/install.sh",
+      args:       ["--prefix", staged_path.to_s],
+      sudo:       true,
+    }
+    binary "mo"
+    binary "mole"
 
-  preflight do
-    # Fix unbound variable error by expanding tmp directory in trap
-    file = "#{staged_path}/install.sh"
-    if File.exist?(file)
-      content = File.read(file)
-      content.gsub!("trap 'stop_line_spinner 2>/dev/null; rm -rf \"$tmp\"' EXIT",
-                    "trap \"stop_line_spinner 2>/dev/null; rm -rf '$tmp'\" EXIT")
-      File.write(file, content)
-    end
+    uninstall script: {
+      executable: "mo",
+      args:       ["remove"],
+    }
   end
-
-  uninstall script: {
-    executable: "mo",
-    args:       ["remove"],
-  }
 
   # No zap stanza required
 end

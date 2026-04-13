@@ -1,6 +1,6 @@
 cask "shadps4" do
-  version "2026-03-21,92bdc40eef82a7a3ee241c35ba961d11a902dd8e"
-  sha256 "edd8517dea4f712574511390c71ee8bf16c79357e96a32af467f4877d9623967"
+  version "2026-04-13,eef10fd100a48c45e78b80e72397497338228e20"
+  sha256 "fda68f3dbad4eb6cb82249bc24b42a3c82071ec638ade435e9911ca96addd493"
 
   url "https://github.com/shadps4-emu/shadps4-qtlauncher/releases/download/shadPS4QtLauncher-#{version.tr(",", "-")}/shadPS4QtLauncher-macos-qt-#{version.csv.first}-#{version.csv.second&.slice(0, 7)}.zip",
       verified: "github.com/shadps4-emu/shadps4-qtlauncher/"
@@ -15,6 +15,8 @@ cask "shadps4" do
       tags.filter_map do |tag|
         match = tag[regex, 1]
         split = match&.split("-")
+        next if split.blank?
+
         part_one = split[..2]&.join("-")
         part_two = split[3]
 

@@ -10,7 +10,13 @@ cask "enttec-emu" do
 
   livecheck do
     url "https://s3-us-west-2.amazonaws.com/enttec-software-builds/emu/emu-versions.json"
-    regex(/EMU[._-]v?(\d+(?:\.\d+)+)\.pkg","Stages":\["Beta","Production/i)
+    strategy :json do |json|
+      json["EMU"].filter_map do |version|
+        next unless version["Stages"]&.any?("Production")
+
+        version["VersionNumber"]
+      end
+    end
   end
 
   pkg "EMU-#{version}.pkg"

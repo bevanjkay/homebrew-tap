@@ -5,7 +5,6 @@
     "b-output-factory": "homebrew/cask/output-factory",
     "bible-import": "bevanjkay/formulae",
     "companion": "homebrew/cask",
-    "companion@beta": "homebrew/cask",
     "companion-satellite": "homebrew/cask",
     "dante-controller": "homebrew/cask",
     "dante-via": "homebrew/cask",

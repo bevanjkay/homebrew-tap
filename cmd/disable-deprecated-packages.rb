@@ -8,6 +8,10 @@ require "date"
 module Homebrew
   module Cmd
     class DisableDeprecatedPackages < AbstractCommand
+      PACKAGES_TO_IGNORE = %w[
+        whisky
+        terraform
+      ].freeze
       cmd_args do
         usage_banner <<~EOS
           `disable-deprecated-packages` <tap> [--dry-run]
@@ -105,7 +109,7 @@ module Homebrew
           content = File.read(file_path)
           name = package_name(file_path)
 
-          next false if name == "terraform"
+          next false if PACKAGES_TO_IGNORE.include?(name)
           next false if content.match?(/^\s*disable!\s+date:\s*"/)
 
           deprecate_match = content.match(/^\s*deprecate!\s+date:\s*"(\d{4}-\d{2}-\d{2})"/)

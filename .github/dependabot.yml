@@ -5,8 +5,7 @@ updates:
       - /
       - /**/*
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
       time: !!str 08:00
       timezone: Australia/Melbourne
     groups:
@@ -20,8 +19,7 @@ updates:
     exclude-paths:
       - .github/workflows/actionlint.yml
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
       time: !!str 08:00
       timezone: Australia/Melbourne
     groups:
@@ -35,8 +33,7 @@ updates:
       - /
       - /**/*
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
       time: !!str 08:00
       timezone: Australia/Melbourne
     groups:
@@ -50,8 +47,7 @@ updates:
       - /
       - /**/*
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
       time: !!str 08:00
       timezone: Australia/Melbourne
     groups:

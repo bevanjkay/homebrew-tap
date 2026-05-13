@@ -19,7 +19,7 @@ cask "companion-beta" do
     end
   end
 
-  depends_on macos: ">= :monterey"
+  depends_on macos: :monterey
 
   # Companion beta does not share preferences with the stable branch, so can be installed side by side
   app "Companion.app", target: "Companion Beta.app"

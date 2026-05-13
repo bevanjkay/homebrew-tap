@@ -60,7 +60,7 @@ cask "davinci-resolve@beta" do
   end
 
   conflicts_with cask: "davinci-resolve"
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   pkg "Install Resolve #{version.csv.first}#{version.csv.fourth}.pkg"
 

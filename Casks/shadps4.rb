@@ -25,7 +25,7 @@ cask "shadps4" do
     end
   end
 
-  depends_on macos: ">= :sequoia"
+  depends_on macos: :sequoia
 
   app "shadPS4QtLauncher.app"
 

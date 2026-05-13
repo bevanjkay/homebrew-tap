@@ -16,6 +16,8 @@ cask "gld-editor" do
     end
   end
 
+  depends_on :macos
+
   pkg "GLD Editor #{version.csv.first} Installer.pkg"
 
   uninstall pkgutil: "com.allenheath.pkg.gldeditor*"

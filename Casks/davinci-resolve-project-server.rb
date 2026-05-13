@@ -59,6 +59,7 @@ cask "davinci-resolve-project-server" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
+  depends_on :macos
 
   pkg "Install DaVinci Resolve Project Server #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
 

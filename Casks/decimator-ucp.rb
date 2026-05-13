@@ -15,7 +15,7 @@ cask "decimator-ucp" do
     regex(/href=.*?UCP[ ._-]v?(\d+(?:\.\d+)+)[ ._-]#{arch}\.dmg/i)
   end
 
-  depends_on macos: ">= :big_sur"
+  depends_on macos: :big_sur
 
   app "UCP #{version} #{arch}.app", target: "Decimator UCP.app"
 

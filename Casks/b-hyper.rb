@@ -19,6 +19,7 @@ cask "b-hyper" do
 
   auto_updates true
   conflicts_with cask: ["homebrew/cask-versions/hyper-canary", "hyper"]
+  depends_on :macos
 
   app "Hyper.app"
   binary "#{appdir}/Hyper.app/Contents/Resources/bin/hyper"

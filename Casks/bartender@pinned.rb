@@ -13,7 +13,7 @@ cask "bartender@pinned" do
 
   auto_updates true
   conflicts_with cask: "bartender"
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "Bartender #{version.major}.app"
 

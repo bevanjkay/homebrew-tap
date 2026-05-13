@@ -17,7 +17,7 @@ cask "mas-static" do
   desc "Command-line interface for the App Store"
   homepage "https://github.com/mas-cli/mas"
 
-  depends_on macos: ">= :monterey"
+  depends_on macos: :monterey
 
   pkg "mas-#{version}-#{arch}.pkg"
 

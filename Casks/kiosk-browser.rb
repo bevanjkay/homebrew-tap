@@ -7,6 +7,8 @@ cask "kiosk-browser" do
   desc "Web kiosk system"
   homepage "https://github.com/IMAGINARY/kiosk-browser"
 
+  depends_on :macos
+
   app "kiosk-browser.app"
   # shim script (https://github.com/Homebrew/homebrew-cask/issues/18809)
   shimscript = "#{staged_path}/kiosk-browser-wrapper.sh"

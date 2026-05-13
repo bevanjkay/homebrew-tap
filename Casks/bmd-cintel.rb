@@ -34,6 +34,7 @@ cask "bmd-cintel" do
 
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
+  depends_on :macos
 
   pkg "Install Cintel #{version.csv.first.chomp(".0")}.pkg"
 

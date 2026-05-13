@@ -12,6 +12,8 @@ cask "fluro-printer" do
     strategy :header_match
   end
 
+  depends_on :macos
+
   pkg "Fluro%20Printer-#{version}.pkg"
 
   uninstall pkgutil: "io.fluro.printer",

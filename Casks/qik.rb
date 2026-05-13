@@ -13,6 +13,8 @@ cask "qik" do
     regex(/qik[._-]v?(\d+(?:\.\d+)+)/i)
   end
 
+  depends_on :macos
+
   app "Qik.app"
 
   postflight do

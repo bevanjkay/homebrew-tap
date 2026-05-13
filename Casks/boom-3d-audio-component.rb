@@ -37,6 +37,8 @@ cask "boom-3d-audio-component" do
 
   app_path = "Audio Component Installer.app"
 
+  depends_on :macos
+
   app app_path,
       target: "#{staged_path}/#{app_path} #{version}.app"
 

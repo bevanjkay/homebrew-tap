@@ -10,7 +10,7 @@ cask "rpcs3" do
 
   disable! date: "2026-03-16", because: "uses too many CI minutes"
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "RPCS3.app"
 

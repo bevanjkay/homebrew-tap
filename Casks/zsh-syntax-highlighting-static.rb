@@ -7,6 +7,8 @@ cask "zsh-syntax-highlighting-static" do
   desc "Fish-like syntax highlighting for zsh"
   homepage "https://github.com/zsh-users/zsh-syntax-highlighting"
 
+  depends_on :macos
+
   suite "zsh-syntax-highlighting-#{version}", target: "#{Dir.home}/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting"
 
   zap rmdir: "#{Dir.home}/.oh-my-zsh-custom"

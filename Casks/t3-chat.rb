@@ -13,6 +13,8 @@ cask "t3-chat" do
     regex(/t3-chat[._-]v?(\d+(?:\.\d+)+)/i)
   end
 
+  depends_on :macos
+
   app "T3 Chat.app"
 
   postflight do

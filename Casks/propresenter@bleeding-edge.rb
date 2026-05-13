@@ -46,7 +46,7 @@ cask "propresenter@bleeding-edge" do
     end
   end
 
-  depends_on macos: ">= :ventura"
+  depends_on macos: :ventura
 
   app "ProPresenter.app", target: "ProPresenter (#{version.csv.first}).app"
 

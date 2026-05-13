@@ -7,6 +7,8 @@ cask "zsh-autosuggestions-static" do
   desc "Fish-like autosuggestions for zsh"
   homepage "https://github.com/zsh-users/zsh-autosuggestions"
 
+  depends_on :macos
+
   suite "zsh-autosuggestions-#{version}", target: "#{Dir.home}/.oh-my-zsh-custom/plugins/zsh-autosuggestions"
 
   zap rmdir: "#{Dir.home}/.oh-my-zsh-custom"

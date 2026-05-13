@@ -19,6 +19,8 @@ cask "enttec-emu" do
     end
   end
 
+  depends_on :macos
+
   pkg "EMU-#{version}.pkg"
 
   uninstall pkgutil: [

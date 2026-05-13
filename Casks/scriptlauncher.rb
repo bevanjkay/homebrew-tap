@@ -10,7 +10,7 @@ cask "scriptlauncher" do
   desc "Run scripts on your machine"
   homepage "https://github.com/josephdadams/ScriptLauncher"
 
-  depends_on macos: ">= :big_sur"
+  depends_on macos: :big_sur
 
   app "scriptlauncher.app"
 

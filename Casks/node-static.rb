@@ -12,6 +12,8 @@ cask "node-static" do
     regex(%r{href=["']?v?(\d+(?:\.\d+)+)/?["' >]}i)
   end
 
+  depends_on :macos
+
   pkg "node-v#{version}.pkg"
 
   uninstall pkgutil: [

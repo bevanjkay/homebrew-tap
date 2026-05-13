@@ -7,6 +7,8 @@ cask "nps-browser" do
   desc "Sony ROM Download Browser"
   homepage "https://github.com/JK3Y/NPS-Browser-macOS"
 
+  depends_on :macos
+
   app "NPS Browser.app"
 
   zap trash: [

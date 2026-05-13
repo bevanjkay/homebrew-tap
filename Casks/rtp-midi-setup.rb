@@ -7,6 +7,8 @@ cask "rtp-midi-setup" do
   desc "Sets up RTP MIDI connections automatically"
   homepage "https://drive.google.com/file/d/1esYiBe6Og7wlHYQQ87K8lQTzJkWf_F08/view"
 
+  depends_on :macos
+
   app "RTPMIDISetup.app"
 
   zap trash: [

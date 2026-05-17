@@ -1,6 +1,6 @@
 cask "shadps4" do
-  version "2026-05-12,c6a921c08aae168f19d11de1f81150838941a9b1"
-  sha256 "2ee4a509a9838245c921293c080c9ebcf6279f80702b80bd7bdfbff752ef0828"
+  version "2026-05-17,527acc4abd0271142d06f1c38f424ce4c8777139"
+  sha256 "d5e0bf1ef0192ef146cad9527ceb390f0c6c27b87b77b81f5d305ca23827c588"
 
   url "https://github.com/shadps4-emu/shadps4-qtlauncher/releases/download/shadPS4QtLauncher-#{version.tr(",", "-")}/shadPS4QtLauncher-macos-qt-#{version.csv.first}-#{version.csv.second&.slice(0, 7)}.zip",
       verified: "github.com/shadps4-emu/shadps4-qtlauncher/"

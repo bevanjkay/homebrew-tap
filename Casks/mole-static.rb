@@ -1,6 +1,6 @@
 cask "mole-static" do
-  version "1.39.1"
-  sha256 "cc01d837ebcac0cd5376c2c81f96bda9496f7eff63a9f9b3b4f96aadf745ad44"
+  version "1.40.0"
+  sha256 "24559864864be8f05093461600e7a67b6f61d1f5131a58b587e1c3245710f90b"
 
   url "https://raw.githubusercontent.com/tw93/mole/V#{version}/install.sh",
       verified: "raw.githubusercontent.com/tw93/mole/"

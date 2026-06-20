@@ -1,8 +1,8 @@
 cask "davinci-resolve-studio@beta" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "21.0.0,3e22a0396429418c8a3b9704c392c477,6bfc6f94c2f843038aa6a7a9db346759,b"
-  sha256 "c58a068a1a33988e64d40e29b30cde7075aedb12f2c134756fad71d1000ed705"
+  version "21.0.0,2cda7ec076ea4b25aaa007fc68a5cbfc,2ba82bed1b8c415186cc815cbe6e9be6,"
+  sha256 "a784c0697cc7cd092287ab873eaeb1445d270a3e7f6fb28e5399b4377526e4a2"
 
   personal_details = if File.exist?("#{Dir.home}/.personal_details.json")
     JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
@@ -62,7 +62,7 @@ cask "davinci-resolve-studio@beta" do
   conflicts_with cask: "davinci-resolve-studio"
   depends_on macos: :sonoma
 
-  pkg "Install Resolve #{version.csv.first}#{version.csv.fourth}.pkg"
+  pkg "Install Resolve #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
 
   uninstall script:  {
               executable: "/Applications/DaVinci Resolve/Uninstall Resolve.app/Contents/Resources/uninstall.sh",

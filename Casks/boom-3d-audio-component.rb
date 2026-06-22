@@ -1,8 +1,8 @@
 cask "boom-3d-audio-component" do
-  version "2.2.0"
-  sha256 "80eddf50d2506ed42454e288f4bfdc0544ef12ecd6befb3d1c86c3b0b164f3ed"
+  version "2.3.0"
+  sha256 "4f85bfec510df263f00926c573fc73ab38be88bdc017e08287ac9fade5fa2564"
 
-  url "https://d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/catalina/v#{version}_tagged_surround/AudioComponentInstaller.zip",
+  url "https://d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/catalina/v#{version}_tagged_surround/Audio_Component_Installer.zip",
       verified: "d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/",
       referer:  "https://www.globaldelight.com"
   name "Boom 3D Component Installer"
@@ -29,7 +29,6 @@ cask "boom-3d-audio-component" do
         "?language=en-AU&app_version=#{main_cask_version}"
       audio_component_regex =
         %r{href=.*?v?(\d+(?:\.\d+)+)(?:_)(?:.+)/Audio((%20)|[_-])?Component((%20)|[_-])?Installer\.zip}i
-
       Homebrew::Livecheck::Strategy::PageMatch.find_versions(url:   audio_component_url,
                                                              regex: audio_component_regex)[:matches].values
     end

@@ -1,8 +1,8 @@
 cask "bmd-camera-prodock" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "1.1.0,4b6b8fcb77fc4348bb0169a693c89405,c03765465b0846c59a8a6117bdb7536f"
-  sha256 "616b4d4f2a2a654f993a8f12a978d600c598b191618a8c68856a315ae38b5c36"
+  version "1.1.1,b51d656a0630467a93045f9c9dbee73b,55d727b2d5af491eb141e37374a851d5"
+  sha256 "8ea16d33f4f539c6ac22f5afa74e712b64796923713902fdb4f198d17dc68fa0"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

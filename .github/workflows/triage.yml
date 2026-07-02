@@ -22,6 +22,7 @@ jobs:
           def: |
             - label: ci-skip-install
               content: app_path
+              keep_if_no_match: true
 
             - label: bump-cask-pr
               pr_body_content: Created with `brew bump-cask-pr`

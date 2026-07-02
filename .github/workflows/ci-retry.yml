@@ -27,18 +27,35 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Get PRs with ci-retry label and process them
-          prs_json="$(gh pr list --repo "$REPO" --label ci-retry --state open --json number,headRefName,headRefOid)" || {
+          # Get PRs labeled ci-retry (rerun failed jobs only) and
+          # ci-retry-all (rerun all jobs), then merge them. A PR carrying
+          # both labels is treated as ci-retry-all.
+          retry_json="$(gh pr list --repo "$REPO" --label ci-retry --state open --json number,headRefName,headRefOid)" || {
             echo "Failed to fetch PRs with ci-retry label" >&2; exit 1
           }
+          retry_all_json="$(gh pr list --repo "$REPO" --label ci-retry-all --state open --json number,headRefName,headRefOid)" || {
+            echo "Failed to fetch PRs with ci-retry-all label" >&2; exit 1
+          }
+
+          prs_json="$(jq -n --argjson a "$retry_json" --argjson b "$retry_all_json" '
+            ([$a[] | {number, headRefName, headRefOid, rerunAll: false}]
+             + [$b[] | {number, headRefName, headRefOid, rerunAll: true}])
+            | group_by(.number)
+            | map({
+                number: .[0].number,
+                headRefName: .[0].headRefName,
+                headRefOid: .[0].headRefOid,
+                rerunAll: (map(.rerunAll) | any)
+              })
+          ')"
 
           if [[ "$(jq length <<< "$prs_json")" -eq 0 ]]; then
-            echo "No open PRs with label ci-retry."; exit 0
+            echo "No open PRs with label ci-retry or ci-retry-all."; exit 0
           fi
 
           # Process each PR
-          jq -r '.[] | "\(.number) \(.headRefName) \(.headRefOid)"' <<< "$prs_json" | while IFS=' ' read -r pr_number head_ref head_sha; do
-            echo "Processing PR #$pr_number (ref: $head_ref sha: $head_sha)"
+          jq -r '.[] | "\(.number) \(.headRefName) \(.headRefOid) \(.rerunAll)"' <<< "$prs_json" | while IFS=' ' read -r pr_number head_ref head_sha rerun_all; do
+            echo "Processing PR #$pr_number (ref: $head_ref sha: $head_sha rerun_all: $rerun_all)"
 
             # Get runs for this branch
             runs_json="$(gh run list --repo "$REPO" --branch "$head_ref" --limit 20 \
@@ -68,9 +85,18 @@ jobs:
               continue
             fi
 
-            # Retry the latest failed run only
-            echo "  Re-running failed jobs for latest run $latest_failed_run"
-            if gh run rerun --repo "$REPO" "$latest_failed_run" --failed >/dev/null 2>&1; then
+            # Retry the latest failed run only. ci-retry-all reruns every job;
+            # ci-retry reruns only the failed jobs. Both only fire because a
+            # failed/cancelled run was found above.
+            if [[ "$rerun_all" == "true" ]]; then
+              rerun_args=()
+              echo "  Re-running all jobs for latest run $latest_failed_run"
+            else
+              rerun_args=(--failed)
+              echo "  Re-running failed jobs for latest run $latest_failed_run"
+            fi
+
+            if gh run rerun --repo "$REPO" "$latest_failed_run" ${rerun_args[@]+"${rerun_args[@]}"} >/dev/null 2>&1; then
               echo "    Rerun requested."
             else
               echo "    Failed to request rerun for $latest_failed_run" >&2

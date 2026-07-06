@@ -249,6 +249,12 @@ jobs:
 
             cask = Cask::CaskLoader.load('${{ matrix.cask.path }}')
 
+            def append_step_summary(markdown)
+              return unless (summary_path = ENV["GITHUB_STEP_SUMMARY"])
+
+              File.open(summary_path, "a") { |file| file.puts markdown }
+            end
+
             app_artifacts = cask.artifacts.grep(Cask::Artifact::App).select do |artifact|
               artifact.target.directory?
             end
@@ -280,6 +286,15 @@ jobs:
             unless status.success?
               message = "Unable to check generated zap paths:\n#{stderr.presence || stdout}"
               puts GitHub::Actions::Annotation.new(:warning, message, file: '${{ matrix.cask.path }}')
+              append_step_summary <<~MARKDOWN
+                ## Possible missing zap paths
+
+                Unable to check `#{cask.full_name}` with `brew generate-zap`.
+
+                ```text
+                #{stderr.presence || stdout}
+                ```
+              MARKDOWN
               exit
             end
 
@@ -305,6 +320,15 @@ jobs:
             message += missing_paths.join("\n")
             puts GitHub::Actions::Annotation.new(:warning, message, file: '${{ matrix.cask.path }}',
                                                            title: "Possible missing zap paths")
+            append_step_summary <<~MARKDOWN
+              ## Possible missing zap paths
+
+              `brew generate-zap #{cask.full_name}` found paths not covered by the current zap stanza:
+
+              ```text
+              #{missing_paths.join("\n")}
+              ```
+            MARKDOWN
           EOF
         if: >
           always() &&

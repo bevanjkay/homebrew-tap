@@ -239,6 +239,82 @@ jobs:
           !matrix.skip_install
         timeout-minutes: 30
 
+      - name: Check for additional zap paths
+        run: |
+          brew ruby <<'EOF'
+            require "cask/cask_loader"
+            require "open3"
+            require "timeout"
+            require "utils/github/actions"
+
+            cask = Cask::CaskLoader.load('${{ matrix.cask.path }}')
+
+            app_artifacts = cask.artifacts.grep(Cask::Artifact::App).select do |artifact|
+              artifact.target.directory?
+            end
+
+            app_artifacts.each do |artifact|
+              system "/usr/bin/open", "-g", artifact.target.to_s
+            end
+
+            sleep 10 if app_artifacts.any?
+
+            app_artifacts.each do |artifact|
+              info_plist = artifact.target/"Contents/Info.plist"
+              next unless info_plist.file? && info_plist.readable?
+
+              bundle_id, _, status = Open3.capture3(
+                "/usr/bin/plutil", "-extract", "CFBundleIdentifier", "raw", "-o", "-", info_plist.to_s
+              )
+              next if !status.success? || bundle_id.blank?
+
+              Timeout.timeout(10) do
+                system "/usr/bin/osascript", "-e", "quit app id \"#{bundle_id.strip}\""
+              end
+            rescue Timeout::Error
+              nil
+            end
+
+            stdout, stderr, status = Open3.capture3("brew", "generate-zap", cask.full_name)
+            unless status.success?
+              message = "Unable to check generated zap paths:\n#{stderr.presence || stdout}"
+              puts GitHub::Actions::Annotation.new(:warning, message, file: '${{ matrix.cask.path }}')
+              exit
+            end
+
+            stanza = stdout[/^zap .*/m]
+            exit unless stanza
+
+            generated_paths = stanza.scan(/"([^"]+)"/).flatten
+            exit if generated_paths.empty?
+
+            existing_paths = cask.artifacts.grep(Cask::Artifact::Zap).flat_map do |artifact|
+              artifact.directives.slice(:trash, :delete, :rmdir).values.flatten
+            end.map(&:to_s)
+
+            missing_paths = generated_paths.reject do |generated_path|
+              existing_paths.any? do |existing_path|
+                existing_path == generated_path || File.fnmatch?(existing_path, generated_path)
+              end
+            end
+
+            exit if missing_paths.empty?
+
+            message = "brew generate-zap found paths not covered by the current zap stanza:\n"
+            message += missing_paths.join("\n")
+            puts GitHub::Actions::Annotation.new(:warning, message, file: '${{ matrix.cask.path }}',
+                                                           title: "Possible missing zap paths")
+          EOF
+        if: >
+          always() &&
+          steps.install.outcome == 'success' &&
+          runner.os == 'macOS' &&
+          (
+            contains(matrix.audit_args, '--new') ||
+            (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'check zap'))
+          )
+        timeout-minutes: 5
+
       - name: Run brew uninstall --cask ${{ matrix.cask.token }}
         run: brew uninstall --cask '${{ matrix.cask.path }}'
         if: always() && steps.install.outcome == 'success' && !fromJSON(steps.info.outputs.manual_installer)

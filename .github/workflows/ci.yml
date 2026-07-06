@@ -275,7 +275,8 @@ jobs:
               nil
             end
 
-            stdout, stderr, status = Open3.capture3("brew", "generate-zap", cask.full_name)
+            brew = ENV.fetch("HOMEBREW_BREW_FILE")
+            stdout, stderr, status = Open3.capture3(brew, "generate-zap", cask.full_name)
             unless status.success?
               message = "Unable to check generated zap paths:\n#{stderr.presence || stdout}"
               puts GitHub::Actions::Annotation.new(:warning, message, file: '${{ matrix.cask.path }}')

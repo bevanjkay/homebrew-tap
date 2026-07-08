@@ -254,12 +254,36 @@ jobs:
               File.open(summary_path, "a") { |file| file.puts markdown }
             end
 
+            def system_command_with_timeout(*command, timeout:)
+              pid = Process.spawn(*command, out: File::NULL, err: File::NULL)
+              deadline = Process.clock_gettime(Process::CLOCK_MONOTONIC) + timeout
+
+              loop do
+                process_id, status = Process.waitpid2(pid, Process::WNOHANG)
+                return status.success? if process_id
+                break if Process.clock_gettime(Process::CLOCK_MONOTONIC) >= deadline
+
+                sleep 0.1
+              end
+
+              Process.kill("TERM", pid)
+              sleep 1
+              Process.kill("KILL", pid)
+              Process.wait(pid)
+              false
+            rescue Errno::ECHILD, Errno::ESRCH
+              false
+            end
+
             app_artifacts = cask.artifacts.grep(Cask::Artifact::App).select do |artifact|
               artifact.target.directory?
             end
 
             app_artifacts.each do |artifact|
-              system "/usr/bin/open", "-g", artifact.target.to_s
+              system_command_with_timeout(
+                "/usr/bin/open", "-g", artifact.target.to_s,
+                timeout: 10,
+              )
             end
 
             sleep 10 if app_artifacts.any?

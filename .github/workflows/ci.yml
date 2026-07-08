@@ -244,7 +244,6 @@ jobs:
           brew ruby <<'EOF'
             require "cask/cask_loader"
             require "open3"
-            require "timeout"
             require "utils/github/actions"
 
             cask = Cask::CaskLoader.load('${{ matrix.cask.path }}')
@@ -264,22 +263,6 @@ jobs:
             end
 
             sleep 10 if app_artifacts.any?
-
-            app_artifacts.each do |artifact|
-              info_plist = artifact.target/"Contents/Info.plist"
-              next unless info_plist.file? && info_plist.readable?
-
-              bundle_id, _, status = Open3.capture3(
-                "/usr/bin/plutil", "-extract", "CFBundleIdentifier", "raw", "-o", "-", info_plist.to_s
-              )
-              next if !status.success? || bundle_id.blank?
-
-              Timeout.timeout(10) do
-                system "/usr/bin/osascript", "-e", "quit app id \"#{bundle_id.strip}\""
-              end
-            rescue Timeout::Error
-              nil
-            end
 
             brew = ENV.fetch("HOMEBREW_BREW_FILE")
             stdout, stderr, status = Open3.capture3(brew, "generate-zap", cask.full_name)

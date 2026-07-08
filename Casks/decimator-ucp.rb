@@ -17,6 +17,7 @@ cask "decimator-ucp" do
 
   depends_on macos: :big_sur
 
+  # test
   app "UCP #{version} #{arch}.app", target: "Decimator UCP.app"
 
   # No zap stanza required

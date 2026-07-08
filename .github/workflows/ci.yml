@@ -248,6 +248,8 @@ jobs:
 
             cask = Cask::CaskLoader.load('${{ matrix.cask.path }}')
 
+            CommandResult = Struct.new(:success, :timed_out, :exit_status, keyword_init: true)
+
             def append_step_summary(markdown)
               return unless (summary_path = ENV["GITHUB_STEP_SUMMARY"])
 
@@ -260,7 +262,13 @@ jobs:
 
               loop do
                 process_id, status = Process.waitpid2(pid, Process::WNOHANG)
-                return status.success? if process_id
+                if process_id
+                  return CommandResult.new(
+                    success: status.success?,
+                    timed_out: false,
+                    exit_status: status.exitstatus,
+                  )
+                end
                 break if Process.clock_gettime(Process::CLOCK_MONOTONIC) >= deadline
 
                 sleep 0.1
@@ -270,9 +278,9 @@ jobs:
               sleep 1
               Process.kill("KILL", pid)
               Process.wait(pid)
-              false
+              CommandResult.new(success: false, timed_out: true, exit_status: nil)
             rescue Errno::ECHILD, Errno::ESRCH
-              false
+              CommandResult.new(success: false, timed_out: false, exit_status: nil)
             end
 
             app_artifacts = cask.artifacts.grep(Cask::Artifact::App).select do |artifact|
@@ -280,10 +288,17 @@ jobs:
             end
 
             app_artifacts.each do |artifact|
-              system_command_with_timeout(
+              result = system_command_with_timeout(
                 "/usr/bin/open", "-g", artifact.target.to_s,
                 timeout: 10,
               )
+
+              if result.timed_out
+                puts "Warning: Timed out opening #{artifact.target} after 10 seconds."
+              elsif !result.success
+                puts "Warning: Failed to open #{artifact.target} " \
+                     "(exit status: #{result.exit_status || "unknown"})."
+              end
             end
 
             sleep 10 if app_artifacts.any?

@@ -20,7 +20,7 @@ module Homebrew
         named_args :token, min: 1, max: 1
       end
 
-      FONT_EXT_PATTERN = T.let(/.(otf|ttf)\Z/i, Regexp)
+      FONT_EXT_PATTERN = /.(otf|ttf)\Z/i
 
       FONT_WEIGHTS = T.let([
         /black/i,
@@ -114,7 +114,10 @@ module Homebrew
 
       sig { params(cask: Cask::Cask, fonts: T::Array[String]).returns(String) }
       def update_cask_content(cask, fonts)
-        content = cask.source.split("\n")
+        source = cask.source
+        odie "#{cask.token} has no source." if source.nil?
+
+        content = source.split("\n")
         font_content = fonts.map do |font|
           "  font \"#{font}\"".gsub(cask.version.to_s, "\#{version}")
         end
@@ -134,15 +137,13 @@ module Homebrew
 
       sig { override.void }
       def run
-        token = args.named.first
+        token = args.named.fetch(0)
 
         cask = Cask::CaskLoader.load(token)
         path = Cask::Download.new(cask).fetch
 
         ohai "Finding font paths" if args.debug?
         fonts = font_paths(path)
-
-        cask.token.split("-").first[0]
 
         if args.debug?
           ohai "Found fonts in archive:"
@@ -151,10 +152,13 @@ module Homebrew
 
         new_content = update_cask_content(cask, fonts)
 
-        File.write(cask.sourcefile_path, new_content)
+        sourcefile_path = cask.sourcefile_path
+        odie "#{cask.token} has no source file." if sourcefile_path.nil?
+
+        File.write(sourcefile_path, new_content)
 
         ohai "Running brew style --fix #{token}" if args.debug?
-        system("brew", "style", "--fix", T.must(token))
+        system("brew", "style", "--fix", token)
       end
     end
   end

@@ -10,18 +10,12 @@ require "tempfile"
 module Homebrew
   module Cmd
     class DeprecateGatekeeperCask < AbstractCommand
-      TARGET_TAP = T.let("homebrew/cask", String)
-      TARGET_REPOSITORY = T.let("homebrew/homebrew-cask", String)
-      DEFAULT_BRANCH = T.let("main", String)
-      ORIGIN_REMOTE = T.let("origin", String)
-      TARGET_DISABLE_STANZA = T.let(
-        '  disable! date: "2026-09-01", because: :fails_gatekeeper_check',
-        String,
-      )
-      PR_NOTE = T.let(
-        "Deprecating because the cask fails the macOS gatekeeper check",
-        String,
-      )
+      TARGET_TAP = "homebrew/cask"
+      TARGET_REPOSITORY = "homebrew/homebrew-cask"
+      DEFAULT_BRANCH = "main"
+      ORIGIN_REMOTE = "origin"
+      TARGET_DISABLE_STANZA = '  disable! date: "2026-09-01", because: :fails_gatekeeper_check'
+      PR_NOTE = "Deprecating because the cask fails the macOS gatekeeper check"
 
       cmd_args do
         usage_banner <<~EOS
@@ -43,6 +37,9 @@ module Homebrew
 
         odie "This command only supports #{TARGET_TAP} casks." if cask.tap != target_tap
 
+        cask_file = cask.sourcefile_path
+        odie "#{cask.token} has no source file." if cask_file.nil?
+
         repo = target_tap.path
         branch_name = "#{cask.token}-deprecate"
         branch_created = T.let(false, T::Boolean)
@@ -51,15 +48,15 @@ module Homebrew
         begin
           ensure_clean_repo(repo)
           ensure_branch_available(repo, branch_name)
-          ensure_no_disable_stanza(cask.sourcefile_path)
+          ensure_no_disable_stanza(cask_file)
           git!(repo, "checkout", "-b", branch_name, "#{ORIGIN_REMOTE}/#{DEFAULT_BRANCH}")
           branch_created = true
 
-          old_contents = cask.sourcefile_path.read
+          old_contents = cask_file.read
           new_contents = updated_contents(old_contents)
           odie "#{cask.token} already contains #{TARGET_DISABLE_STANZA.inspect}." if new_contents == old_contents
 
-          cask.sourcefile_path.atomic_write(new_contents)
+          cask_file.atomic_write(new_contents)
 
           ohai "Running brew style --fix #{cask.token}"
           brew!("style", "--fix", cask.token)
@@ -67,7 +64,7 @@ module Homebrew
           ohai "Running brew audit --cask --online --only=signing #{cask.token}"
           brew!("audit", "--cask", "--online", "--only=signing", cask.token)
 
-          git!(repo, "add", cask.sourcefile_path.to_s)
+          git!(repo, "add", cask_file.to_s)
           git!(repo, "commit", "-m", "#{cask.token}: deprecate")
           git!(repo, "push", "--set-upstream", ORIGIN_REMOTE, branch_name)
           branch_pushed = true

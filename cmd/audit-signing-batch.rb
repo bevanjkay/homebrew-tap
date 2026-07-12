@@ -10,21 +10,21 @@ require "timeout"
 module Homebrew
   module Cmd
     class AuditSigningBatch < AbstractCommand
-      DEFAULT_COUNT = T.let(20, Integer)
-      DEFAULT_JOBS = T.let(5, Integer)
+      DEFAULT_COUNT = 20
+      DEFAULT_JOBS = 5
       DEFAULT_RESULTS_FILE = T.let(
         (Pathname.new(Dir.home)/".homebrew/audit_signing_results.json").freeze,
         Pathname,
       )
-      FETCH_TIMEOUT_SECONDS = T.let(120, Integer)
-      MAX_ERROR_LENGTH = T.let(500, Integer)
+      FETCH_TIMEOUT_SECONDS = 120
+      MAX_ERROR_LENGTH = 500
       DOWNLOADS_WARNING_THRESHOLD_BYTES = T.let(20 * 1024 * 1024 * 1024, Integer)
-      ANSI_RESET = T.let("\e[0m", String)
-      ANSI_GREEN = T.let("\e[32m", String)
-      ANSI_RED = T.let("\e[31m", String)
-      ANSI_YELLOW = T.let("\e[33m", String)
-      ANSI_BLUE = T.let("\e[34m", String)
-      ANSI_ORANGE = T.let("\e[38;5;214m", String)
+      ANSI_RESET = "\e[0m"
+      ANSI_GREEN = "\e[32m"
+      ANSI_RED = "\e[31m"
+      ANSI_YELLOW = "\e[33m"
+      ANSI_BLUE = "\e[34m"
+      ANSI_ORANGE = "\e[38;5;214m"
 
       class TokenResult < T::Struct
         const :passed, T::Boolean

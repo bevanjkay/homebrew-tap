@@ -43,6 +43,9 @@ module Homebrew
 
         odie "This command only supports #{TARGET_TAP} casks." if cask.tap != target_tap
 
+        cask_file = cask.sourcefile_path
+        odie "#{cask.token} has no source file." if cask_file.nil?
+
         repo = target_tap.path
         branch_name = "#{cask.token}-deprecate"
         branch_created = T.let(false, T::Boolean)
@@ -51,15 +54,15 @@ module Homebrew
         begin
           ensure_clean_repo(repo)
           ensure_branch_available(repo, branch_name)
-          ensure_no_disable_stanza(cask.sourcefile_path)
+          ensure_no_disable_stanza(cask_file)
           git!(repo, "checkout", "-b", branch_name, "#{ORIGIN_REMOTE}/#{DEFAULT_BRANCH}")
           branch_created = true
 
-          old_contents = cask.sourcefile_path.read
+          old_contents = cask_file.read
           new_contents = updated_contents(old_contents)
           odie "#{cask.token} already contains #{TARGET_DISABLE_STANZA.inspect}." if new_contents == old_contents
 
-          cask.sourcefile_path.atomic_write(new_contents)
+          cask_file.atomic_write(new_contents)
 
           ohai "Running brew style --fix #{cask.token}"
           brew!("style", "--fix", cask.token)
@@ -67,7 +70,7 @@ module Homebrew
           ohai "Running brew audit --cask --online --only=signing #{cask.token}"
           brew!("audit", "--cask", "--online", "--only=signing", cask.token)
 
-          git!(repo, "add", cask.sourcefile_path.to_s)
+          git!(repo, "add", cask_file.to_s)
           git!(repo, "commit", "-m", "#{cask.token}: deprecate")
           git!(repo, "push", "--set-upstream", ORIGIN_REMOTE, branch_name)
           branch_pushed = true

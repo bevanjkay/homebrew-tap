@@ -10,18 +10,12 @@ require "tempfile"
 module Homebrew
   module Cmd
     class DeprecateGatekeeperCask < AbstractCommand
-      TARGET_TAP = T.let("homebrew/cask", String)
-      TARGET_REPOSITORY = T.let("homebrew/homebrew-cask", String)
-      DEFAULT_BRANCH = T.let("main", String)
-      ORIGIN_REMOTE = T.let("origin", String)
-      TARGET_DISABLE_STANZA = T.let(
-        '  disable! date: "2026-09-01", because: :fails_gatekeeper_check',
-        String,
-      )
-      PR_NOTE = T.let(
-        "Deprecating because the cask fails the macOS gatekeeper check",
-        String,
-      )
+      TARGET_TAP = "homebrew/cask"
+      TARGET_REPOSITORY = "homebrew/homebrew-cask"
+      DEFAULT_BRANCH = "main"
+      ORIGIN_REMOTE = "origin"
+      TARGET_DISABLE_STANZA = '  disable! date: "2026-09-01", because: :fails_gatekeeper_check'
+      PR_NOTE = "Deprecating because the cask fails the macOS gatekeeper check"
 
       cmd_args do
         usage_banner <<~EOS

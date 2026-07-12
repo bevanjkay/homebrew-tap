@@ -20,7 +20,7 @@ module Homebrew
         named_args :token, min: 1, max: 1
       end
 
-      FONT_EXT_PATTERN = T.let(/.(otf|ttf)\Z/i, Regexp)
+      FONT_EXT_PATTERN = /.(otf|ttf)\Z/i
 
       FONT_WEIGHTS = T.let([
         /black/i,

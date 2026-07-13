@@ -2,8 +2,8 @@ cask "sharedown" do
   arch arm: "-arm64"
 
   version "5.3.6"
-  sha256 arm:   "1418cf8106ade2ba7843add57fe3223f92864949da0f04e7adcdf95547c29ccf",
-         intel: "2248d955046f53676e1ad0a4035305bf4e4ec67fdb918ab6d7c925c4574584e4"
+  sha256 arm:   "13481b1ac40a65555367d2cba60e0021b4a1326c698ac5238a1cabd2c0176472",
+         intel: "253945c40c64321806ac5fcfeaa210b36c1336af3353d6cca75da99becc1fc0f"
 
   url "https://github.com/kylon/Sharedown/releases/download/rolling/sharedown-#{version}#{arch}-mac.7z"
   name "Sharedown"

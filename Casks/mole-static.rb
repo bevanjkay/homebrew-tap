@@ -13,20 +13,20 @@ cask "mole-static" do
     strategy :github_latest
   end
 
-  on_macos do
-    installer script: {
-      executable: "#{staged_path}/install.sh",
-      args:       ["--prefix", staged_path.to_s],
-      sudo:       true,
-    }
-    binary "mo"
-    binary "mole"
+  depends_on :macos
 
-    uninstall script: {
-      executable: "mo",
-      args:       ["remove"],
-    }
-  end
+  installer script: {
+    executable: "#{staged_path}/install.sh",
+    args:       ["--prefix", staged_path.to_s],
+    sudo:       true,
+  }
+  binary "mo"
+  binary "mole"
+
+  uninstall script: {
+    executable: "mo",
+    args:       ["remove"],
+  }
 
   # No zap stanza required
 end

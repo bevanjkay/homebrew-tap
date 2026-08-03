@@ -1,6 +1,6 @@
 cask "propresenter@bleeding-edge" do
-  version "22,369098809"
-  sha256 "8127a99e35b5e2359ce2cef429b3a8390093c42dd9c7ad86a5f57dd84a2ad513"
+  version "22,369098813"
+  sha256 "54c0e5c332343f6ac278cd5fae34dc8abb609c9c607f72276aa9531fbf632c2b"
 
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"
@@ -46,7 +46,7 @@ cask "propresenter@bleeding-edge" do
     end
   end
 
-  depends_on macos: :ventura
+  depends_on macos: :sonoma
 
   app "ProPresenter.app", target: "ProPresenter (#{version.csv.first}).app"
 

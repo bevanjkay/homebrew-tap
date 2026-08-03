@@ -2,11 +2,11 @@ cask "companion-beta" do
   arch arm: "arm64", intel: "x64"
   livecheck_arch = on_arch_conditional arm: "arm", intel: "intel"
 
-  sha256 arm:   "3dcca3b571984f7a0bc7cc6bb3f56372c6e3b4cd139a41f3398097354eb9be3a",
+  sha256 arm:   "625c7fa7cecac43b20471da17106c1c6dbd4fc61e9e9a3dba120e65b4f57808a",
          intel: "02f3b4791889a1c215b0c331ee1f7a4bc2b9d0c99122801726568b8357cc3bcd"
 
   on_arm do
-    version "5.1.0+9770-main-e521c9249b"
+    version "5.1.0+9771-main-c58397e9e1"
   end
   on_intel do
     version "5.1.0+9770-main-e521c9249b"

@@ -18,7 +18,6 @@ cask "mole-static" do
   installer script: {
     executable: "#{staged_path}/install.sh",
     args:       ["--prefix", staged_path.to_s],
-    sudo:       true,
   }
   binary "mo"
   binary "mole"

@@ -15,9 +15,18 @@ cask "mole-static" do
 
   depends_on :macos
 
+  # install.sh cleans up with safe_rm, which gates on TMPDIR, but `mktemp -d`
+  # ignores TMPDIR on macOS and brew filters it out of the environment. Without
+  # a matching TMPDIR the cleanup refuses the path and the script exits 1 after
+  # an otherwise successful install. Upstream: tw93/mole.
   installer script: {
-    executable: "#{staged_path}/install.sh",
-    args:       ["--prefix", staged_path.to_s],
+    executable: "/bin/bash",
+    args:       [
+      "-c",
+      "TMPDIR=\"$(getconf DARWIN_USER_TEMP_DIR)\" exec \"$0\" --prefix \"$1\"",
+      "#{staged_path}/install.sh",
+      staged_path.to_s,
+    ],
   }
   binary "mo"
   binary "mole"

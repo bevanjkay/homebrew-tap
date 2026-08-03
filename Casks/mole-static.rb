@@ -1,6 +1,6 @@
 cask "mole-static" do
-  version "1.48.1"
-  sha256 "682ceded63ba42a89aff4e4ee0886d7de097fa0b72ba9c2e2faf8e03ca4ff40f"
+  version "1.49.1"
+  sha256 "8af480f7ad7707418828f55bc60c9e2e589f20903f18385f098ad2f53b5039c1"
 
   url "https://raw.githubusercontent.com/tw93/mole/V#{version}/install.sh",
       verified: "raw.githubusercontent.com/tw93/mole/"
@@ -15,10 +15,18 @@ cask "mole-static" do
 
   depends_on :macos
 
+  # install.sh cleans up with safe_rm, which gates on TMPDIR, but `mktemp -d`
+  # ignores TMPDIR on macOS and brew filters it out of the environment. Without
+  # a matching TMPDIR the cleanup refuses the path and the script exits 1 after
+  # an otherwise successful install. Upstream: tw93/mole.
   installer script: {
-    executable: "#{staged_path}/install.sh",
-    args:       ["--prefix", staged_path.to_s],
-    sudo:       true,
+    executable: "/bin/bash",
+    args:       [
+      "-c",
+      "TMPDIR=\"$(getconf DARWIN_USER_TEMP_DIR)\" exec /bin/bash \"$0\" --prefix \"$1\"",
+      "#{staged_path}/install.sh",
+      staged_path.to_s,
+    ],
   }
   binary "mo"
   binary "mole"

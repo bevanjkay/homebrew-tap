@@ -23,7 +23,7 @@ cask "mole-static" do
     executable: "/bin/bash",
     args:       [
       "-c",
-      "TMPDIR=\"$(getconf DARWIN_USER_TEMP_DIR)\" exec \"$0\" --prefix \"$1\"",
+      "TMPDIR=\"$(getconf DARWIN_USER_TEMP_DIR)\" exec /bin/bash \"$0\" --prefix \"$1\"",
       "#{staged_path}/install.sh",
       staged_path.to_s,
     ],

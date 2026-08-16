@@ -5,8 +5,8 @@ cask "squirrelscan" do
   version "0.0.85"
   sha256 arm:          "bb7fd5488d0a2d72050c390154abefd8e6ff1006601bd809f52bae96670e3f28",
          intel:        "d5bd9ca82090dfb822075550f4af79097c26e9f29e63ef60b88cab6862d412d6",
-         x86_64_linux: "7767c89fbe594890a6b6ca06d44fec6de765dd0c585c2d7fa2684c69daf5b76f",
-         arm64_linux:  "15a534140a8f14ee1a8f83cc55ae623b0ae4038f1ebe899e3759490dc8e2941a"
+         arm64_linux:  "15a534140a8f14ee1a8f83cc55ae623b0ae4038f1ebe899e3759490dc8e2941a",
+         x86_64_linux: "7767c89fbe594890a6b6ca06d44fec6de765dd0c585c2d7fa2684c69daf5b76f"
 
   url "https://github.com/squirrelscan/squirrelscan/releases/download/v#{version}/squirrel-#{version}-#{os}-#{arch}",
       verified: "github.com/squirrelscan/squirrelscan/"

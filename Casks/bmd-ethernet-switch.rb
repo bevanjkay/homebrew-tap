@@ -1,8 +1,8 @@
 cask "bmd-ethernet-switch" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "1.1.0,9ab93e42cdac495b99441b77e9b79487,5dfef21a04c6415fae810a80f01fe240"
-  sha256 "ab58031a9bf44c356d4b97dac2d955539ee4093934187305bef44e11f39f2b61"
+  version "1.2.0,65960dbc063545af96804d28d4c1ecb2,8d83aa9aa2684f1788d1b68da1c01ae7"
+  sha256 "a34c37122939e82b60e08afd0d442fbc5d48bf034d107c36eec6663e3c3069fb"
 
   url "https://www.blackmagicdesign.com/api/register/us/download/#{version.csv.third}",
       using: BmdDownloadStrategy,

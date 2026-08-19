@@ -1,6 +1,6 @@
 cask "propresenter@bleeding-edge" do
-  version "22,369098823"
-  sha256 "c7664c03cd72acd7a177db2c8b35d9af21cf3e3df6c2de75c19031fc9ba93f50"
+  version "22,369098824"
+  sha256 "a626467f97ef73984ae818dddc4a1620b86820dcf3b6e2537f4d674f113a2517"
 
   url "https://renewedvision.com/downloads/propresenter/mac/ProPresenter_#{version.csv.first}_#{version.csv.second}.zip"
   name "ProPresenter"

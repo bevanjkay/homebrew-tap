@@ -2,14 +2,14 @@ cask "companion-beta" do
   arch arm: "arm64", intel: "x64"
   livecheck_arch = on_arch_conditional arm: "arm", intel: "intel"
 
-  sha256 arm:   "0dd5436911558916f67e15b49c67f38bb148db024a16e6b788434cb36378ba39",
-         intel: "8ab61fce064ef8239537d49f5f1f5dfccfab5175115a54935827387d77e5764c"
+  sha256 arm:   "7255b3199f204ab4a8baae6a272530d60b66be9dc3d4e8b09b63da0df49df8e7",
+         intel: "74bd82e1570ccfd7808335ce0946ab6fa7809a4c052879e31572c0dcad04b5c7"
 
   on_arm do
-    version "5.1.0+9830-main-dbb4d66cfc"
+    version "5.1.0+9832-main-3d76cbaded"
   end
   on_intel do
-    version "5.1.0+9830-main-dbb4d66cfc"
+    version "5.1.0+9832-main-3d76cbaded"
   end
 
   url "https://s4.bitfocus.io/builds/companion/companion-mac-#{arch}-#{version.tr("+", "-")}.dmg"

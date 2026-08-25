@@ -5,6 +5,7 @@ require "abstract_command"
 require "open3"
 require "digest"
 require "cask/download"
+require "cask/cask_loader"
 
 module Homebrew
   module Cmd

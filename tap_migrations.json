@@ -8,6 +8,7 @@
     "companion-satellite": "homebrew/cask",
     "dante-controller": "homebrew/cask",
     "dante-via": "homebrew/cask",
+    "davit": "homebrew/cask",
     "mixing-station": "homebrew/cask",
     "ndi-core-suite": "homebrew/cask/ndi-tools",
     "zen-browser": "homebrew/cask"

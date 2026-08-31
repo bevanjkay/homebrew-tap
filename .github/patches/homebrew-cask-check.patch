@@ -1,0 +1,26 @@
+diff --git a/cmd/lib/check.rb b/cmd/lib/check.rb
+index 1cdc2f1060b..41b90d6511f 100644
+--- a/cmd/lib/check.rb
++++ b/cmd/lib/check.rb
+@@ -93,7 +93,20 @@ module Check
+   private_constant :Diff
+ 
+   def self.all
+-    CHECKS.transform_values(&:call)
++    results = CHECKS.transform_values(&:call)
++
++    # Patched by bevanjkay/homebrew-tap: drop entries the tap has declared as
++    # expected leftovers, so shared packages that are only removed by `zap` do
++    # not have to be silenced with the `ci-skip-install` label.
++    exceptions = JSON.parse(ENV.fetch("HOMEBREW_CASK_CHECK_EXCEPTIONS", "{}"))
++    return results if exceptions.empty?
++
++    results.to_h do |name, values|
++      patterns = exceptions[name.to_s]
++      next [name, values] if patterns.blank?
++
++      [name, values.grep_v(Regexp.union(patterns.map { |pattern| Regexp.new(pattern) }))]
++    end
+   end
+ 
+   def self.errors(before, after, cask:)

@@ -98,6 +98,13 @@ jobs:
         if: runner.os == 'macOS'
         run: brew test-bot --cleanup --only-cleanup-before
 
+      # Must run after the cleanup above, which resets the tap's working tree.
+      - name: Patch Homebrew Cask CI checks
+        run: |
+          git -C "$(brew --repository homebrew/cask)" apply --3way --verbose \
+            "${GITHUB_WORKSPACE}/.github/patches/homebrew-cask-check.patch"
+        if: runner.os == 'macOS' && matrix.cask
+
       - name: Cache Homebrew Gems
         id: cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -217,6 +224,29 @@ jobs:
           brew uninstall --cask --force --zap '${{ matrix.cask.token }}'
         if: always() && steps.info.outcome == 'success'
         timeout-minutes: 30
+
+      - name: Resolve cask check exceptions
+        run: |
+          brew ruby <<'EOF'
+            exceptions_file = Pathname(ENV.fetch("GITHUB_WORKSPACE"))/".github/cask_check_exceptions.json"
+            token = '${{ matrix.cask.token }}'
+
+            exceptions = Hash.new { |hash, key| hash[key] = [] }
+            if exceptions_file.exist?
+              JSON.parse(exceptions_file.read).each do |token_pattern, checks|
+                next unless File.fnmatch?(token_pattern, token)
+
+                checks.each { |check, patterns| exceptions[check].concat(patterns) }
+              end
+            end
+
+            File.open(ENV.fetch("GITHUB_ENV"), "a") do |f|
+              # We have to use a `HOMEBREW_` prefix so it will survive the
+              # environment variable filtering in `brew`.
+              f.puts "HOMEBREW_CASK_CHECK_EXCEPTIONS=#{JSON.generate(exceptions)}"
+            end
+          EOF
+        if: always() && steps.info.outcome == 'success' && runner.os == 'macOS'
 
       - name: Take snapshot of installed and running apps and services
         id: snapshot

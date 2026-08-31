@@ -1,1 +1,19 @@
-{}
+{
+  "bmd-cintel": {
+    "installed_pkgs": [
+      "^com\\.blackmagic-design\\.(DesktopVideo|DesktopVideoAssets|DesktopVideoUninstaller|DiskSpeedTest|MediaExpress)$"
+    ],
+    "installed_apps": [
+      "^/Applications/Blackmagic Desktop Video/",
+      "^/Applications/Blackmagic Disk Speed Test\\.app$",
+      "^/Applications/Blackmagic Media Express\\.app$"
+    ],
+    "installed_launchjobs": [
+      "^com\\.blackmagic-design\\.(DesktopVideoDriverExtension|DesktopVideoUpdater|DesktopVideoHelper|desktopvideo\\.XPCService|streaming\\.BMDStreamingServer)"
+    ]
+  },
+  "bmd-video-assist": {
+    "installed_pkgs": ["^com\\.blackmagic-design\\.BlackmagicRaw(SDK)?$"],
+    "installed_apps": ["^/Applications/Blackmagic RAW/"]
+  }
+}

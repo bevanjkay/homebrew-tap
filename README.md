@@ -22,15 +22,19 @@ values map a check name to a list of regular expressions:
 
 ```json
 {
-  "bmd-*": {
-    "installed_pkgs": ["^com\\.blackmagic-design\\.Example$"],
-    "installed_apps": ["^/Applications/Blackmagic Example/"]
+  "bmd-video-assist": {
+    "installed_pkgs": ["^com\\.blackmagic-design\\.BlackmagicRaw(SDK)?$"],
+    "installed_apps": ["^/Applications/Blackmagic RAW/"]
   }
 }
 ```
 
 Valid check names are `installed_apps`, `installed_kexts`, `installed_pkgs`, `installed_launchjobs`
 and `loaded_launchjobs`. Entries from every matching glob are merged.
+
+Prefer an exact cask token over a broad glob. `bmd-*` would be wrong for the example above, because
+`bmd-braw` and `bmd-camera-utility` genuinely own the Blackmagic RAW packages and remove them on
+uninstall — excepting those casks would mask a real regression rather than a known leftover.
 
 Note that `installed_pkgs` and `installed_apps` are coupled: the check subtracts the file list of
 newly-added packages from the leftover-app list, so excepting a package usually means also

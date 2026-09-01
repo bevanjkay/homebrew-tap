@@ -2,8 +2,7 @@ cask "shadps4" do
   version "2026-08-31,bcebdf7d53eaff384d62bfef169a4e98ce284390"
   sha256 "46ee46f0eabb0661f3891364aca80786b0bcd00526fe0246ac7496cecc850169"
 
-  url "https://github.com/shadps4-emu/shadps4-qtlauncher/releases/download/shadPS4QtLauncher-#{version.tr(",", "-")}/shadPS4QtLauncher-macos-qt-#{version.csv.first}-#{version.csv.second&.slice(0, 7)}.zip",
-      verified: "github.com/shadps4-emu/shadps4-qtlauncher/"
+  url "https://github.com/shadps4-emu/shadps4-qtlauncher/releases/download/shadPS4QtLauncher-#{version.tr(",", "-")}/shadPS4QtLauncher-macos-qt-#{version.csv.first}-#{version.csv.second&.slice(0, 7)}.zip"
   name "shadps4"
   desc "PlayStation 4 emulator"
   homepage "https://shadps4.net/"

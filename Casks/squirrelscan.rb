@@ -8,8 +8,7 @@ cask "squirrelscan" do
          arm64_linux:  "cdb7de20b1936058f772c046843cd827ee5be97c3a70b461794619e74b6d163f",
          x86_64_linux: "3eb886538c96ff5e8da3859dd391d71cf32365319bca74ef463fcaaf23c5ba81"
 
-  url "https://github.com/squirrelscan/squirrelscan/releases/download/v#{version}/squirrel-#{version}-#{os}-#{arch}",
-      verified: "github.com/squirrelscan/squirrelscan/"
+  url "https://github.com/squirrelscan/squirrelscan/releases/download/v#{version}/squirrel-#{version}-#{os}-#{arch}"
   name "SquirrelScan"
   desc "Website scanning tool"
   homepage "https://squirrelscan.com/"

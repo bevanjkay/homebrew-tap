@@ -2,8 +2,7 @@ cask "yarc-launcher" do
   version "1.3.0"
   sha256 "2cbf9e10630bbe73c77c8bd82b4c67a7f1e6b4ac45135ed28c2467cd1018510e"
 
-  url "https://github.com/YARC-Official/YARC-Launcher/releases/download/v#{version}/YARC.Launcher_universal.app.tar.gz",
-      verified: "github.com/YARC-Official/YARC-Launcher/"
+  url "https://github.com/YARC-Official/YARC-Launcher/releases/download/v#{version}/YARC.Launcher_universal.app.tar.gz"
   name "YARC Launcher"
   desc "Launcher for YARG (Yet Another Rhthym Game)"
   homepage "https://yarg.in/"

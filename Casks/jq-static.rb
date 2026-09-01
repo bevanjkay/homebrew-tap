@@ -14,8 +14,7 @@ cask "jq-static" do
     end
   end
 
-  url "https://github.com/jqlang/jq/releases/download/jq-#{version}/jq-#{os}-#{arch}",
-      verified: "github.com/jqlang/jq/"
+  url "https://github.com/jqlang/jq/releases/download/jq-#{version}/jq-#{os}-#{arch}"
   name "jq"
   desc "JSON processor"
   homepage "https://jqlang.github.io/jq/"

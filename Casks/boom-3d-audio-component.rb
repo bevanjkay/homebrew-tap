@@ -3,7 +3,6 @@ cask "boom-3d-audio-component" do
   sha256 "4f85bfec510df263f00926c573fc73ab38be88bdc017e08287ac9fade5fa2564"
 
   url "https://d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/catalina/v#{version}_tagged_surround/Audio_Component_Installer.zip",
-      verified: "d3jbf8nvvpx3fh.cloudfront.net/device-assets/boom3d/",
       referer:  "https://www.globaldelight.com"
   name "Boom 3D Component Installer"
   desc "Component installer for Boom 3D"

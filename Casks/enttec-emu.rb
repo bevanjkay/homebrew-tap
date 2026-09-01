@@ -2,8 +2,7 @@ cask "enttec-emu" do
   version "26.04.17.5"
   sha256 "a6a428b99c40f784fa4b9a875bd13281c6711dad5d5639a2142c0a3e31969d7b"
 
-  url "https://s3-us-west-2.amazonaws.com/enttec-software-builds/emu/EMU-#{version}.pkg",
-      verified: "s3-us-west-2.amazonaws.com/enttec-software-builds/emu/"
+  url "https://s3-us-west-2.amazonaws.com/enttec-software-builds/emu/EMU-#{version}.pkg"
   name "ENTTEC Emu"
   desc "Setup and manage ENTTEC DMX devices"
   homepage "https://www.enttec.com.au/product/dmx-lighting-control-software/emu-sound-to-light-controller/"

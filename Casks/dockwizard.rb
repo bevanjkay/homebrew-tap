@@ -7,21 +7,6 @@ cask "dockwizard" do
   desc "Dock manager with portable presets and a command-line tool"
   homepage "https://github.com/bevanjkay/dockwizard"
 
-  livecheck do
-    url :url
-    regex(/^v?(\d+(?:\.\d+)+(?:-[\w.]+)?)$/i)
-    strategy :github_releases do |json, regex|
-      json.map do |release|
-        next if release["draft"]
-
-        match = release["tag_name"]&.match(regex)
-        next if match.blank?
-
-        match[1]
-      end
-    end
-  end
-
   depends_on macos: :tahoe
 
   app "DockWizard.app"

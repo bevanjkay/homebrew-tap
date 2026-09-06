@@ -17,8 +17,8 @@ cask "duckstation" do
 
   app "DuckStation.app"
 
-  postflight do
-    system "xattr", "-d", "com.apple.quarantine", "#{appdir}/DuckStation.app"
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{appdir}}/DuckStation.app"], must_succeed: false
   end
 
   zap trash: "~/Library/Application Support/DuckStation"

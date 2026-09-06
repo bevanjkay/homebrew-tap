@@ -16,8 +16,8 @@ cask "t3-chat" do
 
   app "T3 Chat.app"
 
-  postflight do
-    system "xattr", "-d", "com.apple.quarantine", "#{staged_path}/T3 Chat.app"
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{appdir}}/T3 Chat.app"], must_succeed: false
   end
 
   zap trash: [

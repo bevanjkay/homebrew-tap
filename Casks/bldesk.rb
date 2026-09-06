@@ -12,8 +12,8 @@ cask "bldesk" do
 
   app "BLDesk.app"
 
-  postflight do
-    system "xattr", "-d", "com.apple.quarantine", "#{staged_path}/BLDesk.app"
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{appdir}}/BLDesk.app"], must_succeed: false
   end
 
   zap trash: [

@@ -11,8 +11,8 @@ cask "yarc-launcher" do
 
   app "YARC Launcher.app"
 
-  postflight do
-    system "xattr", "-d", "com.apple.quarantine", "/Applications/YARC Launcher.app"
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{appdir}}/YARC Launcher.app"], must_succeed: false
   end
 
   zap trash: [

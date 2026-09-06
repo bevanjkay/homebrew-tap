@@ -11,13 +11,12 @@ cask "kiosk-browser" do
 
   app "kiosk-browser.app"
   # shim script (https://github.com/Homebrew/homebrew-cask/issues/18809)
-  shimscript = "#{staged_path}/kiosk-browser-wrapper.sh"
-  binary shimscript, target: "kiosk-browser"
+  binary "#{staged_path}/kiosk-browser-wrapper.sh", target: "kiosk-browser"
 
-  preflight do
-    File.write shimscript, <<~EOS
+  preflight_steps do
+    write_file "kiosk-browser-wrapper.sh", <<~EOS
       #!/bin/sh
-      '#{appdir}/kiosk-browser.app/Contents/MacOS/kiosk-browser' "$@"
+      '{{appdir}}/kiosk-browser.app/Contents/MacOS/kiosk-browser' "$@"
     EOS
   end
 

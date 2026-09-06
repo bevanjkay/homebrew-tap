@@ -16,8 +16,8 @@ cask "qik" do
 
   app "Qik.app"
 
-  postflight do
-    system "xattr", "-d", "com.apple.quarantine", "#{staged_path}/Qik.app"
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{appdir}}/Qik.app"], must_succeed: false
   end
 
   zap trash: "~/Library/Application Support/Qik"

@@ -40,7 +40,7 @@ cask "boom-3d-audio-component" do
   app app_path,
       target: "#{staged_path}/#{app_path} #{version}.app"
 
-  postflight do
-    system "open", "#{staged_path}/#{app_path} #{version}.app", "-W"
+  postflight_steps do
+    run "/usr/bin/open", args: ["{{staged_path}}/Audio Component Installer.app {{version}}.app", "-W"]
   end
 end

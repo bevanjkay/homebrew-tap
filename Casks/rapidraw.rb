@@ -14,14 +14,8 @@ cask "rapidraw" do
 
   app "RapidRAW.app"
 
-  postflight do
-    file_path = "#{appdir}/RapidRAW.app"
-    quarantine_value = `spctl --assess --type execute "#{file_path}" 2>/dev/null`.strip
-    if $CHILD_STATUS.success? && !quarantine_value.empty?
-      odie "RapidRAW is already marked as safe. Please remove the postflight block"
-    else
-      system "xattr", "-d", "com.apple.quarantine", file_path
-    end
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{appdir}}/RapidRAW.app"], must_succeed: false
   end
 
   zap trash: [

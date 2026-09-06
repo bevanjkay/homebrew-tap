@@ -31,8 +31,8 @@ cask "sharedown" do
 
   app "sharedown.app"
 
-  postflight do
-    system "xattr", "-d", "com.apple.quarantine", "#{appdir}/sharedown.app"
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{appdir}}/sharedown.app"], must_succeed: false
   end
 
   zap trash: [

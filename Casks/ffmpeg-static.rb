@@ -14,8 +14,8 @@ cask "ffmpeg-static" do
 
   binary "ffmpeg"
 
-  postflight do
-    system "xattr", "-d", "com.apple.quarantine", "#{staged_path}/ffmpeg"
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{staged_path}}/ffmpeg"], must_succeed: false
   end
 
   # No zap stanza required

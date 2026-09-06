@@ -20,8 +20,12 @@ cask "squirrelscan" do
 
   binary "squirrel-#{version}-#{os}-#{arch}", target: "squirrel"
 
-  postflight do
-    system "xattr", "-d", "com.apple.quarantine", "#{staged_path}/squirrel-#{version}-darwin-#{arch}" if OS.mac?
+  postflight_steps do
+    on_macos do
+      run "/usr/bin/xattr",
+          args:         ["-d", "com.apple.quarantine", "{{staged_path}}/squirrel-{{version}}-darwin-{{arch}}"],
+          must_succeed: false
+    end
   end
 
   zap trash: "~/.squirrel"

@@ -19,8 +19,8 @@ cask "tallyarbiter" do
 
   app "Tally Arbiter.app"
 
-  postflight do
-    system "xattr", "-d", "com.apple.quarantine", "/Applications/Tally Arbiter.app"
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{appdir}}/Tally Arbiter.app"], must_succeed: false
   end
 
   zap trash: [

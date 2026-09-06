@@ -16,7 +16,7 @@ cask "sevenzip-static" do
 
   # No zap stanza required
 
-  postflight do
-    system "xattr", "-d", "com.apple.quarantine", "#{staged_path}/7zz"
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{staged_path}}/7zz"], must_succeed: false
   end
 end

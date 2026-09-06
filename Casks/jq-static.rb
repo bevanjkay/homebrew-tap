@@ -9,8 +9,10 @@ cask "jq-static" do
          x86_64_linux: "b1c22172dd303f3be49e935aa56aa48a8b7a46e0bc838b4997d3bb451495870f"
 
   on_intel do
-    postflight do
-      system "xattr", "-d", "com.apple.quarantine", "#{HOMEBREW_PREFIX}/bin/jq"
+    postflight_steps do
+      on_macos do
+        run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{HOMEBREW_PREFIX}}/bin/jq"], must_succeed: false
+      end
     end
   end
 

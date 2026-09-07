@@ -64,8 +64,7 @@ cask "bmd-fairlight-live" do
   auto_updates true
   depends_on macos: :sonoma
 
-  # The installer filename embeds the internal package version, not just the release version
-  pkg "Install Fairlight Live #{version.csv.first}release_fairlight_live_#{version.csv.first.chomp(".0")}.pkg"
+  pkg "Install Fairlight Live #{version.csv.first.chomp(".0")}.pkg"
 
   uninstall script:  {
               executable: "/Applications/Fairlight Live/Uninstall Fairlight Live.app/Contents/Resources/uninstall_fairlightlive.sh",

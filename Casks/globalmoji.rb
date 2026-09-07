@@ -1,6 +1,6 @@
 cask "globalmoji" do
-  version "0.1.1"
-  sha256 "01ea49c2f60a2121bfb26568a87d73926f69ae7a3ef96f325b74c38c87a232d6"
+  version "0.2.0"
+  sha256 "1eee9cf79aa7d0e279ae54cd622dbf124e167aef7ce92d73bed7b28738014531"
 
   url "https://github.com/bevanjkay/globalmoji/releases/download/v#{version}/Globalmoji-#{version}.dmg"
   name "Globalmoji"

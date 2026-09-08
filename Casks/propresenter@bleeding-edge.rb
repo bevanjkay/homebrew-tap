@@ -50,6 +50,8 @@ cask "propresenter@bleeding-edge" do
 
   app "ProPresenter.app", target: "ProPresenter (#{version.csv.first}).app"
 
+  uninstall quit: "com.renewedvision.propresenter"
+
   zap trash: [
         "/Library/Application Support/RenewedVision",
         "/Library/Caches/com.renewedvision.ProPresenter#{version.major}",

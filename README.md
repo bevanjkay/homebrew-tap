@@ -43,6 +43,8 @@ excepting the apps that package installs.
 To find the identifiers for a new exception, run the CI workflow manually against the cask with
 `skip_install` unchecked and read them out of the resulting annotation.
 
-This works by applying `.github/patches/homebrew-cask-check.patch` to Homebrew Cask's
-`cmd/lib/check.rb` at the start of each CI job. If a Homebrew Cask change ever makes that patch stop
-applying, the `Patch Homebrew Cask CI checks` step fails and the patch needs refreshing.
+This works by re-implementing the final `brew cask-ci check` step inline in `ci.yml`: the "after"
+snapshot from `Cask::CI::Check.all` is filtered through the matching exceptions before it is diffed
+with `Cask::CI::Check.errors`. If a Homebrew change ever renames those helpers, the `Compare
+installed and running apps and services with snapshot` step fails and the inline script needs
+refreshing.

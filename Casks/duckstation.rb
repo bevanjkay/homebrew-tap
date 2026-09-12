@@ -17,11 +17,11 @@ cask "duckstation" do
 
   app "DuckStation.app"
 
-  uninstall quit: "com.github.stenzek.duckstation"
-
   postflight_steps do
     run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{appdir}}/DuckStation.app"], must_succeed: false
   end
+
+  uninstall quit: "com.github.stenzek.duckstation"
 
   zap trash: "~/Library/Application Support/DuckStation"
 end

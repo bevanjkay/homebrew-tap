@@ -28,6 +28,8 @@ cask "shadps4" do
 
   app "shadPS4QtLauncher.app"
 
+  uninstall quit: "com.shadps4-emu.shadps4-qtlauncher"
+
   zap trash: [
     "~/Library/Application Support/shadPS4",
     "~/Library/Preferences/com.shadps4-emu.shadps4.plist",

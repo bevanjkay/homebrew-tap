@@ -273,7 +273,7 @@ jobs:
         if: always() && steps.snapshot.outcome == 'success' && steps.install.outcome == 'success' && runner.os == 'macOS'
 
   conclusion:
-    name: conclusion
+    name: CI conclusion
     needs: test
     runs-on: ubuntu-slim
     if: always()

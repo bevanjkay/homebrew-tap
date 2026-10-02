@@ -1,8 +1,8 @@
 cask "davinci-resolve@beta" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "21.1.0,59dd4eef1f4941c29fb8dc48b33f5c87,0885c68edabf471689e38c5974e7f15b,"
-  sha256 "2d81ebd2fc60349e98044812801f556cd8cbb571360b53645f1561d855b9d4e5"
+  version "21.1.1,62817b75bdf744718e93909ca6d58f0d,fe9e4851d000487588709802e9694b59,"
+  sha256 "dfe8a7c1ee189a141310afdeebf3fff33316d9be7967ad3116b8b62e2bb4fe14"
 
   personal_details = if File.exist?("#{Dir.home}/.personal_details.json")
     JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
@@ -60,15 +60,12 @@ cask "davinci-resolve@beta" do
   end
 
   conflicts_with cask: "davinci-resolve"
-  depends_on macos: :sonoma
+  depends_on macos: :sequoia
 
   pkg "Install Resolve #{version.csv.first}#{version.csv.fourth}.pkg"
 
-  uninstall script:  {
-              executable: "/Applications/DaVinci Resolve/Uninstall Resolve.app/Contents/Resources/uninstall.sh",
-              sudo:       true,
-            },
-            pkgutil: [
+  uninstall launchctl: "com.blackmagic-design.DaVinciResolveBMDPanelDaemon",
+            pkgutil:   [
               "com.blackmagic-design.BlackmagicRaw_resolve",
               "com.blackmagic-design.DaVinciKeyboards",
               "com.blackmagic-design.DaVinciPanels",
@@ -76,7 +73,17 @@ cask "davinci-resolve@beta" do
               "com.blackmagic-design.ManifestBlackmagicRawPlayer",
               "com.blackmagic-design.ManifestLite",
               "com.blackmagic-design.ManifestPanels",
-            ]
+            ],
+            delete:    [
+              "/Applications/DaVinci Resolve",
+              "/Library/Application Support/Blackmagic Design/DaVinci Resolve Advanced Panel",
+              "/Library/Application Support/Blackmagic Design/DaVinci Resolve Panels/AdminUtility",
+              "/Library/Frameworks/DaVinciPanelAPI.framework",
+              "/Library/Frameworks/FairlightPanelAPI.framework",
+              "/Library/OFX/Plugins/DaVinci Resolve Renderer.ofx.bundle",
+              "/var/tmp/davinci_socket",
+            ],
+            rmdir:     "/Library/Application Support/Blackmagic Design/DaVinci Resolve Panels"
 
   zap trash: [
     "~/Library/Application Scripts/com.blackmagic-design.DaVinciResolveLite",

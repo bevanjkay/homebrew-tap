@@ -55,7 +55,7 @@ module Homebrew
           new_content = content.gsub(
             /(deprecate! date: ".*?"(, because: .*?)?)$/,
             "\\1\n  disable! date: \"#{Date.today}\"\\2",
-          ).gsub(/^\s*livecheck\s+do\s*\n(?:\s*.*\n)*?\s*end\n?/, "")
+          ).gsub(/^(?:[ \t]*\n)?([ \t]*)livecheck\s+do\s*\n.*?^\1end\n?/m, "")
           File.write(file_path, new_content)
         end
 

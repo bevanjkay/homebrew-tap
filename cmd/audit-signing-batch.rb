@@ -65,7 +65,6 @@ module Homebrew
 
       sig { override.void }
       def run
-        ENV["HOMEBREW_EVAL_ALL"] = "1"
         cmd_args = T.cast(args, Args)
 
         count = positive_integer_arg(cmd_args.count, flag: "--count", default: DEFAULT_COUNT)

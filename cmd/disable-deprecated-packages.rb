@@ -27,7 +27,6 @@ module Homebrew
 
       sig { override.void }
       def run
-        ENV["HOMEBREW_EVAL_ALL"] = "1"
         tap_string = args.named.first
         @target_tap = T.let(Tap.fetch(T.must(tap_string)), T.nilable(Tap))
 

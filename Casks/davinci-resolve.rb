@@ -62,15 +62,12 @@ cask "davinci-resolve" do
   # Doesn't automatically update, but set to true to prevent `brew upgrade` from forcing an update
   auto_updates true
   conflicts_with cask: "davinci-resolve@beta"
-  depends_on macos: :sonoma
+  depends_on macos: :sequoia
 
   pkg "Install Resolve #{version.csv.first.chomp(".0")}.pkg"
 
-  uninstall script:  {
-              executable: "/Applications/DaVinci Resolve/Uninstall Resolve.app/Contents/Resources/uninstall.sh",
-              sudo:       true,
-            },
-            pkgutil: [
+  uninstall launchctl: "com.blackmagic-design.DaVinciResolveBMDPanelDaemon",
+            pkgutil:   [
               "com.blackmagic-design.BlackmagicRaw_resolve",
               "com.blackmagic-design.DaVinciKeyboards",
               "com.blackmagic-design.DaVinciPanels",
@@ -78,7 +75,17 @@ cask "davinci-resolve" do
               "com.blackmagic-design.ManifestBlackmagicRawPlayer",
               "com.blackmagic-design.ManifestLite",
               "com.blackmagic-design.ManifestPanels",
-            ]
+            ],
+            delete:    [
+              "/Applications/DaVinci Resolve",
+              "/Library/Application Support/Blackmagic Design/DaVinci Resolve Advanced Panel",
+              "/Library/Application Support/Blackmagic Design/DaVinci Resolve Panels/AdminUtility",
+              "/Library/Frameworks/DaVinciPanelAPI.framework",
+              "/Library/Frameworks/FairlightPanelAPI.framework",
+              "/Library/OFX/Plugins/DaVinci Resolve Renderer.ofx.bundle",
+              "/var/tmp/davinci_socket",
+            ],
+            rmdir:     "/Library/Application Support/Blackmagic Design/DaVinci Resolve Panels"
 
   zap trash: [
     "~/Library/Application Scripts/com.blackmagic-design.DaVinciResolveLite",

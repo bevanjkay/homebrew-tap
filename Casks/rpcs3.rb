@@ -1,6 +1,6 @@
 cask "rpcs3" do
-  version "0.0.40-18970-297db871,297db8713fbb02bfb156edb6c03c68850825a83e"
-  sha256 "032acb7ed798ea740ece01aff79cb4167cfec58e5fdb2805a87252652dc43338"
+  version "0.0.43-20250-304d544b,304d544bc1b3af4f15400a47b34132ff49b1bc69"
+  sha256 "2a7bda49c72e38c859520827971ad8a59cc703918f0091657a6fd5ad30f3991a"
 
   url "https://github.com/RPCS3/rpcs3-binaries-mac/releases/download/build-#{version.csv.second}/rpcs3-v#{version.csv.first}_macos.7z"
   name "RPCS3"
@@ -16,7 +16,7 @@ cask "rpcs3" do
     throttle days: 7
   end
 
-  depends_on macos: :sonoma
+  depends_on macos: :sequoia
 
   app "RPCS3.app"
 

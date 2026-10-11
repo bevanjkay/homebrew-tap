@@ -20,6 +20,8 @@ cask "rpcs3" do
 
   app "RPCS3.app"
 
+  uninstall quit: "net.rpcs3.rpcs3"
+
   zap trash: [
     "~/Library/Application Support/rpcs3",
     "~/Library/Caches/rpcs3",

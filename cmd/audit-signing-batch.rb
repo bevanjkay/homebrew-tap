@@ -16,6 +16,16 @@ module Homebrew
         (Pathname.new(Dir.home)/".homebrew/audit_signing_results.json").freeze,
         Pathname,
       )
+      DEFAULT_EXPANDED_RESULTS_FILE = T.let(
+        (Pathname.new(Dir.home)/".homebrew/audit_signing_expanded_results.json").freeze,
+        Pathname,
+      )
+      # Stanzas that `brew audit --only=signing` only started checking in Homebrew/brew#24227.
+      EXPANDED_ARTIFACTS_REGEX = /
+        ^\s*(?:audio_unit_plugin|colorpicker|input_method|internet_plugin|mdimporter|prefpane|
+        screen_saver|service|vst3_plugin|vst_plugin|suite|artifact)\b|
+        ^\s*installer\s+script:
+      /x
       FETCH_TIMEOUT_SECONDS = 120
       MAX_ERROR_LENGTH = 500
       DOWNLOADS_WARNING_THRESHOLD_BYTES = T.let(20 * 1024 * 1024 * 1024, Integer)
@@ -42,11 +52,14 @@ module Homebrew
 
         sig { returns(T.nilable(String)) }
         def results_file; end
+
+        sig { returns(T::Boolean) }
+        def expanded?; end
       end
 
       cmd_args do
         usage_banner <<~EOS
-          `audit-signing-batch` [`--count=`<n>] [`--jobs=`<n>] [`--results-file=`<path>]
+          `audit-signing-batch` [`--count=`<n>] [`--jobs=`<n>] [`--results-file=`<path>] [`--expanded`]
 
           Audit the next batch of `homebrew/cask` casks with `brew audit --online --only=signing`.
           Results are cached as JSON and previously checked casks are skipped.
@@ -58,7 +71,10 @@ module Homebrew
         flag "--jobs=",
              description: "Number of concurrent fetch workers and audit workers. Defaults to 5."
         flag "--results-file=",
-             description: "Path to the JSON results cache. Defaults to ~/.homebrew/audit_signing_results.json."
+             description: "Path to the JSON results cache. Defaults to ~/.homebrew/audit_signing_results.json, " \
+                          "or ~/.homebrew/audit_signing_expanded_results.json with `--expanded`."
+        switch "--expanded",
+               description: "Only audit casks with artifacts newly covered by the expanded signing audit."
 
         named_args :none
       end
@@ -69,12 +85,13 @@ module Homebrew
 
         count = positive_integer_arg(cmd_args.count, flag: "--count", default: DEFAULT_COUNT)
         jobs = positive_integer_arg(cmd_args.jobs, flag: "--jobs", default: DEFAULT_JOBS)
-        results_file = Pathname.new(cmd_args.results_file || DEFAULT_RESULTS_FILE.to_s).expand_path
+        default_results_file = cmd_args.expanded? ? DEFAULT_EXPANDED_RESULTS_FILE : DEFAULT_RESULTS_FILE
+        results_file = Pathname.new(cmd_args.results_file || default_results_file.to_s).expand_path
         details_file = details_file_for(results_file)
         results = load_results(results_file)
         details = load_details(details_file)
 
-        tokens = next_tokens(results: results, count: count)
+        tokens = next_tokens(results: results, count: count, expanded: cmd_args.expanded?)
         if tokens.empty?
           puts "No unchecked non-font casks found."
           return
@@ -162,13 +179,17 @@ module Homebrew
         details_file.write(JSON.pretty_generate(details.sort.to_h) << "\n")
       end
 
-      sig { params(results: T::Hash[String, T::Boolean], count: Integer).returns(T::Array[String]) }
-      def next_tokens(results:, count:)
+      sig {
+        params(results: T::Hash[String, T::Boolean], count: Integer, expanded: T::Boolean).returns(T::Array[String])
+      }
+      def next_tokens(results:, count:, expanded:)
         Tap.fetch("homebrew/cask").cask_files
+           .sort_by { |path| File.basename(path, ".rb") }
+           .lazy
+           .reject { |path| File.basename(path, ".rb").start_with?("font-") }
+           .reject { |path| results.key?(File.basename(path, ".rb")) }
+           .select { |path| !expanded || File.read(path).match?(EXPANDED_ARTIFACTS_REGEX) }
            .map { |path| File.basename(path, ".rb") }
-           .sort
-           .reject { |token| token.start_with?("font-") }
-           .reject { |token| results.key?(token) }
            .first(count)
       end
 

@@ -30,6 +30,7 @@ module Homebrew
 
       sig { override.void }
       def run
+        ENV["HOMEBREW_NO_INSTALL_FROM_API"] = "1"
         cask = args.named.to_casks.fetch(0)
         target_tap = Tap.fetch(TARGET_TAP)
 

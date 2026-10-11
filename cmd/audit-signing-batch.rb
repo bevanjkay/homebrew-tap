@@ -81,6 +81,7 @@ module Homebrew
 
       sig { override.void }
       def run
+        ENV["HOMEBREW_NO_INSTALL_FROM_API"] = "1"
         cmd_args = T.cast(args, Args)
 
         count = positive_integer_arg(cmd_args.count, flag: "--count", default: DEFAULT_COUNT)

@@ -3,6 +3,7 @@
 
 require "abstract_command"
 require "cask/cask_loader"
+require "date"
 require "open3"
 require "tap"
 require "tempfile"
@@ -14,7 +15,6 @@ module Homebrew
       TARGET_REPOSITORY = "homebrew/homebrew-cask"
       DEFAULT_BRANCH = "main"
       ORIGIN_REMOTE = "origin"
-      TARGET_DISABLE_STANZA = '  disable! date: "2026-09-01", because: :fails_gatekeeper_check'
       PR_NOTE = "Deprecating because the cask fails the macOS gatekeeper check"
 
       cmd_args do
@@ -52,7 +52,7 @@ module Homebrew
 
           old_contents = cask_file.read
           new_contents = updated_contents(old_contents)
-          odie "#{cask.token} already contains #{TARGET_DISABLE_STANZA.inspect}." if new_contents == old_contents
+          odie "#{cask.token} already contains #{disable_stanza.inspect}." if new_contents == old_contents
 
           cask_file.atomic_write(new_contents)
 
@@ -106,19 +106,24 @@ module Homebrew
         odie "#{cask_file.basename(".rb")} already has a disable stanza."
       end
 
+      sig { returns(String) }
+      def disable_stanza
+        %Q(  disable! date: "#{Date.today}", because: :fails_gatekeeper_check)
+      end
+
       sig { params(contents: String).returns(String) }
       def updated_contents(contents)
         updated = contents.sub(
           /^\s*(disable!|deprecate!)\s+date:\s*".*?"(?:,\s*because:\s*:[a-z_]+)?$/,
-          TARGET_DISABLE_STANZA,
+          disable_stanza,
         )
         return updated if updated != contents
 
         updated = contents.sub(
           /(^\s*homepage\s+.*\n)(\n)?/,
-          "\\1#{TARGET_DISABLE_STANZA}\n\n",
+          "\\1#{disable_stanza}\n\n",
         )
-        odie "Could not find a homepage stanza to insert #{TARGET_DISABLE_STANZA.inspect}." if updated == contents
+        odie "Could not find a homepage stanza to insert #{disable_stanza.inspect}." if updated == contents
 
         updated
       end

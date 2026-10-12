@@ -15,7 +15,7 @@ module Homebrew
       TARGET_REPOSITORY = "homebrew/homebrew-cask"
       DEFAULT_BRANCH = "main"
       ORIGIN_REMOTE = "origin"
-      PR_NOTE = "Deprecating because the cask fails the macOS gatekeeper check"
+      PR_NOTE = "Disabling because the cask fails the macOS Gatekeeper check"
 
       cmd_args do
         usage_banner <<~EOS
@@ -40,7 +40,7 @@ module Homebrew
         odie "#{cask.token} has no source file." if cask_file.nil?
 
         repo = target_tap.path
-        branch_name = "#{cask.token}-deprecate"
+        branch_name = "#{cask.token}-disable"
         branch_created = T.let(false, T::Boolean)
         branch_pushed = T.let(false, T::Boolean)
 
@@ -133,7 +133,7 @@ module Homebrew
       def create_pr(repo, branch_name, token)
         body = pr_body(repo)
 
-        Tempfile.create(["#{token}-deprecate", ".md"]) do |file|
+        Tempfile.create(["#{token}-disable", ".md"]) do |file|
           file.write(body)
           file.flush
 

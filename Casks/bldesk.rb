@@ -1,14 +1,19 @@
 cask "bldesk" do
-  version "1.0.59"
-  sha256 "47135cc13097ef60e3fa9ceffbf59beefe73819c9ff6957e759fb3085ed451d9"
+  version "1.0.62-beta.25"
+  sha256 "27a91879b1948a1fd2ac560617ca7717c80a0eb6dd4f432945c02dab1d464090"
 
   url "https://github.com/termau/bldesk/releases/download/v#{version}/BLDesk-#{version}-mac-universal.dmg"
   name "BLDesk"
   desc "Desktop client for BinaryLane Cloud"
   homepage "https://github.com/termau/bldesk/"
 
+  livecheck do
+    url :url
+    regex(/v(.+)/i)
+  end
+
   auto_updates true
-  depends_on :macos
+  depends_on macos: :ventura
 
   app "BLDesk.app"
 

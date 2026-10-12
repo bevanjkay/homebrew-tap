@@ -131,7 +131,7 @@ module Homebrew
 
       sig { params(repo: Pathname, branch_name: String, token: String).returns(String) }
       def create_pr(repo, branch_name, token)
-        body = pr_body(repo, token)
+        body = pr_body(repo)
 
         Tempfile.create(["#{token}-deprecate", ".md"]) do |file|
           file.write(body)
@@ -153,10 +153,10 @@ module Homebrew
         end
       end
 
-      sig { params(repo: Pathname, token: String).returns(String) }
-      def pr_body(repo, token)
+      sig { params(repo: Pathname).returns(String) }
+      def pr_body(repo)
         template = (repo/".github/PULL_REQUEST_TEMPLATE.md").read
-        "#{template.gsub("<cask>", token).rstrip}\n\n#{PR_NOTE}\n"
+        "#{template.rstrip}\n\n#{PR_NOTE}\n"
       end
 
       sig { params(repo: Pathname, args: String).void }

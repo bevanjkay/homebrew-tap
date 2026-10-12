@@ -30,6 +30,7 @@ module Homebrew
 
       sig { override.void }
       def run
+        ENV["HOMEBREW_NO_INSTALL_FROM_API"] = "1"
         cask = args.named.to_casks.fetch(0)
         target_tap = Tap.fetch(TARGET_TAP)
 
@@ -63,7 +64,7 @@ module Homebrew
           brew!("audit", "--cask", "--online", "--only=signing", cask.token)
 
           git!(repo, "add", cask_file.to_s)
-          git!(repo, "commit", "-m", "#{cask.token}: deprecate")
+          git!(repo, "commit", "-m", "#{cask.token}: disable")
           git!(repo, "push", "--set-upstream", ORIGIN_REMOTE, branch_name)
           branch_pushed = true
 
@@ -141,7 +142,7 @@ module Homebrew
             "--repo", TARGET_REPOSITORY,
             "--base", DEFAULT_BRANCH,
             "--head", branch_name,
-            "--title", "#{token}: deprecate",
+            "--title", "#{token}: disable",
             "--body-file", file.path
           )
 

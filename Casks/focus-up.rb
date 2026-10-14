@@ -1,6 +1,6 @@
 cask "focus-up" do
-  version "0.1.1"
-  sha256 "0d9ef98f6b5d92e4da9aa14bcdc072891c061a147874ca86b0ddf84fd07a9724"
+  version "0.1.2"
+  sha256 "b12a32410ff2dd1debb76eac29efdb5488ab0b5ef86959979d57845573038f72"
 
   url "https://github.com/bevanjkay/focus-up/releases/download/v#{version}/Focus-Up-#{version}.dmg"
   name "Focus Up"

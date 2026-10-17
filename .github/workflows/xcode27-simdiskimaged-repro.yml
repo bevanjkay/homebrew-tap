@@ -59,8 +59,9 @@ jobs:
           mount | grep -iE 'CoreSimulator|cryptexd' || true
           hdiutil info
 
-      # Small, so attaches are frequent enough to land on the BSD name simdiskimaged
-      # is about to eject during its ~35 s retry loop.
+      # Small, so attaches are frequent enough to land on the BSD names simdiskimaged
+      # guesses during its ~35 s retry loop. APFS, like the runtime images, so each
+      # attach is a disk plus a synthesized container (diskN, diskN+1, diskN+1s1).
       - name: Create DMG
         run: |
           src=$(mktemp -d)
@@ -68,7 +69,7 @@ jobs:
           for n in $(seq 1 20); do
             head -c 2000000 /dev/urandom > "${src}/Repro.app/Contents/MacOS/blob${n}"
           done
-          hdiutil create -quiet -format UDZO -fs HFS+ -volname Repro -srcfolder "${src}" "${MON}/base.dmg"
+          hdiutil create -quiet -format UDZO -fs APFS -volname Repro -srcfolder "${src}" "${MON}/base.dmg"
           ls -l "${MON}/base.dmg"
 
       - name: Stop simdiskimaged

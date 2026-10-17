@@ -18,13 +18,9 @@ on:
         description: Runner label
         default: xcode-27
         type: string
-      rounds:
-        description: Attach/copy rounds per repro job
-        default: "10"
-        type: string
-      dmg_url:
-        description: DMG to attach in repro jobs
-        default: https://github.com/openclaw/openclaw/releases/download/v2026.10.4/OpenClaw-2026.10.4.dmg
+      duration:
+        description: Seconds to keep attaching DMGs after the CoreSimulator trigger
+        default: "180"
         type: string
       cask:
         description: Cask to fetch and audit in homebrew jobs
@@ -47,8 +43,7 @@ jobs:
         stop: [false, true]
         attempt: [1]
     env:
-      DMG_URL: ${{ inputs.dmg_url || 'https://github.com/openclaw/openclaw/releases/download/v2026.10.4/OpenClaw-2026.10.4.dmg' }}
-      ROUNDS: ${{ inputs.rounds || '10' }}
+      DURATION: ${{ inputs.duration || '180' }}
     steps:
       - name: Runner state
         run: |
@@ -64,11 +59,17 @@ jobs:
           mount | grep -iE 'CoreSimulator|cryptexd' || true
           hdiutil info
 
-      - name: Download DMG
+      # Small, so attaches are frequent enough to land on the BSD name simdiskimaged
+      # is about to eject during its ~35 s retry loop.
+      - name: Create DMG
         run: |
-          curl -fsSL --retry 3 -o "${MON}/base.dmg" "${DMG_URL}"
+          src=$(mktemp -d)
+          mkdir -p "${src}/Repro.app/Contents/MacOS"
+          for n in $(seq 1 20); do
+            head -c 2000000 /dev/urandom > "${src}/Repro.app/Contents/MacOS/blob${n}"
+          done
+          hdiutil create -quiet -format UDZO -fs HFS+ -volname Repro -srcfolder "${src}" "${MON}/base.dmg"
           ls -l "${MON}/base.dmg"
-          hdiutil imageinfo -format "${MON}/base.dmg"
 
       - name: Stop simdiskimaged
         if: matrix.stop
@@ -97,13 +98,16 @@ jobs:
           (set -x; xcodebuild -version; xcrun --find metal; xcrun simctl runtime list) > "${MON}/trigger.txt" 2>&1 &
 
           fails=0
-          for i in $(seq 1 "${ROUNDS}"); do
+          i=0
+          end=$((SECONDS + DURATION))
+          while [ "${SECONDS}" -lt "${end}" ]; do
+            i=$((i + 1))
             dmg="${MON}/round-${i}.dmg"
             cp -c "${MON}/base.dmg" "${dmg}"
             xattr -w com.apple.quarantine "0081;$(printf %x "$(date +%s)");Homebrew Cask;" "${dmg}"
             mnt=$(mktemp -d "${TMPDIR:-/tmp}/repro-dmg.XXXXXX")
             unpack=$(mktemp -d)
-            start=$(date +%T)
+            start=$(perl -MTime::HiRes=time -MPOSIX=strftime -e '$t = time; printf "%s.%03d", strftime("%H:%M:%S", localtime $t), ($t - int $t) * 1000')
 
             if ! plist=$(hdiutil attach -plist -nobrowse -readonly -mountrandom "${mnt}" "${dmg}" 2> "${MON}/attach.err"); then
               echo "${start} round ${i}: ATTACH FAILED: $(tail -n 1 "${MON}/attach.err")" | tee -a "${MON}/results.txt"
@@ -124,6 +128,7 @@ jobs:
             fi
             rm -rf "${dmg}" "${unpack}" "${MON}/round.bom" "${MON}/list.txt"
           done
+          echo "rounds=${i}" | tee -a "${MON}/results.txt"
           echo "failures=${fails}" | tee -a "${MON}/results.txt"
 
       - name: Collect results
@@ -155,7 +160,8 @@ jobs:
           {
             echo "### repro ${{ matrix.stop && 'simdiskimaged stopped' || 'control' }} ${{ matrix.attempt }} (${ImageVersion:-unknown})"
             echo '```'
-            cat "${MON}/results.txt" || echo "no results"
+            grep -vE ': OK ' "${MON}/results.txt" || echo "no results"
+            echo "disks used: $(grep -oE '/dev/disk[0-9]+' "${MON}/results.txt" | sort | uniq -c | tr '\n' ' ')"
             echo '```'
             echo '```'
             grep -E 'Cryptex mounting failed|duplicate of existing image|Attempting to add image|Ejecting disk|blocked by dissenter|IOCTL eject' "${MON}/log.txt" | cut -c1-200 | head -n 30 || echo "no simdiskimaged runtime/eject activity"

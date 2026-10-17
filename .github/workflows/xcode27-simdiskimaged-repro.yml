@@ -1,9 +1,12 @@
 name: xcode-27 simdiskimaged DMG repro
 
-# Reproduces DMG attach/copy failures on the xcode-27 runner image without Homebrew.
+# Reproduces DMG attach/copy failures on the xcode-27 runner image.
 # CoreSimulator's simdiskimaged re-registers a simulator runtime, then retries
 # "Ejecting diskN" by BSD name; when a freshly attached DMG has reused that name,
 # its attach fails or its mount point disappears during the copy.
+#
+# `repro` does this without Homebrew; `homebrew` runs the same steps as
+# Homebrew/homebrew-cask CI (setup-homebrew, brew config, brew fetch, brew audit).
 
 on:
   push:
@@ -16,12 +19,16 @@ on:
         default: xcode-27
         type: string
       rounds:
-        description: Attach/copy rounds per job
-        default: "20"
+        description: Attach/copy rounds per repro job
+        default: "10"
         type: string
       dmg_url:
-        description: DMG to attach
+        description: DMG to attach in repro jobs
         default: https://github.com/openclaw/openclaw/releases/download/v2026.10.4/OpenClaw-2026.10.4.dmg
+        type: string
+      cask:
+        description: Cask to fetch and audit in homebrew jobs
+        default: openclaw
         type: string
 
 permissions: {}
@@ -32,16 +39,16 @@ defaults:
 
 jobs:
   repro:
-    name: ${{ matrix.stop && 'simdiskimaged stopped' || 'control' }} ${{ matrix.attempt }}
+    name: repro ${{ matrix.stop && 'simdiskimaged stopped' || 'control' }} ${{ matrix.attempt }}
     runs-on: ${{ inputs.runner || 'xcode-27' }}
     strategy:
       fail-fast: false
       matrix:
         stop: [false, true]
-        attempt: [1, 2, 3]
+        attempt: [1, 2]
     env:
       DMG_URL: ${{ inputs.dmg_url || 'https://github.com/openclaw/openclaw/releases/download/v2026.10.4/OpenClaw-2026.10.4.dmg' }}
-      ROUNDS: ${{ inputs.rounds || '20' }}
+      ROUNDS: ${{ inputs.rounds || '10' }}
     steps:
       - name: Runner state
         run: |
@@ -78,7 +85,7 @@ jobs:
           sudo nohup eslogger mount unmount remount exec > "${MON}/eslogger.jsonl" 2> "${MON}/eslogger.err" &
           # shellcheck disable=SC2024
           sudo nohup log stream --level debug --style compact --predicate \
-            'process IN {"diskarbitrationd", "diskimages-helper", "hdiutil", "simdiskimaged", "diskimagescontroller", "diskimagesiod", "cryptexd", "CoreSimulatorService", "ditto"} OR subsystem BEGINSWITH "com.apple.DiskImages" OR (process == "kernel" AND (eventMessage CONTAINS[c] "unmount" OR eventMessage CONTAINS "repro-dmg"))' \
+            'process IN {"diskarbitrationd", "diskimages-helper", "hdiutil", "simdiskimaged", "diskimagescontroller", "diskimagesiod", "cryptexd", "CoreSimulatorService", "mobileassetd", "ditto"} OR subsystem BEGINSWITH "com.apple.DiskImages" OR (process == "kernel" AND (eventMessage CONTAINS[c] "unmount" OR eventMessage CONTAINS "repro-dmg"))' \
             > "${MON}/log.txt" 2>&1 &
           sleep 3
           cat "${MON}/eslogger.err"
@@ -138,7 +145,7 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::simdiskimaged key events"
-          grep -E 'Cryptex mounting failed|duplicate of existing image|Unmounting|Ejecting disk|blocked by dissenter|IOCTL eject|Disk unmount requested|not responding' "${MON}/log.txt" | cut -c1-300 || true
+          grep -E 'Cryptex mounting failed|duplicate of existing image|Attempting to add image|Unmounting|Ejecting disk|blocked by dissenter|IOCTL eject|Disk unmount requested|not responding' "${MON}/log.txt" | cut -c1-300 || true
           echo "::endgroup::"
 
           echo "::group::eslogger unmounts"
@@ -146,12 +153,12 @@ jobs:
           echo "::endgroup::"
 
           {
-            echo "### ${{ matrix.stop && 'simdiskimaged stopped' || 'control' }} ${{ matrix.attempt }} (${ImageVersion:-unknown})"
+            echo "### repro ${{ matrix.stop && 'simdiskimaged stopped' || 'control' }} ${{ matrix.attempt }} (${ImageVersion:-unknown})"
             echo '```'
             cat "${MON}/results.txt" || echo "no results"
             echo '```'
             echo '```'
-            grep -E 'Cryptex mounting failed|duplicate of existing image|Ejecting disk|blocked by dissenter|IOCTL eject' "${MON}/log.txt" | cut -c1-200 | head -n 30 || echo "no simdiskimaged eject activity"
+            grep -E 'Cryptex mounting failed|duplicate of existing image|Attempting to add image|Ejecting disk|blocked by dissenter|IOCTL eject' "${MON}/log.txt" | cut -c1-200 | head -n 30 || echo "no simdiskimaged runtime/eject activity"
             echo '```'
           } >> "${GITHUB_STEP_SUMMARY}"
 
@@ -167,5 +174,114 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: repro-${{ matrix.stop && 'stopped' || 'control' }}-${{ matrix.attempt }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/repro
+          if-no-files-found: ignore
+
+  homebrew:
+    name: homebrew ${{ matrix.stop && 'simdiskimaged stopped' || 'control' }} ${{ matrix.attempt }}
+    runs-on: ${{ inputs.runner || 'xcode-27' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        stop: [false, true]
+        attempt: [1, 2]
+    env:
+      CASK: ${{ inputs.cask || 'openclaw' }}
+      HOMEBREW_DEVELOPER: 1
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_NO_INSTALL_FROM_API: 1
+      HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
+    steps:
+      - name: Runner state
+        run: |
+          MON="${RUNNER_TEMP}/repro"
+          echo "MON=${MON}" >> "${GITHUB_ENV}"
+          mkdir -p "${MON}"
+          sw_vers
+          echo "ImageOS=${ImageOS:-unknown} ImageVersion=${ImageVersion:-unknown}"
+          defaults read /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Resources/Info.plist CFBundleVersion || true
+          pgrep -lf 'simdiskimaged|CoreSimulatorService' || echo "simdiskimaged and CoreSimulatorService not running"
+          mount | grep -iE 'CoreSimulator|cryptexd' || true
+
+      # Started before setup-homebrew so whatever brings simdiskimaged back is captured.
+      - name: Start monitors
+        run: |
+          # shellcheck disable=SC2024
+          sudo nohup eslogger mount unmount remount exec > "${MON}/eslogger.jsonl" 2> "${MON}/eslogger.err" &
+          # shellcheck disable=SC2024
+          sudo nohup log stream --level debug --style compact --predicate \
+            'process IN {"diskarbitrationd", "diskimages-helper", "hdiutil", "simdiskimaged", "diskimagescontroller", "diskimagesiod", "cryptexd", "CoreSimulatorService", "mobileassetd", "ditto"} OR subsystem BEGINSWITH "com.apple.DiskImages" OR (process == "kernel" AND (eventMessage CONTAINS[c] "unmount" OR eventMessage CONTAINS "homebrew-dmg"))' \
+            > "${MON}/log.txt" 2>&1 &
+          sleep 3
+          cat "${MON}/eslogger.err"
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@e99025eb970cfa124b8284a35463d87426917478 # 2026.09.28.1
+        with:
+          core: false
+          cask: true
+
+      - name: Run brew config
+        run: brew config
+
+      - name: Run brew fetch
+        run: brew fetch --cask --retry --force "homebrew/cask/${CASK}"
+
+      - name: Stop simdiskimaged
+        if: matrix.stop
+        run: |
+          pgrep -lf 'simdiskimaged|CoreSimulatorService' || true
+          sudo launchctl disable system/com.apple.CoreSimulator.simdiskimaged || true
+          sudo launchctl bootout system/com.apple.CoreSimulator.simdiskimaged || true
+          sudo pkill -x simdiskimaged || true
+          sleep 1
+          pgrep -lf simdiskimaged || echo "simdiskimaged stopped"
+
+      - name: Run brew audit
+        id: audit
+        run: brew audit --cask --online --signing "homebrew/cask/${CASK}" 2>&1 | tee "${MON}/audit.txt"
+
+      - name: Collect results
+        if: always()
+        env:
+          AUDIT: ${{ steps.audit.outcome }}
+        run: |
+          sleep 2
+          sudo pkill -x eslogger || true
+          sudo pkill -f "log stream --level debug" || true
+          sudo chown -R "$(id -u)" "${MON}"
+
+          echo "::group::simdiskimaged at end"
+          pgrep -lf 'simdiskimaged|CoreSimulatorService' || echo "simdiskimaged and CoreSimulatorService not running"
+          mount | grep -iE 'CoreSimulator|cryptexd' || true
+          echo "::endgroup::"
+
+          echo "::group::who started CoreSimulatorService and simdiskimaged"
+          jq -r 'select(.event.exec and ((.event.exec.target.executable.path // "") | test("CoreSimulatorService|simdiskimaged|xcodebuild|xcrun|metal"))) | [.time, .process.audit_token.pid, .process.ppid, .process.executable.path, ((.event.exec.args // []) | join(" ") | .[0:200])] | @tsv' "${MON}/eslogger.jsonl" || true
+          echo "::endgroup::"
+
+          echo "::group::simdiskimaged key events"
+          grep -E 'Cryptex mounting failed|duplicate of existing image|Attempting to add image|Unmounting|Ejecting disk|blocked by dissenter|IOCTL eject|Disk unmount requested|not responding' "${MON}/log.txt" | cut -c1-300 || true
+          echo "::endgroup::"
+
+          echo "::group::eslogger unmounts"
+          jq -r 'select(.event | has("unmount")) | [.time, .process.executable.path, .event.unmount.statfs.f_mntfromname, .event.unmount.statfs.f_mntonname] | @tsv' "${MON}/eslogger.jsonl" || true
+          echo "::endgroup::"
+
+          {
+            echo "### homebrew ${{ matrix.stop && 'simdiskimaged stopped' || 'control' }} ${{ matrix.attempt }} (${ImageVersion:-unknown}): audit ${AUDIT}"
+            echo '```'
+            grep -E 'exception while auditing|attach failed|Cannot get the real path' "${MON}/audit.txt" | cut -c1-300 || echo "no DMG unpack errors in audit output"
+            echo '```'
+            echo '```'
+            grep -E 'Cryptex mounting failed|duplicate of existing image|Attempting to add image|Ejecting disk|blocked by dissenter|IOCTL eject' "${MON}/log.txt" | cut -c1-200 | head -n 30 || echo "no simdiskimaged runtime/eject activity"
+            echo '```'
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Upload monitor files
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: homebrew-${{ matrix.stop && 'stopped' || 'control' }}-${{ matrix.attempt }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/repro
           if-no-files-found: ignore

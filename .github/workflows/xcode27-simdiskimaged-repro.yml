@@ -19,16 +19,20 @@ on:
         default: xcode-27
         type: string
       duration:
-        description: Seconds to keep attaching DMGs (the trigger runs 10 s in)
-        default: "180"
+        description: Seconds after the CoreSimulator trigger to keep starting attaches
+        default: "120"
         type: string
       hold:
-        description: Seconds each DMG stays mounted (idle) between listing and copying
-        default: "15"
+        description: Extra idle seconds each DMG stays mounted between listing and copying
+        default: "0"
         type: string
       workers:
-        description: DMGs kept mounted in parallel
+        description: Parallel attach loops, started 5 s apart after the trigger
         default: "4"
+        type: string
+      dmg_url:
+        description: DMG to attach in repro jobs
+        default: https://github.com/openclaw/openclaw/releases/download/v2026.10.4/OpenClaw-2026.10.4.dmg
         type: string
       cask:
         description: Cask to fetch and audit in homebrew jobs
@@ -51,9 +55,10 @@ jobs:
         stop: [false, true]
         attempt: [1]
     env:
-      DURATION: ${{ inputs.duration || '180' }}
-      HOLD: ${{ inputs.hold || '15' }}
+      DURATION: ${{ inputs.duration || '120' }}
+      HOLD: ${{ inputs.hold || '0' }}
       WORKERS: ${{ inputs.workers || '4' }}
+      DMG_URL: ${{ inputs.dmg_url || 'https://github.com/openclaw/openclaw/releases/download/v2026.10.4/OpenClaw-2026.10.4.dmg' }}
     steps:
       - name: Runner state
         run: |
@@ -69,16 +74,12 @@ jobs:
           mount | grep -iE 'CoreSimulator|cryptexd' || true
           hdiutil info
 
-      # APFS, like the runtime images, so each attach is a disk plus a synthesized
-      # container (diskN, diskN+1, diskN+1s1): the names simdiskimaged guesses at.
-      - name: Create DMG
+      # The DMG from the Homebrew failure: APFS (a disk plus a synthesized container, the
+      # names simdiskimaged guesses at), and big enough that a fresh quarantined attach
+      # spends ~20 s verifying, like a real cask download.
+      - name: Download DMG
         run: |
-          src=$(mktemp -d)
-          mkdir -p "${src}/Repro.app/Contents/MacOS"
-          for n in $(seq 1 20); do
-            head -c 2000000 /dev/urandom > "${src}/Repro.app/Contents/MacOS/blob${n}"
-          done
-          hdiutil create -quiet -format UDZO -fs APFS -volname Repro -srcfolder "${src}" "${MON}/base.dmg"
+          curl -fsSL --retry 3 -o "${MON}/base.dmg" "${DMG_URL}"
           ls -l "${MON}/base.dmg"
 
       - name: Stop simdiskimaged
@@ -105,9 +106,10 @@ jobs:
         run: |
           ts() { perl -MTime::HiRes=time -MPOSIX=strftime -e '$t = time; printf "%s.%03d", strftime("%H:%M:%S", localtime $t), ($t - int $t) * 1000'; }
 
-          # Each worker keeps one APFS DMG mounted and idle for HOLD seconds, then copies
-          # from it like Homebrew does. Several at once keep our volumes on the BSD names
-          # next to whatever simdiskimaged frees and re-attaches.
+          # Each worker attaches a fresh quarantined copy and unpacks it like Homebrew does.
+          # They start after the trigger, as on Homebrew's CI (`brew config` runs first), so
+          # simulator runtimes already hold the low BSD names and our attaches land on the
+          # ones simdiskimaged frees during its clean-up.
           worker() {
             set +e
             local w=$1 r=0 dmg mnt unpack start plist n mp vol voldev
@@ -144,16 +146,16 @@ jobs:
             done
           }
 
-          end=$((SECONDS + DURATION))
-          for w in $(seq 1 "${WORKERS}"); do
-            worker "${w}" &
-          done
-
-          # Let the workers' volumes come up first, then do what `brew config` does on
-          # Homebrew's CI (and a CoreSimulator query), which starts simdiskimaged.
-          sleep 10
+          # What `brew config` does on Homebrew's CI (and a CoreSimulator query); this
+          # starts simdiskimaged, which begins its watchOS clean-up ~20 s later.
           echo "$(ts) trigger" >> "${MON}/results.txt"
           (set -x; xcodebuild -version; xcrun --find metal; xcrun simctl runtime list) > "${MON}/trigger.txt" 2>&1 &
+
+          end=$((SECONDS + DURATION))
+          for w in $(seq 1 "${WORKERS}"); do
+            sleep 5
+            worker "${w}" &
+          done
 
           wait
           sort "${MON}/results.txt"

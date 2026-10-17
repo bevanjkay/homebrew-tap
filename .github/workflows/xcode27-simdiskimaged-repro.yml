@@ -19,12 +19,16 @@ on:
         default: xcode-27
         type: string
       duration:
-        description: Seconds to keep attaching DMGs after the CoreSimulator trigger
+        description: Seconds to keep attaching DMGs (the trigger runs 10 s in)
         default: "180"
         type: string
       hold:
         description: Seconds each DMG stays mounted (idle) between listing and copying
-        default: "5"
+        default: "15"
+        type: string
+      workers:
+        description: DMGs kept mounted in parallel
+        default: "4"
         type: string
       cask:
         description: Cask to fetch and audit in homebrew jobs
@@ -48,7 +52,8 @@ jobs:
         attempt: [1]
     env:
       DURATION: ${{ inputs.duration || '180' }}
-      HOLD: ${{ inputs.hold || '5' }}
+      HOLD: ${{ inputs.hold || '15' }}
+      WORKERS: ${{ inputs.workers || '4' }}
     steps:
       - name: Runner state
         run: |
@@ -64,9 +69,8 @@ jobs:
           mount | grep -iE 'CoreSimulator|cryptexd' || true
           hdiutil info
 
-      # Small, so attaches are frequent enough to land on the BSD names simdiskimaged
-      # guesses during its ~35 s retry loop. APFS, like the runtime images, so each
-      # attach is a disk plus a synthesized container (diskN, diskN+1, diskN+1s1).
+      # APFS, like the runtime images, so each attach is a disk plus a synthesized
+      # container (diskN, diskN+1, diskN+1s1): the names simdiskimaged guesses at.
       - name: Create DMG
         run: |
           src=$(mktemp -d)
@@ -99,45 +103,63 @@ jobs:
 
       - name: Trigger CoreSimulator and attach DMGs
         run: |
-          # The Xcode tool calls `brew config` makes (Homebrew's CI runs it just before the
-          # stray simdiskimaged appeared), then a CoreSimulator query.
+          ts() { perl -MTime::HiRes=time -MPOSIX=strftime -e '$t = time; printf "%s.%03d", strftime("%H:%M:%S", localtime $t), ($t - int $t) * 1000'; }
+
+          # Each worker keeps one APFS DMG mounted and idle for HOLD seconds, then copies
+          # from it like Homebrew does. Several at once keep our volumes on the BSD names
+          # next to whatever simdiskimaged frees and re-attaches.
+          worker() {
+            set +e
+            local w=$1 r=0 dmg mnt unpack start plist n mp vol voldev
+            while [ "${SECONDS}" -lt "${end}" ]; do
+              r=$((r + 1))
+              dmg="${MON}/w${w}-r${r}.dmg"
+              cp -c "${MON}/base.dmg" "${dmg}"
+              xattr -w com.apple.quarantine "0081;$(printf %x "$(date +%s)");Homebrew Cask;" "${dmg}"
+              mnt=$(mktemp -d "${TMPDIR:-/tmp}/repro-dmg.XXXXXX")
+              unpack=$(mktemp -d)
+              start=$(ts)
+              if ! plist=$(hdiutil attach -plist -nobrowse -readonly -mountrandom "${mnt}" "${dmg}" 2> "${MON}/w${w}.attach.err"); then
+                echo "${start} w${w} r${r}: ATTACH FAILED: $(tail -n 1 "${MON}/w${w}.attach.err")" >> "${MON}/results.txt"
+              else
+                vol="" voldev=""
+                for n in 0 1 2 3 4 5 6 7; do
+                  mp=$(echo "${plist}" | plutil -extract "system-entities.${n}.mount-point" raw -o - - 2> /dev/null) || continue
+                  vol=${mp}
+                  voldev=$(echo "${plist}" | plutil -extract "system-entities.${n}.dev-entry" raw -o - - 2> /dev/null)
+                  break
+                done
+                # Same sequence as Homebrew's UnpackStrategy::Dmg::Mount: list, mkbom, ditto --bom.
+                if (cd "${vol}" && find . -print0 | tr '\0' '\n' > "${MON}/w${w}.list") &&
+                   mkbom -s -i "${MON}/w${w}.list" -- "${MON}/w${w}.bom" &&
+                   sleep "${HOLD}" &&
+                   ditto --bom "${MON}/w${w}.bom" -- "${vol}" "${unpack}" 2> "${MON}/w${w}.ditto.err"; then
+                  echo "${start} w${w} r${r}: OK (${voldev})" >> "${MON}/results.txt"
+                else
+                  echo "${start} w${w} r${r}: COPY FAILED (${voldev}): $(tail -n 1 "${MON}/w${w}.ditto.err"); now: $(mount | grep -E "^${voldev} on" || echo "not mounted")" >> "${MON}/results.txt"
+                fi
+                hdiutil detach -force "${voldev:-${vol}}" > /dev/null 2>&1 || true
+              fi
+              rm -rf "${dmg}" "${unpack}" "${MON}/w${w}.bom" "${MON}/w${w}.list"
+            done
+          }
+
+          end=$((SECONDS + DURATION))
+          for w in $(seq 1 "${WORKERS}"); do
+            worker "${w}" &
+          done
+
+          # Let the workers' volumes come up first, then do what `brew config` does on
+          # Homebrew's CI (and a CoreSimulator query), which starts simdiskimaged.
+          sleep 10
+          echo "$(ts) trigger" >> "${MON}/results.txt"
           (set -x; xcodebuild -version; xcrun --find metal; xcrun simctl runtime list) > "${MON}/trigger.txt" 2>&1 &
 
-          fails=0
-          i=0
-          end=$((SECONDS + DURATION))
-          while [ "${SECONDS}" -lt "${end}" ]; do
-            i=$((i + 1))
-            dmg="${MON}/round-${i}.dmg"
-            cp -c "${MON}/base.dmg" "${dmg}"
-            xattr -w com.apple.quarantine "0081;$(printf %x "$(date +%s)");Homebrew Cask;" "${dmg}"
-            mnt=$(mktemp -d "${TMPDIR:-/tmp}/repro-dmg.XXXXXX")
-            unpack=$(mktemp -d)
-            start=$(perl -MTime::HiRes=time -MPOSIX=strftime -e '$t = time; printf "%s.%03d", strftime("%H:%M:%S", localtime $t), ($t - int $t) * 1000')
-
-            if ! plist=$(hdiutil attach -plist -nobrowse -readonly -mountrandom "${mnt}" "${dmg}" 2> "${MON}/attach.err"); then
-              echo "${start} round ${i}: ATTACH FAILED: $(tail -n 1 "${MON}/attach.err")" | tee -a "${MON}/results.txt"
-              fails=$((fails + 1))
-            else
-              disk=$(echo "${plist}" | plutil -extract system-entities.0.dev-entry raw -o - - 2> /dev/null || echo "?")
-              vol=$(find "${mnt}" -mindepth 1 -maxdepth 1 -type d | head -n 1)
-              # Same sequence as Homebrew's UnpackStrategy::Dmg::Mount: list, mkbom, ditto --bom.
-              # The idle hold stands in for the seconds a real cask's mount stays up; a mount
-              # that is idle can be unmounted from under us, which ditto then reports.
-              if (cd "${vol}" && find . -print0 | tr '\0' '\n' > "${MON}/list.txt") &&
-                 mkbom -s -i "${MON}/list.txt" -- "${MON}/round.bom" &&
-                 sleep "${HOLD}" &&
-                 ditto --bom "${MON}/round.bom" -- "${vol}" "${unpack}" 2> "${MON}/ditto.err"; then
-                echo "${start} round ${i}: OK (${disk})" | tee -a "${MON}/results.txt"
-              else
-                echo "${start} round ${i}: COPY FAILED (${disk}): $(tail -n 1 "${MON}/ditto.err")" | tee -a "${MON}/results.txt"
-                fails=$((fails + 1))
-              fi
-              hdiutil detach -force "${vol}" > /dev/null 2>&1 || true
-            fi
-            rm -rf "${dmg}" "${unpack}" "${MON}/round.bom" "${MON}/list.txt"
-          done
-          echo "rounds=${i}" | tee -a "${MON}/results.txt"
+          wait
+          sort "${MON}/results.txt"
+          rounds=$(grep -cE ' w[0-9]+ r[0-9]+: ' "${MON}/results.txt" || true)
+          fails=$(grep -cE 'FAILED' "${MON}/results.txt" || true)
+          echo "rounds=${rounds}" | tee -a "${MON}/results.txt"
           echo "failures=${fails}" | tee -a "${MON}/results.txt"
 
       - name: Collect results

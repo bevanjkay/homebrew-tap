@@ -85,9 +85,9 @@ jobs:
 
       - name: Trigger CoreSimulator and attach DMGs
         run: |
-          # Starting CoreSimulatorService is what brings simdiskimaged back and makes it
-          # re-register runtimes; on Homebrew's CI something early in the job does this.
-          (xcodebuild -version; xcrun simctl runtime list) > "${MON}/trigger.txt" 2>&1 &
+          # The Xcode tool calls `brew config` makes (Homebrew's CI runs it just before the
+          # stray simdiskimaged appeared), then a CoreSimulator query.
+          (set -x; xcodebuild -version; xcrun --find metal; xcrun simctl runtime list) > "${MON}/trigger.txt" 2>&1 &
 
           fails=0
           for i in $(seq 1 "${ROUNDS}"); do

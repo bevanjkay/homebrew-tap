@@ -45,7 +45,7 @@ jobs:
       fail-fast: false
       matrix:
         stop: [false, true]
-        attempt: [1, 2]
+        attempt: [1]
     env:
       DMG_URL: ${{ inputs.dmg_url || 'https://github.com/openclaw/openclaw/releases/download/v2026.10.4/OpenClaw-2026.10.4.dmg' }}
       ROUNDS: ${{ inputs.rounds || '10' }}
@@ -184,7 +184,7 @@ jobs:
       fail-fast: false
       matrix:
         stop: [false, true]
-        attempt: [1, 2]
+        attempt: [1]
     env:
       CASK: ${{ inputs.cask || 'openclaw' }}
       HOMEBREW_DEVELOPER: 1

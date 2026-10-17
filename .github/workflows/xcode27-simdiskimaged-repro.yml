@@ -1,0 +1,171 @@
+name: xcode-27 simdiskimaged DMG repro
+
+# Reproduces DMG attach/copy failures on the xcode-27 runner image without Homebrew.
+# CoreSimulator's simdiskimaged re-registers a simulator runtime, then retries
+# "Ejecting diskN" by BSD name; when a freshly attached DMG has reused that name,
+# its attach fails or its mount point disappears during the copy.
+
+on:
+  push:
+    branches:
+      - xcode27-simdiskimaged-repro
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: Runner label
+        default: xcode-27
+        type: string
+      rounds:
+        description: Attach/copy rounds per job
+        default: "20"
+        type: string
+      dmg_url:
+        description: DMG to attach
+        default: https://github.com/openclaw/openclaw/releases/download/v2026.10.4/OpenClaw-2026.10.4.dmg
+        type: string
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash -euo pipefail {0}
+
+jobs:
+  repro:
+    name: ${{ matrix.stop && 'simdiskimaged stopped' || 'control' }} ${{ matrix.attempt }}
+    runs-on: ${{ inputs.runner || 'xcode-27' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        stop: [false, true]
+        attempt: [1, 2, 3]
+    env:
+      DMG_URL: ${{ inputs.dmg_url || 'https://github.com/openclaw/openclaw/releases/download/v2026.10.4/OpenClaw-2026.10.4.dmg' }}
+      ROUNDS: ${{ inputs.rounds || '20' }}
+    steps:
+      - name: Runner state
+        run: |
+          MON="${RUNNER_TEMP}/repro"
+          echo "MON=${MON}" >> "${GITHUB_ENV}"
+          mkdir -p "${MON}"
+          sw_vers
+          echo "ImageOS=${ImageOS:-unknown} ImageVersion=${ImageVersion:-unknown}"
+          csrutil status || true
+          xcode-select -p
+          defaults read /Library/Developer/PrivateFrameworks/CoreSimulator.framework/Resources/Info.plist CFBundleVersion || true
+          pgrep -lf 'simdiskimaged|CoreSimulatorService' || echo "simdiskimaged and CoreSimulatorService not running"
+          mount | grep -iE 'CoreSimulator|cryptexd' || true
+          hdiutil info
+
+      - name: Download DMG
+        run: |
+          curl -fsSL --retry 3 -o "${MON}/base.dmg" "${DMG_URL}"
+          ls -l "${MON}/base.dmg"
+          hdiutil imageinfo -format "${MON}/base.dmg"
+
+      - name: Stop simdiskimaged
+        if: matrix.stop
+        run: |
+          sudo launchctl disable system/com.apple.CoreSimulator.simdiskimaged || true
+          sudo launchctl bootout system/com.apple.CoreSimulator.simdiskimaged || true
+          sudo pkill -x simdiskimaged || true
+          sleep 1
+          pgrep -lf simdiskimaged || echo "simdiskimaged stopped"
+
+      - name: Start monitors
+        run: |
+          # shellcheck disable=SC2024
+          sudo nohup eslogger mount unmount remount exec > "${MON}/eslogger.jsonl" 2> "${MON}/eslogger.err" &
+          # shellcheck disable=SC2024
+          sudo nohup log stream --level debug --style compact --predicate \
+            'process IN {"diskarbitrationd", "diskimages-helper", "hdiutil", "simdiskimaged", "diskimagescontroller", "diskimagesiod", "cryptexd", "CoreSimulatorService", "ditto"} OR subsystem BEGINSWITH "com.apple.DiskImages" OR (process == "kernel" AND (eventMessage CONTAINS[c] "unmount" OR eventMessage CONTAINS "repro-dmg"))' \
+            > "${MON}/log.txt" 2>&1 &
+          sleep 3
+          cat "${MON}/eslogger.err"
+
+      - name: Trigger CoreSimulator and attach DMGs
+        run: |
+          # Starting CoreSimulatorService is what brings simdiskimaged back and makes it
+          # re-register runtimes; on Homebrew's CI something early in the job does this.
+          (xcodebuild -version; xcrun simctl runtime list) > "${MON}/trigger.txt" 2>&1 &
+
+          fails=0
+          for i in $(seq 1 "${ROUNDS}"); do
+            dmg="${MON}/round-${i}.dmg"
+            cp -c "${MON}/base.dmg" "${dmg}"
+            xattr -w com.apple.quarantine "0081;$(printf %x "$(date +%s)");Homebrew Cask;" "${dmg}"
+            mnt=$(mktemp -d "${TMPDIR:-/tmp}/repro-dmg.XXXXXX")
+            unpack=$(mktemp -d)
+            start=$(date +%T)
+
+            if ! plist=$(hdiutil attach -plist -nobrowse -readonly -mountrandom "${mnt}" "${dmg}" 2> "${MON}/attach.err"); then
+              echo "${start} round ${i}: ATTACH FAILED: $(tail -n 1 "${MON}/attach.err")" | tee -a "${MON}/results.txt"
+              fails=$((fails + 1))
+            else
+              disk=$(echo "${plist}" | plutil -extract system-entities.0.dev-entry raw -o - - 2> /dev/null || echo "?")
+              vol=$(find "${mnt}" -mindepth 1 -maxdepth 1 -type d | head -n 1)
+              # Same sequence as Homebrew's UnpackStrategy::Dmg::Mount: list, mkbom, ditto --bom.
+              if (cd "${vol}" && find . -print0 | tr '\0' '\n' > "${MON}/list.txt") &&
+                 mkbom -s -i "${MON}/list.txt" -- "${MON}/round.bom" &&
+                 ditto --bom "${MON}/round.bom" -- "${vol}" "${unpack}" 2> "${MON}/ditto.err"; then
+                echo "${start} round ${i}: OK (${disk})" | tee -a "${MON}/results.txt"
+              else
+                echo "${start} round ${i}: COPY FAILED (${disk}): $(tail -n 1 "${MON}/ditto.err")" | tee -a "${MON}/results.txt"
+                fails=$((fails + 1))
+              fi
+              hdiutil detach -force "${vol}" > /dev/null 2>&1 || true
+            fi
+            rm -rf "${dmg}" "${unpack}" "${MON}/round.bom" "${MON}/list.txt"
+          done
+          echo "failures=${fails}" | tee -a "${MON}/results.txt"
+
+      - name: Collect results
+        if: always()
+        run: |
+          sleep 2
+          sudo pkill -x eslogger || true
+          sudo pkill -f "log stream --level debug" || true
+          sudo chown -R "$(id -u)" "${MON}"
+          rm -f "${MON}/base.dmg"
+
+          echo "::group::simdiskimaged at end"
+          pgrep -lf 'simdiskimaged|CoreSimulatorService' || echo "simdiskimaged and CoreSimulatorService not running"
+          mount | grep -iE 'CoreSimulator|cryptexd' || true
+          echo "::endgroup::"
+
+          echo "::group::trigger output"
+          cat "${MON}/trigger.txt" || true
+          echo "::endgroup::"
+
+          echo "::group::simdiskimaged key events"
+          grep -E 'Cryptex mounting failed|duplicate of existing image|Unmounting|Ejecting disk|blocked by dissenter|IOCTL eject|Disk unmount requested|not responding' "${MON}/log.txt" | cut -c1-300 || true
+          echo "::endgroup::"
+
+          echo "::group::eslogger unmounts"
+          jq -r 'select(.event | has("unmount")) | [.time, .process.executable.path, .event.unmount.statfs.f_mntfromname, .event.unmount.statfs.f_mntonname] | @tsv' "${MON}/eslogger.jsonl" || true
+          echo "::endgroup::"
+
+          {
+            echo "### ${{ matrix.stop && 'simdiskimaged stopped' || 'control' }} ${{ matrix.attempt }} (${ImageVersion:-unknown})"
+            echo '```'
+            cat "${MON}/results.txt" || echo "no results"
+            echo '```'
+            echo '```'
+            grep -E 'Cryptex mounting failed|duplicate of existing image|Ejecting disk|blocked by dissenter|IOCTL eject' "${MON}/log.txt" | cut -c1-200 | head -n 30 || echo "no simdiskimaged eject activity"
+            echo '```'
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+          if grep -q '^failures=0$' "${MON}/results.txt"; then
+            echo "No failures"
+          else
+            echo "::error::DMG attach/copy failures reproduced"
+            exit 1
+          fi
+
+      - name: Upload monitor files
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: repro-${{ matrix.stop && 'stopped' || 'control' }}-${{ matrix.attempt }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/repro
+          if-no-files-found: ignore

@@ -245,7 +245,7 @@ jobs:
 
       - name: Run brew audit
         id: audit
-        run: brew audit --cask --online --signing "homebrew/cask/${CASK}" 2>&1 | tee "${MON}/audit.txt"
+        run: brew audit --cask --online "homebrew/cask/${CASK}" 2>&1 | tee "${MON}/audit.txt"
 
       - name: Collect results
         if: always()

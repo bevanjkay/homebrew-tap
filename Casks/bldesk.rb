@@ -1,6 +1,6 @@
 cask "bldesk" do
-  version "1.0.62-beta.30"
-  sha256 "23a840a2dfc388f08cf1fa73773b62535d7090206d367f8c391c0788f6424114"
+  version "1.0.62-beta.31"
+  sha256 "62e357ba2f6976ff4f156b90babe66ddd8ded3fd2f8ae10e8b90219979f10ae0"
 
   url "https://github.com/termau/bldesk/releases/download/v#{version}/BLDesk-#{version}-mac-universal.dmg"
   name "BLDesk"

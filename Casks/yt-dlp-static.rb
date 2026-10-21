@@ -1,6 +1,6 @@
 cask "yt-dlp-static" do
-  version "2026.08.19"
-  sha256 "0f192b7ec147ab6288885d6351d9ab67367640029b4377576ef46dd79cf7b202"
+  version "2026.10.21"
+  sha256 "7a6fe71d7d680f1fb0ac18d4949873d77db2859e90017c0f44bd94b23be4ee40"
 
   if OS.not_tier_one_configuration?
     depends_on cask: "bevanjkay/tap/ffmpeg-static"

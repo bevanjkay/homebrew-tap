@@ -16,6 +16,7 @@ cask "squirrelscan" do
   livecheck do
     url "https://squirrelscan.com/download"
     regex(/href=.*?squirrel[._-]v?(\d+(?:\.\d+)+)-#{os}-#{arch}/i)
+    throttle days: 3
   end
 
   binary "squirrel-#{version}-#{os}-#{arch}", target: "squirrel"

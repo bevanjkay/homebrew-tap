@@ -2,11 +2,11 @@ cask "squirrelscan" do
   arch arm: "arm64", intel: "x64"
   os macos: "darwin", linux: "linux"
 
-  version "0.0.129"
-  sha256 arm:          "5a2ade9842f3b1482028f8de370896248c743f5cbf90af898358401f1cad6acb",
-         intel:        "d59d3e626d7d7e5f7e5c4bf34323d39caf70bf30fabf4271cb97ed9ad4da37e6",
-         arm64_linux:  "e7e1e5f9f18e4f4e6e3b98bc96332a46b7a7305c28477a2de833db5278bb2acc",
-         x86_64_linux: "39b2d2e612c59b02cc51e8655a5b8e5f3f1b596d8b7a701fb0b10cc4bacddff3"
+  version "0.0.131"
+  sha256 arm:          "80fe67e2d395b3876da08e4d4ab5c69fe0bc76f9392098d8e0041c34b435ec30",
+         intel:        "47c0577d213f470df4d4eae9ef4801fe941e6542d41025a9774a5c9e1de64fcf",
+         arm64_linux:  "9524dd7bead7cd2a35b36861b4b2c73933dce1a7b3d24b0b47dd4b03be355340",
+         x86_64_linux: "1e03c9a5835e72c188af01f0afa273699dfa2e16c576b060dcaaa6b1cda2df0c"
 
   url "https://github.com/squirrelscan/squirrelscan/releases/download/v#{version}/squirrel-#{version}-#{os}-#{arch}"
   name "SquirrelScan"

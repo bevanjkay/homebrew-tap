@@ -23,5 +23,5 @@ cask "jq-static" do
 
   binary "jq-#{os}-#{arch}", target: "jq"
 
-  # No zap stanza required
+  zap :not_required
 end

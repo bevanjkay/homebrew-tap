@@ -19,5 +19,5 @@ cask "decimator-ucp" do
 
   app "UCP #{version} #{arch}.app", target: "Decimator UCP.app"
 
-  # No zap stanza required
+  zap :not_required
 end

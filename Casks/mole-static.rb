@@ -26,5 +26,5 @@ cask "mole-static" do
     args:       ["remove"],
   }
 
-  # No zap stanza required
+  zap :not_required
 end

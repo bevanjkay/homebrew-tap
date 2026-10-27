@@ -15,5 +15,5 @@ cask "yt-dlp-static" do
 
   binary "yt-dlp_macos", target: "yt-dlp"
 
-  # No zap stanza required
+  zap :not_required
 end

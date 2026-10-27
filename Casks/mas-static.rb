@@ -23,5 +23,5 @@ cask "mas-static" do
 
   uninstall pkgutil: "io.github.mas-cli.mas"
 
-  # No zap stanza required
+  zap :not_required
 end

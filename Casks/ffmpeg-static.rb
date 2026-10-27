@@ -18,7 +18,7 @@ cask "ffmpeg-static" do
     run "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "{{staged_path}}/ffmpeg"], must_succeed: false
   end
 
-  # No zap stanza required
+  zap :not_required
 
   caveats do
     requires_rosetta

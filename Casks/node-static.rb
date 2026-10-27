@@ -21,5 +21,5 @@ cask "node-static" do
     "org.nodejs.npm.pkg",
   ]
 
-  # No zap stanza required
+  zap :not_required
 end

@@ -22,7 +22,7 @@ cask "companion@experimental" do
 
   app "Companion.app", target: "Companion Experimental.app"
 
-  # No zap stanza required
+  zap :not_required
   # Shares settings with companion-beta - so don't remove
   # To forcibly clean up, run brew uninstall --cask --force --zap companion-beta
 end

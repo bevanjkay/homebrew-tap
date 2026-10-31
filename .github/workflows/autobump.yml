@@ -19,14 +19,14 @@ jobs:
     steps:
       - name: Set up Homebrew
         id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@848c272c7bfe984a197bd4d16383f4c106ec61e6 # 2026.09.21.1
+        uses: Homebrew/actions/setup-homebrew@d482da0e602890d3160aade42e72c8556103bf04 # 2026.10.26.1
         with:
           cask: false
           core: false
           test-bot: false
 
       - name: Configure Git user
-        uses: Homebrew/actions/git-user-config@848c272c7bfe984a197bd4d16383f4c106ec61e6 # 2026.09.21.1
+        uses: Homebrew/actions/git-user-config@d482da0e602890d3160aade42e72c8556103bf04 # 2026.10.26.1
         with:
           username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'bkdbot' }}
 
@@ -35,7 +35,7 @@ jobs:
         run: echo "autobump_list=$(brew tap-info bevanjkay/tap --json | jq -c -r '.[0]["cask_tokens"]|join(" ")')" >> "$GITHUB_OUTPUT"
 
       - name: Bump casks
-        uses: Homebrew/actions/bump-packages@848c272c7bfe984a197bd4d16383f4c106ec61e6 # 2026.09.21.1
+        uses: Homebrew/actions/bump-packages@d482da0e602890d3160aade42e72c8556103bf04 # 2026.10.26.1
         continue-on-error: true
         with:
           token: ${{ secrets.BOT_TOKEN }}

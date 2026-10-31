@@ -2,14 +2,14 @@ cask "companion-beta" do
   arch arm: "arm64", intel: "x64"
   livecheck_arch = on_arch_conditional arm: "arm", intel: "intel"
 
-  sha256 arm:   "4a80e8559a51c680dc80f4ac917e6031a116415da87dce5724de6ff7f4d8e0ad",
-         intel: "8922c9c113f0d48fbd578f19f97210882f22cbcaf5d2e3d7e517d4ae32608534"
+  sha256 arm:   "be0f48b9efd37c1fb92bde74a22ce45ca8acfa50ff043077d35a66e6c3c54ffe",
+         intel: "befd812cc958c6d3f12f1053af5e910f84f84460c445cb222faaa719c67f8cd4"
 
   on_arm do
-    version "5.1.0+9852-main-9411d27748"
+    version "5.2.0+10176-main-9166e7a0a0"
   end
   on_intel do
-    version "5.1.0+9852-main-9411d27748"
+    version "5.2.0+10176-main-9166e7a0a0"
   end
 
   url "https://s4.bitfocus.io/builds/companion/companion-mac-#{arch}-#{version.tr("+", "-")}.dmg"
@@ -25,7 +25,7 @@ cask "companion-beta" do
     end
   end
 
-  depends_on macos: :monterey
+  depends_on macos: :ventura
 
   # Companion beta does not share preferences with the stable branch, so can be installed side by side
   app "Companion.app", target: "Companion Beta.app"

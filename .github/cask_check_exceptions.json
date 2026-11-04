@@ -15,6 +15,9 @@
   "davinci-resolve*": {
     "installed_pkgs": ["^com\\.Apple\\.pkg\\.ASAF\\.SDK$"]
   },
+  "bmd-fairlight-live": {
+    "installed_pkgs": ["^com\\.Apple\\.pkg\\.ASAF\\.SDK$"]
+  },
   "bmd-video-assist": {
     "installed_pkgs": ["^com\\.blackmagic-design\\.BlackmagicRaw(SDK)?$"],
     "installed_apps": ["^/Applications/Blackmagic RAW/"]

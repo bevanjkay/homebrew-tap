@@ -1,8 +1,8 @@
 cask "bmd-fairlight-live" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
-  version "1.1.0,cde56ff586c5480ca21eed384c9b20ce,8492d7b0771042b18bd7ffdf8c98c8de"
-  sha256 "7d5bde3eaf95cfa511c398e3d51f10e9078a46684ffb1320a977d0800e704359"
+  version "1.1.1,d1773199536843e6bb5ae1bea79b4094,4e76fc1914224bddbf1cc4372f09bd92"
+  sha256 "5cd1dfe6725b290bc8896af8fb302c3985cb00801f2c2bdd3670aedd50033cb2"
 
   personal_details = if File.exist?("#{Dir.home}/.personal_details.json")
     JSON.parse(File.read("#{Dir.home}/.personal_details.json"))

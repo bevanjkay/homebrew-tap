@@ -15,6 +15,8 @@ cask "sevenzip-static" do
     regex(/>\s*Download\s+7-Zip\s+v?(\d+(?:\.\d+)+)\s+\([^)]+?\)/im)
   end
 
+  depends_on :macos
+
   binary "7zz"
 
   postflight_steps do

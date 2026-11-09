@@ -5,8 +5,7 @@ cask "sevenzip-static" do
   sha256 arm:   "b6f17920b4240940461dac8ef4009891881ac44d2a5ead625ede2ec8472185dd",
          intel: "3af68b124052da7fc2a246c96b0bea6a68bfee389baa788f4cead1a133445586"
 
-  url "https://github.com/ip7z/7zip/releases/download/#{version}/7z#{version.no_dots}-#{arch}.tar.xz",
-      verified: "github.com/ip7z/7zip/"
+  url "https://github.com/ip7z/7zip/releases/download/#{version}/7z#{version.no_dots}-#{arch}.tar.xz"
   name "7zip"
   desc "File archiver with a high compression ratio"
   homepage "https://7-zip.org/"

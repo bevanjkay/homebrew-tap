@@ -17,9 +17,12 @@ cask "auracle-x" do
 
   app "Auracle X.app"
 
+  uninstall quit: "com.iconnectivity.auracle"
+
   zap trash: [
     "~/Library/Application Support/Auracle for X-Series",
     "~/Library/Application Support/Auracle X",
+    "~/Library/Caches/Auracle X",
     "~/Library/HTTPStorages/com.iconnectivity.auracle",
     "~/Library/Logs/Auracle for X-Series_debug.log",
     "~/Library/Logs/Auracle X_debug.log",

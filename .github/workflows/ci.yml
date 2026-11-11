@@ -73,6 +73,10 @@ jobs:
     # The matrix sets ghcr.io/homebrew/brew:main on Linux, which tracks the same
     # brew main that setup-homebrew installs on every other runner.
     container: ${{ matrix.container || null }} # zizmor: ignore[unpinned-images]
+    # Without this, steps in a container run under `sh`, which can't parse bash arrays.
+    defaults:
+      run:
+        shell: bash
     strategy:
       fail-fast: false
       matrix:

@@ -244,7 +244,7 @@ jobs:
             require "utils/github/actions"
 
             cask_path = ARGV.fetch(0)
-            cask = Cask::CaskLoader.load(cask_path)
+            cask = Cask::CaskLoader.from_tap_path(cask_path)
 
             exceptions_file = Pathname(ENV.fetch("GITHUB_WORKSPACE"))/".github/cask_check_exceptions.json"
             exceptions = Hash.new { |hash, key| hash[key] = [] }

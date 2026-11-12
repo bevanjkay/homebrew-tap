@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require "abstract_command"
+require "cask/cask_loader"
 require "open3"
 require "digest"
 

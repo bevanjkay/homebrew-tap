@@ -1,9 +1,9 @@
 cask "rapidraw" do
   arch arm: "15_aarch64", intel: "15-intel_x64"
 
-  version "1.6.9"
-  sha256 arm:   "c0cad5dd47332d0e8a95245cedc29a3410626c2f8a9820865f632c6e28cdb1c0",
-         intel: "217055a49ad680ff9b890511406747e0dd9d72181325e1ac4bd6c32fee3e618a"
+  version "1.7.0"
+  sha256 arm:   "19c0bb3d405b4c047e338884df5034be9f0a3f44669344f86254f9972d70dd06",
+         intel: "d0561f9078fb7f348e46789f47eafe1b115ce5826926371cdc3d25203edd63db"
 
   url "https://github.com/CyberTimon/RapidRAW/releases/download/v#{version}/02_RapidRAW_v#{version}_macos-#{arch}.dmg"
   name "RapidRAW"

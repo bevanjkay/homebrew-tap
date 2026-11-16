@@ -23,6 +23,7 @@ cask "companion-beta" do
       json["packages"]&.select { |c| c["target"] == "mac-#{livecheck_arch}" }
                       &.map { |c| c["version"] }
     end
+    throttle days: 7
   end
 
   depends_on macos: :ventura

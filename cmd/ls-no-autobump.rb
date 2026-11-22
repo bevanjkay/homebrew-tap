@@ -23,7 +23,8 @@ module Homebrew
       sig { override.void }
       def run
         tap_string = args.named.first
-        @target_tap = T.let(Tap.fetch(T.must(tap_string)), T.nilable(Tap))
+        target_tap = Tap.fetch(T.must(tap_string))
+        @target_tap = T.let(target_tap, T.nilable(Tap))
 
         odie "Invalid tap: #{tap_string}" if @target_tap.nil?
 

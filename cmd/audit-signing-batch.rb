@@ -12,14 +12,10 @@ module Homebrew
     class AuditSigningBatch < AbstractCommand
       DEFAULT_COUNT = 20
       DEFAULT_JOBS = 5
-      DEFAULT_RESULTS_FILE = T.let(
-        (Pathname.new(Dir.home)/".homebrew/audit_signing_results.json").freeze,
-        Pathname,
-      )
-      DEFAULT_EXPANDED_RESULTS_FILE = T.let(
-        (Pathname.new(Dir.home)/".homebrew/audit_signing_expanded_results.json").freeze,
-        Pathname,
-      )
+      default_results_path = Pathname.new(Dir.home)/".homebrew/audit_signing_results.json"
+      DEFAULT_RESULTS_FILE = T.let(default_results_path.freeze, Pathname)
+      default_expanded_results_path = Pathname.new(Dir.home)/".homebrew/audit_signing_expanded_results.json"
+      DEFAULT_EXPANDED_RESULTS_FILE = T.let(default_expanded_results_path.freeze, Pathname)
       # Stanzas that `brew audit --only=signing` only started checking in Homebrew/brew#24227.
       EXPANDED_ARTIFACTS_REGEX = /
         ^\s*(?:audio_unit_plugin|colorpicker|input_method|internet_plugin|mdimporter|prefpane|
@@ -28,7 +24,8 @@ module Homebrew
       /x
       FETCH_TIMEOUT_SECONDS = 120
       MAX_ERROR_LENGTH = 500
-      DOWNLOADS_WARNING_THRESHOLD_BYTES = T.let(20 * 1024 * 1024 * 1024, Integer)
+      downloads_warning_threshold_bytes = 20 * 1024 * 1024 * 1024
+      DOWNLOADS_WARNING_THRESHOLD_BYTES = T.let(downloads_warning_threshold_bytes.freeze, Integer)
       ANSI_RESET = "\e[0m"
       ANSI_GREEN = "\e[32m"
       ANSI_RED = "\e[31m"

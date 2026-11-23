@@ -2,7 +2,7 @@ cask "davinci-resolve@beta" do
   require "#{HOMEBREW_TAP_DIRECTORY}/bevanjkay/homebrew-tap/cmd/lib/bmd_download_strategy"
 
   version "21.2.0,801a108506a54a908ffcd497f13b60de,0c2e03fcd586438bae0d268fbc3ad477,"
-  sha256 "9511b293abd4996f5b4101c96fbd652bf75fc470df76a54f62fca1dc9ab0d969"
+  sha256 "3f0a8ea61081874f06c772b2f07495180a3d5a1b62e1bcfd0c61740fb234be57"
 
   personal_details = if File.exist?("#{Dir.home}/.personal_details.json")
     JSON.parse(File.read("#{Dir.home}/.personal_details.json"))
@@ -52,9 +52,9 @@ cask "davinci-resolve@beta" do
         download["urls"]["Mac OS X"].first["product"] == "davinci-resolve"
       end
       matched.map do |download|
-        beta = /beta/i.match?(download["name"])
+        beta_suffix = "b" if /beta/i.match?(download["name"])
         v = download["urls"]["Mac OS X"].first
-        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{"b" if beta}"
+        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{beta_suffix}"
       end.first
     end
   end
@@ -62,7 +62,8 @@ cask "davinci-resolve@beta" do
   conflicts_with cask: "davinci-resolve"
   depends_on macos: :sequoia
 
-  pkg "Install Resolve #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Resolve #{pkg_version}#{version.csv.fourth}.pkg"
 
   uninstall launchctl: "com.blackmagic-design.DaVinciResolveBMDPanelDaemon",
             pkgutil:   [

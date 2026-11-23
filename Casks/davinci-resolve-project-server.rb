@@ -53,7 +53,8 @@ cask "davinci-resolve-project-server" do
       version_info = JSON.parse(res)["mac"]
       next if version_info.blank?
 
-      "#{version_info["major"]}.#{version_info["minor"]}.#{version_info["releaseNum"]},#{version_info["build"]},#{version_info["downloadId"]},#{"b" if version_info["beta"]}"
+      beta_suffix = "b" if version_info["beta"]
+      "#{version_info["major"]}.#{version_info["minor"]}.#{version_info["releaseNum"]},#{version_info["build"]},#{version_info["downloadId"]},#{beta_suffix}"
     end
   end
 
@@ -61,13 +62,13 @@ cask "davinci-resolve-project-server" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install DaVinci Resolve Project Server #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install DaVinci Resolve Project Server #{pkg_version}#{version.csv.fourth}.pkg"
 
-  uninstall launchctl: "com.edb.launchd.postgresql-13",
-            script:    {
-              executable: "/Applications/DaVinci Resolve Project Server/Uninstall DaVinci Resolve Project Server.app/Contents/Resources/uninstall_projectserver.sh",
-              sudo:       true,
-            },
+  uninstall launchctl: [
+              "com.edb.launchd.postgresql-13",
+              "postgresql-18",
+            ],
             pkgutil:   [
               "com.blackmagic-design.ManifestPostgres",
               "com.blackmagic-design.ManifestProjectServer",

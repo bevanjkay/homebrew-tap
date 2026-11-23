@@ -36,7 +36,8 @@ cask "bmd-smartview" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install SmartView #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install SmartView #{pkg_version}.pkg"
 
   uninstall script:  {
               executable: "/Applications/Blackmagic SmartView/Uninstall SmartView.app/Contents/Resources/uninstall.sh",

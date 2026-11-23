@@ -9,7 +9,10 @@
       "^/Applications/Blackmagic Media Express\\.app$"
     ],
     "installed_launchjobs": [
-      "^com\\.blackmagic-design\\.(DesktopVideoDriverExtension|DesktopVideoUpdater|DesktopVideoHelper|desktopvideo\\.XPCService|streaming\\.BMDStreamingServer)"
+      "^com\\.blackmagic-design\\.(DesktopVideoDriverExtension|DesktopVideoDriverPostInstall|DesktopVideoUpdater|DesktopVideoHelper|desktopvideo\\.XPCService|streaming\\.BMDStreamingServer)"
+    ],
+    "loaded_launchjobs": [
+      "^(application\\.)?com\\.blackmagic-design\\.(BlackmagicDesktopVideoDriverExtension|DesktopVideoDriverExtension\\.Helper)"
     ]
   },
   "davinci-resolve*": {

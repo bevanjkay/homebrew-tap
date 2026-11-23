@@ -15,7 +15,11 @@ cask "propresenter@bleeding-edge" do
 
       beta = CaskLoader.load("propresenter@beta")
 
-      current_version = (version.csv.first > beta.version.csv.first) ? version : beta.version
+      current_version = if version.csv.first > beta.version.csv.first
+        version
+      else
+        beta.version
+      end
       puts current_version
       current_build = current_version.csv.second.to_i
       future_build = current_build.to_i + 5

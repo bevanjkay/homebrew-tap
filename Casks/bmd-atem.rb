@@ -36,7 +36,8 @@ cask "bmd-atem" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install ATEM #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install ATEM #{pkg_version}.pkg"
 
   uninstall script:  {
               executable: "/Applications/Blackmagic ATEM Switchers/Uninstall ATEM.app/Contents/Resources/uninstall.sh",

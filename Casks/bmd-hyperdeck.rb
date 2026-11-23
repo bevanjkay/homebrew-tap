@@ -36,7 +36,8 @@ cask "bmd-hyperdeck" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install HyperDeck #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install HyperDeck #{pkg_version}.pkg"
 
   uninstall script:  {
               executable: "/Applications/Blackmagic HyperDeck/Uninstall HyperDeck.app/Contents/Resources/uninstall.sh",

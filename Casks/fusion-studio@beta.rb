@@ -28,9 +28,9 @@ cask "fusion-studio@beta" do
         download["urls"]["Mac OS X"].first["product"] == "fusion-studio"
       end
       matched.map do |download|
-        beta = /beta/i.match?(download["name"])
+        beta_suffix = "b" if /beta/i.match?(download["name"])
         v = download["urls"]["Mac OS X"].first
-        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{"b" if beta}"
+        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{beta_suffix}"
       end&.first
     end
   end
@@ -39,8 +39,9 @@ cask "fusion-studio@beta" do
   conflicts_with cask: "fusion-studio"
   depends_on :macos
 
-  pkg "Install Fusion Studio v#{version.csv.first.chomp(".0")}.pkg"
-  pkg "Install Fusion Render Node v#{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Fusion Studio v#{pkg_version}.pkg"
+  pkg "Install Fusion Render Node v#{pkg_version}.pkg"
 
   # Split uninstall stanza to allow multiple scripts
   uninstall script: {

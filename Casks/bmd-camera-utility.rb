@@ -36,7 +36,8 @@ cask "bmd-camera-utility" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Cameras #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Cameras #{pkg_version}.pkg"
 
   uninstall pkgutil: [
     "com.blackmagic-design.BlackmagicRaw",

@@ -36,7 +36,8 @@ cask "bmd-videohub" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Videohub #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Videohub #{pkg_version}.pkg"
 
   uninstall launchctl: "com.blackmagic-design.videohub.server",
             pkgutil:   [

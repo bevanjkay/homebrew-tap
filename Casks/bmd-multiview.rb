@@ -37,7 +37,7 @@ cask "bmd-multiview" do
   depends_on :macos
 
   pkg_version = version.csv.first.chomp(".0")
-  pkg "Install Multiview #{pkg_version}.pkg"
+  pkg "Install MultiView #{pkg_version}.pkg"
 
   uninstall script:  {
               executable: "/Applications/Blackmagic MultiView/Uninstall MultiView.app/Contents/Resources/uninstall.sh",

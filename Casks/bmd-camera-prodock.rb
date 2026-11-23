@@ -39,7 +39,7 @@ cask "bmd-camera-prodock" do
   depends_on :macos
 
   pkg_version = version.csv.first.chomp(".0")
-  pkg "Install Camera Prodock #{pkg_version}.pkg"
+  pkg "Install Camera ProDock #{pkg_version}.pkg"
 
   uninstall pkgutil: [
     "com.blackmagic-design.StoneCutter",

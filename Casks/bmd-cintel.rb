@@ -36,7 +36,8 @@ cask "bmd-cintel" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Cintel #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Cintel #{pkg_version}.pkg"
 
   uninstall pkgutil: [
               "com.blackmagic-design.Cintel",

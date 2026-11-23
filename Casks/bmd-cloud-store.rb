@@ -36,7 +36,8 @@ cask "bmd-cloud-store" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Cloud Store #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Cloud Store #{pkg_version}.pkg"
 
   uninstall script:  {
               executable: "/Applications/Blackmagic Cloud Store/Uninstall Cloud Store.app/Contents/Resources/uninstall.sh",

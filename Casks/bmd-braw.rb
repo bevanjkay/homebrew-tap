@@ -63,7 +63,8 @@ cask "bmd-braw" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Blackmagic RAW #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Blackmagic RAW #{pkg_version}.pkg"
 
   uninstall script:  {
               executable: "/Applications/Blackmagic RAW/Uninstall Blackmagic RAW.app/Contents/Resources/uninstall.sh",

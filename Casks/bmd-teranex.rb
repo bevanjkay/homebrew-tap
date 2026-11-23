@@ -36,7 +36,8 @@ cask "bmd-teranex" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Teranex #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Teranex #{pkg_version}.pkg"
 
   uninstall script:  {
               executable: "/Applications/Blackmagic Teranex/Uninstall Teranex.app/Contents/Resources/uninstall.sh",

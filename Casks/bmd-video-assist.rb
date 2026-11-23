@@ -36,7 +36,8 @@ cask "bmd-video-assist" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Video Assist #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Video Assist #{pkg_version}.pkg"
 
   uninstall script:  {
               executable: "/Applications/Blackmagic Video Assist/Uninstall Video Assist.app/Contents/Resources/uninstall.sh",

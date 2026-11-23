@@ -36,7 +36,8 @@ cask "bmd-converters" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Converters #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Converters #{pkg_version}.pkg"
 
   uninstall pkgutil: [
     "com.blackmagic-design.Converters",

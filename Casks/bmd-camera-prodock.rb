@@ -38,7 +38,8 @@ cask "bmd-camera-prodock" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Camera Prodock #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Camera Prodock #{pkg_version}.pkg"
 
   uninstall pkgutil: [
     "com.blackmagic-design.StoneCutter",

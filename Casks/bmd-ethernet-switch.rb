@@ -38,7 +38,8 @@ cask "bmd-ethernet-switch" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Ethernet Switch #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Ethernet Switch #{pkg_version}.pkg"
 
   uninstall pkgutil: [
     "com.blackmagic-design.EthernetSwitch",

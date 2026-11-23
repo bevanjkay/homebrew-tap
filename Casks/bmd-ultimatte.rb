@@ -36,7 +36,8 @@ cask "bmd-ultimatte" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Ultimatte #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Ultimatte #{pkg_version}.pkg"
 
   uninstall script:  {
               executable: "/Applications/Blackmagic Ultimatte/Uninstall Ultimatte.app/Contents/Resources/uninstall.sh",

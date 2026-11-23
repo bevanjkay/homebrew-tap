@@ -36,7 +36,8 @@ cask "bmd-desktop-video" do
   auto_updates true
   depends_on :macos
 
-  pkg "Install Desktop Video #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Desktop Video #{pkg_version}.pkg"
 
   uninstall launchctl: [
               "com.blackmagic-design.DesktopVideo",

@@ -39,8 +39,9 @@ cask "fusion-studio" do
   conflicts_with cask: "fusion-studio@beta"
   depends_on :macos
 
-  pkg "Install Fusion Studio v#{version.csv.first.chomp(".0")}.pkg"
-  pkg "Install Fusion Render Node v#{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Fusion Studio v#{pkg_version}.pkg"
+  pkg "Install Fusion Render Node v#{pkg_version}.pkg"
 
   # Split uninstall stanza to allow multiple scripts
   uninstall script: {

@@ -64,7 +64,8 @@ cask "davinci-resolve-studio" do
   conflicts_with cask: "davinci-resolve-studio@beta"
   depends_on macos: :sequoia
 
-  pkg "Install Resolve #{version.csv.first.chomp(".0")}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Resolve #{pkg_version}.pkg"
 
   uninstall launchctl: "com.blackmagic-design.DaVinciResolveBMDPanelDaemon",
             pkgutil:   [

@@ -52,9 +52,9 @@ cask "davinci-resolve-studio@beta" do
         download["urls"]["Mac OS X"].first["product"] == "davinci-resolve-studio"
       end
       matched.map do |download|
-        beta = /beta/i.match?(download["name"])
+        beta_suffix = "b" if /beta/i.match?(download["name"])
         v = download["urls"]["Mac OS X"].first
-        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{"b" if beta}"
+        "#{v["major"]}.#{v["minor"]}.#{v["releaseNum"]},#{v["releaseId"]},#{v["downloadId"]},#{beta_suffix}"
       end.first
     end
   end
@@ -62,7 +62,8 @@ cask "davinci-resolve-studio@beta" do
   conflicts_with cask: "davinci-resolve-studio"
   depends_on macos: :sequoia
 
-  pkg "Install Resolve #{version.csv.first.chomp(".0")}#{version.csv.fourth}.pkg"
+  pkg_version = version.csv.first.chomp(".0")
+  pkg "Install Resolve #{pkg_version}#{version.csv.fourth}.pkg"
 
   uninstall launchctl: "com.blackmagic-design.DaVinciResolveBMDPanelDaemon",
             pkgutil:   [

@@ -44,6 +44,7 @@ cask "bmd-ultimatte" do
               sudo:       true,
             },
             pkgutil: [
+              "com.blackmagic-design.SmartRemote",
               "com.blackmagic-design.Ultimatte",
               "com.blackmagic-design.UltimatteAssets",
               "com.blackmagic-design.UltimatteUninstaller",

@@ -162,6 +162,19 @@ jobs:
         if: ${{ always() && steps.info.outcome == 'success' && steps.info.outputs.formula_dependencies != '[]' }}
         timeout-minutes: 30
 
+      # On xcode-27, anything that starts CoreSimulator (e.g. `brew config`) launches
+      # simdiskimaged, which then unmounts or moves other disk images while re-adding a
+      # duplicate watchOS runtime: "no mountable file systems" or vanishing mount points.
+      # Stop it after `brew config` and before any DMG is opened.
+      # Mirrors Homebrew/homebrew-cask's `ci.yml`.
+      # TODO: remove once the xcode-27 runner image no longer needs this.
+      - name: Stop simdiskimaged
+        if: always() && matrix.runner == 'xcode-27' && steps.fetch.outcome == 'success'
+        run: |
+          sudo launchctl disable system/com.apple.CoreSimulator.simdiskimaged || true
+          sudo launchctl bootout system/com.apple.CoreSimulator.simdiskimaged || true
+          sudo pkill -x simdiskimaged || true
+
       - name: Run brew audit --cask${{ (matrix.cask && ' ') || ' --tap ' }}${{ matrix.cask.token || matrix.tap }}
         id: audit
         run: |

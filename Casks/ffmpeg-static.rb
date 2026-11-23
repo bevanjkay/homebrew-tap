@@ -12,6 +12,8 @@ cask "ffmpeg-static" do
     regex(/ffmpeg[._-]v?(\d+(?:\.\d+)+)\.7z/i)
   end
 
+  depends_on :macos
+
   binary "ffmpeg"
 
   postflight_steps do

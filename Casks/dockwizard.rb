@@ -11,6 +11,8 @@ cask "dockwizard" do
 
   app "DockWizard.app"
   binary "#{appdir}/DockWizard.app/Contents/Helpers/dockwizard"
+  generate_completions_from_executable "#{appdir}/DockWizard.app/Contents/Helpers/dockwizard",
+                                       "--generate-completion-script"
 
   zap trash: [
     "~/Library/Application Support/DockWizard",

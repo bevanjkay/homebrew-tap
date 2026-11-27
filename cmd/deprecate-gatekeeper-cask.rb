@@ -45,8 +45,15 @@ module Homebrew
         branch_pushed = T.let(false, T::Boolean)
 
         begin
-          ensure_clean_repo(repo)
-          ensure_branch_available(repo, branch_name)
+          odie "#{repo} has uncommitted changes." if command_output!("git", "-C", repo.to_s, "status",
+                                                                     "--porcelain").present?
+          if system("git", "-C", repo.to_s, "show-ref", "--verify", "--quiet", "refs/heads/#{branch_name}")
+            odie "Local branch already exists: #{branch_name}"
+          end
+          if system("git", "-C", repo.to_s, "show-ref", "--verify", "--quiet",
+                    "refs/remotes/#{ORIGIN_REMOTE}/#{branch_name}")
+            odie "Remote branch already exists: #{ORIGIN_REMOTE}/#{branch_name}"
+          end
           ensure_no_disable_stanza(cask_file)
           git!(repo, "checkout", "-b", branch_name, "#{ORIGIN_REMOTE}/#{DEFAULT_BRANCH}")
           branch_created = true
@@ -68,7 +75,23 @@ module Homebrew
           git!(repo, "push", "--set-upstream", ORIGIN_REMOTE, branch_name)
           branch_pushed = true
 
-          pr_url = create_pr(repo, branch_name, cask.token)
+          template = (repo/".github/PULL_REQUEST_TEMPLATE.md").read
+          pr_url = Tempfile.create(["#{cask.token}-disable", ".md"]) do |file|
+            file.write("#{template.rstrip}\n\n#{PR_NOTE}\n")
+            file.flush
+
+            stdout = command_output!(
+              "gh", "pr", "create",
+              "--repo", TARGET_REPOSITORY,
+              "--base", DEFAULT_BRANCH,
+              "--head", branch_name,
+              "--title", "#{cask.token}: disable",
+              "--body-file", file.path
+            )
+            stdout.lines.map(&:strip).reject(&:empty?).last
+          end
+          odie "Failed to determine PR URL." if pr_url.blank?
+
           git!(repo, "checkout", DEFAULT_BRANCH)
 
           puts pr_url
@@ -79,25 +102,6 @@ module Homebrew
       end
 
       private
-
-      sig { params(repo: Pathname).void }
-      def ensure_clean_repo(repo)
-        stdout = git_output!(repo, "status", "--porcelain")
-        odie "#{repo} has uncommitted changes." if stdout.present?
-      end
-
-      sig { params(repo: Pathname, branch_name: String).void }
-      def ensure_branch_available(repo, branch_name)
-        local_branch_exists = system(
-          "git", "-C", repo.to_s, "show-ref", "--verify", "--quiet", "refs/heads/#{branch_name}"
-        )
-        odie "Local branch already exists: #{branch_name}" if local_branch_exists
-
-        remote_branch_exists = system(
-          "git", "-C", repo.to_s, "show-ref", "--verify", "--quiet", "refs/remotes/#{ORIGIN_REMOTE}/#{branch_name}"
-        )
-        odie "Remote branch already exists: #{ORIGIN_REMOTE}/#{branch_name}" if remote_branch_exists
-      end
 
       sig { params(cask_file: Pathname).void }
       def ensure_no_disable_stanza(cask_file)
@@ -129,43 +133,8 @@ module Homebrew
         updated
       end
 
-      sig { params(repo: Pathname, branch_name: String, token: String).returns(String) }
-      def create_pr(repo, branch_name, token)
-        body = pr_body(repo)
-
-        Tempfile.create(["#{token}-disable", ".md"]) do |file|
-          file.write(body)
-          file.flush
-
-          stdout = command_output!(
-            "gh", "pr", "create",
-            "--repo", TARGET_REPOSITORY,
-            "--base", DEFAULT_BRANCH,
-            "--head", branch_name,
-            "--title", "#{token}: disable",
-            "--body-file", file.path
-          )
-
-          pr_url = stdout.lines.map(&:strip).reject(&:empty?).last
-          odie "Failed to determine PR URL." if pr_url.blank?
-
-          pr_url
-        end
-      end
-
-      sig { params(repo: Pathname).returns(String) }
-      def pr_body(repo)
-        template = (repo/".github/PULL_REQUEST_TEMPLATE.md").read
-        "#{template.rstrip}\n\n#{PR_NOTE}\n"
-      end
-
       sig { params(repo: Pathname, args: String).void }
       def git!(repo, *args)
-        command_output!("git", "-C", repo.to_s, *args)
-      end
-
-      sig { params(repo: Pathname, args: String).returns(String) }
-      def git_output!(repo, *args)
         command_output!("git", "-C", repo.to_s, *args)
       end
 
